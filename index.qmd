@@ -1,0 +1,29 @@
+---
+toc: false
+page-layout: custom
+navbar: false
+---
+
+<div id="hero">
+
+# Transmission Channel Analysis
+
+Decompose your impulse response functions, and gain insights not gained before. 
+
+<div id="quarto-search">
+</div>
+
+<ul id="hero-nav">
+<li>[Learn](index.qmd)</li>
+<li>[Documentation](index.qmd)</li>
+<li>[About](about.qmd)</li>
+<li id="hero-nav-paper">[Paper](https://arxiv.org/abs/2405.18987)</li>
+</ul>
+
+</div>
+
+
+<div id="learn-more">
+<span id="learn-more-text">Learn more</span>
+<span id="learn-more-arrow">&darr;</span>
+</div>

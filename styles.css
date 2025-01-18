@@ -1,0 +1,126 @@
+/* css styles */
+
+#hero {
+  max-width: 680px;
+  width: 680px;
+  text-align: center;
+  margin: 0 auto;
+  height: 100vh;
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  /*justify-content: center;*/
+  padding-top: 10vh;
+}
+#hero h1 {
+  font-family: "Source Serif 4", serif; 
+  font-weight: 500; 
+  font-size: 4rem;
+  margin-top: 0 !important;
+  margin-bottom: 0.2em !important;
+}
+#hero p {
+  font-size: 1.3rem; 
+  font-weight: 400; 
+  max-width: 85%;
+  margin: 0 auto;
+}
+#hero .aa-Form {
+  /*height: 3em; */
+  height: 50px;
+  border-radius: 25px;
+  /*border-radius: 2em; */
+  /*border-color: var(--bs-gray-500);*/
+  border-color: var(--bs-gray-200);
+  background-color: var(--bs-gray-100);
+  margin-top: 2em; 
+  transition: border-radius 0.1s ease;
+}
+#hero .aa-Form:focus-within {
+  /*border: 2px solid red !important;*/
+  outline: 1px solid var(--bs-blue) !important;
+  border-bottom-right-radius: 0; 
+  border-bottom-left-radius: 0;
+}
+#hero .aa-SubmitButton {
+  padding: 5px; 
+  /*margin: 5px; */
+  margin-left: 5px; 
+  margin-right: 10px;
+  background-color: var(--bs-blue);
+  border-radius: 50%;
+}
+#hero .aa-SubmitIcon {
+  color: #ffffff;
+  opacity: 1;
+}
+.aa-Panel {
+  max-width: 680px !important;
+  width: 680px;
+  outline: 1px solid var(--bs-blue) !important; 
+}
+
+
+#quarto-search > p {
+  display: none;
+}
+
+
+#hero-nav {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-top: 2em;
+}
+#hero-nav li > a{
+  background-color: var(--bs-gray-100);
+  border-radius: 1em;
+  padding: 5px 15px; 
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--bs-body-color)
+}
+#hero-nav li > a:hover {
+  background-color: var(--bs-gray-200);
+}
+#hero-nav-paper a{
+  background-color: var(--bs-blue) !important;
+  color: #ffffff !important;
+}
+#hero-nav-paper a:hover {
+  filter: brightness(1.2) !important;
+}
+
+/* <<<< LEARN MORE >>>> */
+#learn-more {
+  position: absolute; 
+  bottom: 50px; 
+  width: 100vw;
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+}
+#learn-more-text{
+  display: inline-block;
+}
+#learn-more-arrow {
+  display: inline-block;
+  animation: moveUpDown 1.5s infinite;
+}
+@keyframes moveUpDown {
+  0%, 100% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+/* >>>> LEARN MORE <<<< */
+
+
+
+
+
