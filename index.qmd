@@ -2,6 +2,7 @@
 toc: false
 page-layout: custom
 navbar: false
+css: /styles/landing.css
 include-before-body:
   - text: |
       <script type="text/javascript">document.getElementById("quarto-search").remove();</script>
@@ -20,7 +21,7 @@ Decompose your impulse response functions, and gain insights not gained before.
 </div>
 
 <ul id="hero-nav">
-<li>[Tutorials](index.qmd)</li>
+<li>[Tutorials](about.qmd)</li>
 <li>[Documentation](documentation/julia/index.qmd)</li>
 <li>[About](about.qmd)</li>
 <li id="hero-nav-paper">[Paper](https://arxiv.org/abs/2405.18987)</li>
