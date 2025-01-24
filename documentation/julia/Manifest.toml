@@ -29,7 +29,7 @@ version = "1.11.0"
 
 [[deps.DocUtils]]
 deps = ["Markdown"]
-git-tree-sha1 = "32e973a513a927e8f77442f9149fe7b653da16bf"
+git-tree-sha1 = "a67ea9f181a3df21960acecd71ca1513253aeb14"
 repo-rev = "main"
 repo-url = "git@github.com:enweg/DocUtils.jl.git"
 uuid = "0748f756-3ac0-4a38-93be-3d2028d1481a"
@@ -103,7 +103,7 @@ version = "1.0.3"
 
 [[deps.TransmissionChannelAnalysis]]
 deps = ["Combinatorics", "JSON", "LinearAlgebra"]
-git-tree-sha1 = "ef24daa3b6e84d900fa52fabdbea7c777b0a3297"
+git-tree-sha1 = "103a3bc515deed618c855d207472187bdcc87135"
 repo-rev = "main"
 repo-url = "git@github.com:enweg/TransmissionChannelAnalysis.jl.git"
 uuid = "d500094b-e8d7-4ee4-9514-4e3996dd73c3"

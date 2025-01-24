@@ -127,7 +127,9 @@ Transmission effects, i.e. the effect through the transmission channel, can be c
 
 [^1]: See Section 4 in @wegnerTCA2024.
 
-### Using the Systems Form
+### Preparing the Systems Form
+
+The [systems form](/learn/systems-form.qmd) can be used whenever a SVAR(MA) was estimated and the AR and MA coefficients are available. The first step then consists of transforming the [dynamic form](/learn/dynamic-form.qmd) of the SVAR(MA) into the systems form. We provide the utility function `make_systems_form`{.julia} for this purpose. 
 
 ```{julia}
 #| echo: false
@@ -136,10 +138,42 @@ Transmission effects, i.e. the effect through the transmission channel, can be c
 include_quarto_callout_doc(make_systems_form)
 ```
 
-### Using IRFs
+The returned systems form can then be used in `transmission`{.julia} to compute the trasnmission effect. 
 
+Besides `make_systems_form`{.julia} we also offer the two separate functions `make_B`{.julia} and `make_Omega`{.julia} which respectively create $B$ and $\Omega$ of the [systems form](/learn/systems-form.qmd). Use of these two functions should most of the time not be required. However, for users that might want to research of TCA, having access to these two methods seperately can be helpful. 
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_quarto_callout_doc(make_B)
+```
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_quarto_callout_doc(make_Omega)
+```
+
+### Preparing the IRFs
+
+Estimating the transmission effects using IRFs requires Cholesky / orthogonalised IRFs for all variables, as well as the structural shocks impulse response functions. In either case, `TransmissionChannelAnalysis.jl`{.julia} works internally with a matrix representation of IRFs. Since many software solutions for SVAR(MA) return IRFs in the form of three-dimensional arrays, we provide the utility function `to_transmission_irfs`{.julia} that transforms the three-dimensional arrays into a matrix of IRFs. 
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_quarto_callout_doc(to_transmission_irfs)
+```
+
+`to_transmission_irfs`{.julia} should be applied to both the Cholesky / orthogonalised and the structural IRFs. The resulting IRFs can then be used in `transmission`{.julia} to compute the transmission effects. 
 
 ### Computing
+
+With either the IRFs or the systems form prepared, transmission effects can be computed using any of the following versions of the `transmission`{.julia} function. In either case, the fourth argument to `transmission`{.julia} must be a transmission condition that can be obtained in any of the ways described above. 
+
+To compute transmission effects using the systems form, `method`{.julia} should be set equal to `:BOmega`{.julia}. Similarly, to use IRFs, `method`{.julia} should be set equal to `:irfs`{.julia}. The default is set to `:BOmega`{.julia} and thus, if not further specified, `TransmissionChannelAnalysis.jl`{.julia} assumes that the systems form is being used. This choice was mostly made because the computations under the systems form are faster than the computations using IRFs. 
 
 ```{julia}
 #| echo: false
@@ -148,3 +182,6 @@ include_quarto_callout_doc(make_systems_form)
 include_quarto_callout_doc(transmission)
 ```
 
+## Additional Utility Functions
+
+[list of functions](all-functions.qmd)
