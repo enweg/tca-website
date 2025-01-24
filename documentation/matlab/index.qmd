@@ -1,0 +1,5 @@
+---
+sidebar: doc
+---
+
+# Matlab toolbox for transmission channel analysis

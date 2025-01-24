@@ -1,6 +1,7 @@
 ---
 engine: julia
-toc: false
+toc: true
+sidebar: doc
 ---
 
 # List of Exported Symbols
@@ -27,4 +28,3 @@ for s in sort!(exported_symbols)
 end
 ```
 
-some change

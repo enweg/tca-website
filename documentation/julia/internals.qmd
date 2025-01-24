@@ -1,1 +1,6 @@
+---
+toc: true
+sidebar: doc
+---
+
 # Internals of `TransmissionChannelAnalysis.jl`

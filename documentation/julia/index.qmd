@@ -2,6 +2,7 @@
 title: TransmissionChannelAnalysis.jl
 engine: julia
 bibliography: "../../references.bib"
+sidebar: doc
 ---
 
 
@@ -192,6 +193,3 @@ It may occur that a transmission condition contains a contradiction, i.e. a part
 include_quarto_callout_doc(set_remove_contradictions)
 ```
 
-## Additional Utility Functions
-
-[list of functions](all-functions.qmd)

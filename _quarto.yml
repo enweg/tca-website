@@ -6,6 +6,7 @@ language:
 
 website:
   title: "Transmission Channel Analysis"
+  page-navigation: true
   search: 
     location: navbar
     type: textbox
@@ -16,10 +17,33 @@ website:
         href: index.qmd
       - text: Tutorials 
       - text: Documentation
+        href: "documentation/julia/index.qmd"
       - text: FAQ
     right: 
       - text: About
         href: about.qmd
+  sidebar: 
+    - id: doc
+      title: Documentation
+      contents: 
+      - section: Julia 
+        # href: "documentation/julia/index.qmd"
+        contents: 
+          - text: Overview
+            href: "documentation/julia/index.qmd"
+          - text: Internals
+            href: "documentation/julia/internals.qmd"
+          - text: All Symbols
+            href: "documentation/julia/all-functions.qmd"
+      - section: Matlab
+        # href: "documentation/matlab/index.qmd"
+        contents: 
+          - text: Overview
+            href: "documentation/matlab/index.qmd"
+          - text: "Dynare DSGE"
+            href: "documentation/matlab/dynare.qmd"
+          - text: All Functions
+            href: "documentation/matlab/all-functions.qmd"
 
 format:
   html:

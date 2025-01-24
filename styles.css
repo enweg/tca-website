@@ -1,9 +1,11 @@
 /* css styles */
 
-
-
 .doc-box h1, .doc-box h2, .doc-box h3 {
   font-size: 1.1rem !important;
+}
+
+.navbar .aa-Form {
+  width: 250px !important;
 }
 
 
