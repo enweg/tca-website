@@ -1,0 +1,8 @@
+---
+bibliography: "../../references.bib"
+title: How do I manipulate transmission conditions? 
+description: |
+  @wegnerTCA2024 derive methods to manipulate transmission conditions. These manipulations often make it easier to compute the transmission effect. In this article we show how these manipulations work. 
+order: 5
+sidebar: faq
+---

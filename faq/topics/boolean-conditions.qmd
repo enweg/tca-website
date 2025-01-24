@@ -1,0 +1,7 @@
+---
+title: What are Boolean Conditions?
+description: |
+  Transmission conditions are most effectively stated using Boolean conditions about which variables should and should not lie on the transmission channels. In this article we describe the basics of Boolean conditions and Boolean algebra and show how these can be used to define various transmission channels. 
+order: 4
+sidebar: faq
+---

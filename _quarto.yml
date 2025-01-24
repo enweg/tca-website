@@ -19,6 +19,7 @@ website:
       - text: Documentation
         href: "documentation/julia/index.qmd"
       - text: FAQ
+        href: "faq/index.qmd"
     right: 
       - text: About
         href: about.qmd
@@ -44,6 +45,15 @@ website:
             href: "documentation/matlab/dynare.qmd"
           - text: All Functions
             href: "documentation/matlab/all-functions.qmd"
+
+    - id: faq
+      title: FAQ
+      contents: 
+        - "faq/topics/what-is-tca.qmd"
+        - "faq/topics/dynamic-form.qmd"
+        - "faq/topics/systems-form.qmd"
+        - "faq/topics/boolean-conditions.qmd"
+        - "faq/topics/algebra.qmd"
 
 format:
   html:

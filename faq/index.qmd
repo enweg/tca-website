@@ -1,0 +1,10 @@
+---
+title: FAQ
+css: "../styles/faq.css"
+sidebar: false
+listing: 
+  contents: "/topics"
+  sort: "order"
+  type: grid
+  fields: ["title", "description"]
+---

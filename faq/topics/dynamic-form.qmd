@@ -1,0 +1,8 @@
+---
+bibliography: "../../references.bib"
+title: What is the Dynamic Form?
+description: | 
+  @wegnerTCA2024 make use of two forms (1) the dynamic form and (2) the systems form. In this article we describe what the dynamic form is.  
+order: 2
+sidebar: faq
+---
