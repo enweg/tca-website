@@ -14,8 +14,9 @@ website:
     left:
       - text: Home
         href: index.qmd
-      - text: What is TCA?
-      - text: Learn
+      - text: Tutorials 
+      - text: Documentation
+      - text: FAQ
     right: 
       - text: About
         href: about.qmd
