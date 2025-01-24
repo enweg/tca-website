@@ -103,7 +103,7 @@ version = "1.0.3"
 
 [[deps.TransmissionChannelAnalysis]]
 deps = ["Combinatorics", "JSON", "LinearAlgebra"]
-git-tree-sha1 = "103a3bc515deed618c855d207472187bdcc87135"
+git-tree-sha1 = "2006d5855604aa4ea2e341c2c43c1aeab501beaa"
 repo-rev = "main"
 repo-url = "git@github.com:enweg/TransmissionChannelAnalysis.jl.git"
 uuid = "d500094b-e8d7-4ee4-9514-4e3996dd73c3"

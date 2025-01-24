@@ -182,6 +182,16 @@ To compute transmission effects using the systems form, `method`{.julia} should 
 include_quarto_callout_doc(transmission)
 ```
 
+It may occur that a transmission condition contains a contradiction, i.e. a part of the boolean conditions says $x_i \land \neg x_i$. These are usually automatically removed internally. However, this automatic removal can sometimes lengthen the time it takes for the condition to compile. We therefore offer the utility function `set_remove_contradictions`{.julia} that can be used to turn this off. Even if off, the resulting transmission effect will be correct, but the computation may take a bit longer. Thus, there is a trade-off between longer compile times (if contradictions are being removed) and longer computing time (if contradictions are not removed). 
+
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_quarto_callout_doc(set_remove_contradictions)
+```
+
 ## Additional Utility Functions
 
 [list of functions](all-functions.qmd)
