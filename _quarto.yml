@@ -34,8 +34,8 @@ website:
             href: "documentation/julia/index.qmd"
           - text: Internals
             href: "documentation/julia/internals.qmd"
-          - text: All Symbols
-            href: "documentation/julia/all-functions.qmd"
+          - section: Functions
+            contents: documentation/julia/all-functions/*
       - section: Matlab
         # href: "documentation/matlab/index.qmd"
         contents: 

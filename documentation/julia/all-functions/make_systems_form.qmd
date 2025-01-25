@@ -1,0 +1,22 @@
+--- 
+title: | 
+  make_systems_form
+sidebar: doc
+engine: julia
+---
+
+```{julia}
+#| echo: false 
+#| output: false 
+
+using DocUtils
+using TransmissionChannelAnalysis
+```
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_quarto_callout_doc(TransmissionChannelAnalysis, Symbol("make_systems_form"))
+```
+    
