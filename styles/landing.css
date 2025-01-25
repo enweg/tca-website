@@ -134,20 +134,38 @@
   width: 100%;
   background-color: var(--bs-primary);
   color: var(--bs-body-bg);
+  padding: 3em;
+}
+#overview h1 {
+  font-family: "Source Serif 4", serif; 
+  font-weight: 500; 
+  font-size: 4rem;
+  /*margin-top: 100px;*/
 }
 #faq {
   position: sticky;
-  top: 0;
+  top: -100px;
   z-index: 2;
-  height: 100vh; 
-  min-width: 100%;
+  min-height: 100vh; 
+  width: 100%;
   background-color: var(--bs-body-bg);
   padding: 3em;
+  display: grid; 
+  grid-template-columns: auto 1fr;
+  gap: 3em; 
+}
+#faq-title {
+  grid-column: 1;
 }
 #faq h1 {
   font-family: "Source Serif 4", serif; 
   font-weight: 500; 
   font-size: 4rem;
+  margin-top: 100px;
+}
+#faq-listings {
+  overflow: auto; 
+  grid-column: 2;
 }
 #about {
   position: sticky;
@@ -157,4 +175,11 @@
   width: 100%;
   background-color: var(--bs-body-color);
   color: var(--bs-body-bg);
+  padding: 3em;
+}
+#about h1 {
+  font-family: "Source Serif 4", serif; 
+  font-weight: 500; 
+  font-size: 4rem;
+  /*margin-top: 100px;*/
 }

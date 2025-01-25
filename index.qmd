@@ -54,7 +54,7 @@ Decompose your impulse response functions, and gain insights not gained before.
 
 
 <div id="faq">
-# FAQ
+<div id="faq-title"><h1>FAQ</h1></div>
 ::: {#faq-listings}
 :::
 </div>
