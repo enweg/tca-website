@@ -1,5 +1,4 @@
 ---
-toc: true
 sidebar: doc
 engine: julia
 ---
@@ -12,7 +11,7 @@ using DocUtils
 using TransmissionChannelAnalysis
 ```
 
-# Internals of `TransmissionChannelAnalysis.jl`
+# Internals
 
 The internals of `TransmissionChannelAnalysis.jl`{.julia} all resolve around the type `Q`{.julia}, which is the internal representation of a transmission condition using the variables of the [systems form](/faq/topics/systems-form.qmd); thus $x_i$ and **not** $y_{i,t}$.  
 
