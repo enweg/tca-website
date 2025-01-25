@@ -1,6 +1,83 @@
 ---
 toc: true
 sidebar: doc
+engine: julia
 ---
 
+```{julia}
+#| echo: false
+#| output: false
+
+using DocUtils
+using TransmissionChannelAnalysis
+```
+
 # Internals of `TransmissionChannelAnalysis.jl`
+
+The internals of `TransmissionChannelAnalysis.jl`{.julia} all resolve around the type `Q`{.julia}, which is the internal representation of a transmission condition using the variables of the [systems form](/faq/topics/systems-form.qmd); thus $x_i$ and **not** $y_{i,t}$.  
+
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_quarto_callout_doc(TransmissionChannelAnalysis, :Q)
+```
+
+The basic idea is to start with a singleton statement, such as $x_i$, $\neg x_i$ or sometimes even just $\text{TRUE}$. Each of these singleton -- or atomic -- statements refers to the simplest transmission channel in which $x_i$ must be on the path, $x_i$ cannot be on the path, or in which case the condition is always true. Such singleton statement can be created in the following way. 
+
+```{julia}
+#| output: false
+
+# Q is not exported
+
+# x1 must be on the path
+x1 = TransmissionChannelAnalysis.Q(1)
+
+# x1 cannot be on the path
+not_x2 = TransmissionChannelAnalysis.Q("!x2")
+
+# TRUE
+T = TransmissionChannelAnalysis.Q("")
+
+```
+
+More complex transmission conditions are then simply a combination of these singleton statements. More precisely, a transmission condition `q1::Q`{.julia} can be combined with another transmission condition `q2::Q`{.julia} using any of AND (`&`{.julia}), OR (`|`{.julia}) and NOT (`!`{.julia}). Throughout, parentheses can be used to change the precedence. In the following we will describe how such combinations are internally implemented. 
+
+## Combining two conditions using AND (`&`{.julia})
+
+Suppose we wanted to combine two conditions `q1::Q`{.julia} and `q2::Q`{.julia} using an AND. Thus, suppose we wanted to do
+
+```{julia}
+#| eval: false
+q1 & q2
+```
+
+This is achieved by extending `Base.&`{.julia}. However, key in the internal implementation is the following assumption. 
+
+::: {#nte-assumption1-internal-julia .callout-note}
+# Assumption 1
+
+The transmission condition `q::Q`{.julia} consists of only conjunctions (`&`{.julia}) and negations (`!`{.julia}). 
+:::
+
+Under [Assumption @nte-assumption1-internal-julia] `q1::Q`{.julia} and `q2::Q`{.julia} both consists of only conjunctions and disjunctions. This immediately implies that we can internally simply concatenate their conditions, since the final condition with the conjunction (AND, `&`{.julia}) of the two conditions and will itself only consists of conjunctions and disjunctions. This is basically what we internally do, with the caveat that the conditions are represented using `String`{.julia} and that, for algorithimic purposes, we prefer the variables to be ordered in the statement. 
+
+The detailed internal implementation is given by 
+
+```{julia}
+#| echo: false 
+#| output: asis
+
+docs = Base.Docs.doc(&, Tuple{TransmissionChannelAnalysis.Q, TransmissionChannelAnalysis.Q})
+println(DocUtils.create_quarto_callout(docs, "&")[1])
+```
+
+
+```{julia}
+#| echo: false 
+#| output: asis
+
+include_quarto_callout_doc(TransmissionChannelAnalysis, :string_and)
+```
+
