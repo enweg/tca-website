@@ -61,7 +61,7 @@ This is achieved by extending `Base.&`{.julia}. However, key in the internal imp
 The transmission condition `q::Q`{.julia} consists of only conjunctions (`&`{.julia}) and negations (`!`{.julia}). 
 :::
 
-Under [Assumption @nte-assumption1-internal-julia] `q1::Q`{.julia} and `q2::Q`{.julia} both consists of only conjunctions and disjunctions. This immediately implies that we can internally simply concatenate their conditions, since the final condition with the conjunction (AND, `&`{.julia}) of the two conditions and will itself only consists of conjunctions and disjunctions. This is basically what we internally do, with the caveat that the conditions are represented using `String`{.julia} and that, for algorithimic purposes, we prefer the variables to be ordered in the statement. 
+Under [Assumption @nte-assumption1-internal-julia] `q1::Q`{.julia} and `q2::Q`{.julia} both consists of only conjunctions and disjunctions. This immediately implies that their conjunction will also only consist of conjunctions and negations. We can thus simply "concatenate" the two conditions. This is basically what we internally do, with the caveat that the conditions are represented using `String`{.julia} and that, for algorithimic purposes, we prefer the variables to be ordered in the statement. 
 
 The detailed internal implementation is given by 
 
@@ -81,3 +81,70 @@ println(DocUtils.create_quarto_callout(docs, "&")[1])
 include_quarto_callout_doc(TransmissionChannelAnalysis, :string_and)
 ```
 
+While concatenating the two conditions, we need to watch out that no contradictions are being introduced. Contradictions are any statements along the lines $x_i \land \neg x_i$ which would always result in `false`{.julia}. This is taken care of by the following functions. 
+
+
+```{julia}
+#| echo: false 
+#| output: asis
+
+include_quarto_callout_doc(TransmissionChannelAnalysis, :check_contradiction)
+```
+
+```{julia}
+#| echo: false 
+#| output: asis
+
+include_quarto_callout_doc(TransmissionChannelAnalysis, :remove_contradictions)
+```
+
+As stated in the [overview]("./index.qmd") of the documentation, removal of contradictions is governed by `REMOVE_CONTRADICTION`{.julia} and the utility function `set_remove_contradictions`{.julia}. Not removing contradictions does not lead to a mistakes in the computation, but can result in longer computations. Contrary, removing contradictions can lead to longer compile times -- it takes longer to compile the transmission conditions. Thus, a trade-off between compile and computing time exists. 
+
+## Combining two conditions using OR (`|`{.julia})
+
+Let `q1::Q`{.julia} and `q2::Q`{.julia} be again two transmission conditions. Suppose their internal Boolean conditions are given by $b$ and $b'$ respectively, with both satisfying [Assumption @nte-assumption1-internal-julia]. The [rules for manipulating transmission conditions](/faq/topics/algebra.qmd) then imply
+$$
+Q(b \lor b') = Q(b) + Q(b') - Q(b \land b').
+$$
+Implementation of OR (`|`{.julia}) therefore simply uses AND and the ability for `Q`{.julia} to represent multiple terms with different multipliers. The precise implementation of OR can be found in the following function. 
+
+
+```{julia}
+#| echo: false 
+#| output: asis
+
+docs = Base.Docs.doc(|, Tuple{TransmissionChannelAnalysis.Q, TransmissionChannelAnalysis.Q})
+println(DocUtils.create_quarto_callout(docs, "|")[1])
+```
+
+## Negating a condition using NOT (`!`{.julia})
+
+Suppose a transmission condition is given by `q::Q`{.julia} which internally represents the Boolean condition $b$. By the [rules for manipulating transmission conditions](/faq/topics/algebra.qmd) we then know that 
+$$
+Q(\neg b) = Q(T) - Q(b),
+$$
+where $T$ represents the Boolean condition that is always true. This can easily be represented using `Q`{.julia} through its ability to represent multiple terms and multipliers. Specifically, we simply replace the original transmission condition with a new one that consists one one additional term, representing true, and switch the sign of all original terms of the condition. The following function implements this behaviour. 
+
+```{julia}
+#| echo: false 
+#| output: asis
+
+docs = Base.Docs.doc(!, Tuple{TransmissionChannelAnalysis.Q})
+println(DocUtils.create_quarto_callout(docs, "!")[1])
+```
+
+## Parsing transmission conditions using `make_condition`{.julia}
+
+Rather than letting the user create all variables manually via `x1 = Q(1)`{.julia} etc., we provide the function `make_condition`{.julia}. This function simply matches all variables in a string with the regex `x\d+`, creates teh variables using the above way, and then evaluates the entire condition to create the final condition. Due to the operator overloading above, the final result will be a valid and correct transmission condtion. However, key to this correctness is that all variables math the provided regex pattern. Thus, all variables must be of the form `x1`, `x2`, etc. 
+
+For user friendliness, we also provide a version of `make_condition`{.julia} that takes variables of the [dynamic form](/faq/topics/dynamic-form.qmd), i.e. $y_{i,t}$. However, all that this function does is to translate all variables into variables of the [systems form](/faq/topics/systems-form.qmd) and then calls the method explained above. 
+
+In any case, `make_conditions`{.julia} should be seen as a utility function with the main funcionality being dependent on correct implementation of `Q`{.julia}, `&`{.julia}, `|`{.julia}, and `!`{.julia} as explained above. 
+
+
+```{julia}
+#| echo: false 
+#| output: asis
+
+include_quarto_callout_doc(TransmissionChannelAnalysis, :make_condition)
+```
