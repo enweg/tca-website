@@ -34,8 +34,8 @@ Decompose your impulse response functions, and gain insights not gained before.
 <ul id="hero-nav">
 <li>[Tutorials](about.qmd)</li>
 <li>[Documentation](documentation/julia/index.qmd)</li>
-<li>[FAQ](faq/index.qmd)</li>
-<li>[About](about.qmd)</li>
+<li>[FAQ](#faq)</li>
+<li>[About](#about)</li>
 <li id="hero-nav-paper">[Paper](https://arxiv.org/abs/2405.18987)</li>
 </ul>
 

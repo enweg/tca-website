@@ -20,10 +20,10 @@ website:
       - text: Documentation
         href: "documentation/julia/index.qmd"
       - text: FAQ
-        href: "faq/index.qmd"
+        href: "index.qmd#faq"
     right: 
       - text: About
-        href: about.qmd
+        href: "index.qmd#about"
   sidebar: 
     - id: doc
       title: Documentation
