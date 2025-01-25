@@ -54,6 +54,7 @@
 }
 .aa-Panel {
   max-width: 680px !important;
+  max-height: 35vh !important;
   width: 680px;
   outline: 1px solid var(--bs-blue) !important; 
 }
