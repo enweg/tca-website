@@ -1,5 +1,5 @@
 ---
-title: What is TCA? 
+title: What is Transmission Channel Analysis (TCA)? 
 description: | 
   What even is Transmission Channel Analysis? In this article we describe the basic idea behind transmission channel analysis (TCA) and what it can be used for. 
 order: 1

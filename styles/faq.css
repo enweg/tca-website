@@ -5,8 +5,9 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  /*box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);*/
+  box-shadow: 0 2px 5px var(--bs-primary);
 }
 .card h5 {
   font-weight: 600 !important; 

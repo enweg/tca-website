@@ -95,7 +95,8 @@
 
 /* <<<< LEARN MORE >>>> */
 #learn-more {
-  position: absolute; 
+  z-index: -1;
+  position: fixed; 
   bottom: 50px; 
   width: 100vw;
   display: flex; 
@@ -118,3 +119,42 @@
   }
 }
 /* >>>> LEARN MORE <<<< */
+
+
+#hero {
+  position: sticky; 
+  top: 0;
+  z-index: 0;
+}
+#overview {
+  position: sticky; 
+  top: 0;
+  z-index: 1;
+  height: 100vh; 
+  width: 100%;
+  background-color: var(--bs-primary);
+  color: var(--bs-body-bg);
+}
+#faq {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: 100vh; 
+  min-width: 100%;
+  background-color: var(--bs-body-bg);
+  padding: 3em;
+}
+#faq h1 {
+  font-family: "Source Serif 4", serif; 
+  font-weight: 500; 
+  font-size: 4rem;
+}
+#about {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  height: 100vh; 
+  width: 100%;
+  background-color: var(--bs-body-color);
+  color: var(--bs-body-bg);
+}

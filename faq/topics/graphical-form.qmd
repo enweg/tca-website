@@ -1,0 +1,7 @@
+---
+title: What is the Associated Graph?
+description: | 
+  Transmission channels are best thought of as paths through the graph associted with the model. In this article we describe was the associated graph is. 
+order: 3.5
+sidebar: faq
+---

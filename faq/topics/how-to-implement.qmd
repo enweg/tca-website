@@ -1,0 +1,7 @@
+---
+title: How can I implement TCA?
+description: |
+  In this article we outline various ways to implement TCA, including software for Julia, Matlab, and Dynare.
+order: 1.5
+sidebar: faq
+---

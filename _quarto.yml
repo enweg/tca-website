@@ -7,6 +7,7 @@ language:
 website:
   title: "Transmission Channel Analysis"
   page-navigation: true
+  back-to-top-navigation: true
   search: 
     location: navbar
     type: textbox
@@ -64,6 +65,7 @@ format:
     toc: true
     reference-location: margin
     citation-location: margin
+    smooth-scroll: true
 
 
 
