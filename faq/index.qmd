@@ -6,5 +6,6 @@ listing:
   contents: "/topics"
   sort: "order"
   type: grid
+  grid-columns: 2
   fields: ["title", "description"]
 ---
