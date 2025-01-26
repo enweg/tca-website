@@ -49,17 +49,32 @@ Decompose your impulse response functions, and gain insights not gained before.
 
 
 <div id="overview">
-# Overview
+<div id="overview-title">
+<h1>Overview</h1>
+</div>
+
+<div id="overview-col2">
+Some text comes here blasdgkjhj ldsakjfh lkjladsg jkhadsg kljhsdhag jksdhaf 
+</div>
 </div>
 
 
 <div id="faq">
-<div id="faq-title"><h1>FAQ</h1></div>
+<div id="faq-title">
+<h1>FAQ</h1>
+</div>
+
 ::: {#faq-listings}
 :::
 </div>
 
 
 <div id="about">
-# About
+<div id="about-title">
+<h1>About</h1>
+</div>
+
+<div id="about-col2">
+Some text comes here blasdgkjhj ldsakjfh lkjladsg jkhadsg kljhsdhag jksdhaf 
+</div>
 </div>
