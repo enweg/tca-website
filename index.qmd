@@ -48,15 +48,59 @@ Decompose your impulse response functions, and gain insights not gained before.
 </div>
 
 
+<!--START OF OVERVIEW-->
 <div id="overview">
 <div id="overview-title">
 <h1>Overview</h1>
 </div>
 
 <div id="overview-col2">
-Some text comes here blasdgkjhj ldsakjfh lkjladsg jkhadsg kljhsdhag jksdhaf 
+Impulse response functions only measure the total effect of a shock or policy.  What if we wanted to know how this total effect comes to be, i.e. what if we wanted to understand how the shock or policy work? **Transmission Channel Analysis allows for the decomposition of impulse response functions into the effects along channels.** Each channel corresponds to one mechanism behind the shock or the policy. 
+
+<div id="overview-example">
+<div id="overview-example-text">
+### Example
+
+Wegner et al (2024) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They are able to quantify the expectations channel within a theoretical model and show that expectations play a key role in the transmission of monetary policy. 
+
+Sice TCA decomposes the impulse response function, Wegner et al (2024) are able to produce a decomposition plot, showing their results graphically.
+
+<a href="index.qmd" class="overview-btn" style="background-color: var(--bs-orange);">Check the Paper</a>
+</div>
+<div id="overview-example-figure"></div>
+</div>
+<!--END OF EXAMPLE-->
+
+<!--START OF INFO-->
+<div id="overview-info">
+<div id="overview-info-learn">
+### Learn more about TCA
+
+The best way to learn about about TCA is to check out the FAQ or the tutorials. The FAQ covers the basic and frequently asked questions, while the tutorials give hands-on examples on how to use TCA in practice.
+
+<a href="index.qmd" class="overview-btn">FAQ</a>
+<a href="index.qmd" class="overview-btn">Tutorials</a>
+</div>
+
+<div id="overview-info-software">
+### Software 
+
+We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (in Matlab). See the documentation or the tutorials for each of them to learn more
+
+**Documentation**
+
+
+<a href="index.qmd" class="overview-btn">Julia</a>
+<a href="index.qmd" class="overview-btn">Matlab</a>
+<a href="index.qmd" class="overview-btn">Dynare</a>
+
 </div>
 </div>
+<!--END OF INFO-->
+</div>
+<!--END OF COLUMN 2-->
+</div>
+<!--END OF OVERVIEW-->
 
 
 <div id="faq">
