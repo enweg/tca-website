@@ -164,6 +164,7 @@
   width: 100%;
   background-color: var(--bs-body-bg);
   padding: 3em;
+  padding-bottom: 6em;
   display: grid; 
   grid-template-columns: 50px 1fr;
   gap: 3em; 
