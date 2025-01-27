@@ -181,11 +181,38 @@ School of Business and Economics Maastricht</p>
 
 
 ### How do I cite TCA?
+
+If you use TCA or any of the packages in your research, we would appreciate if you could cite the original paper. This is currently the best way.
+
+::: {#about-how-to-cite}
+```{.tex}
+@misc{wegner2024transmissionchannelanalysisdynamic,
+  title={Transmission Channel Analysis in Dynamic Models}, 
+  author={Enrico Wegner and Lenard Lieb and Stephan Smeekes and Ines Wilms},
+  year={2024},
+  eprint={2405.18987},
+  archivePrefix={arXiv},
+  primaryClass={econ.EM},
+  url={https://arxiv.org/abs/2405.18987
+} 
+```
+:::
+
 </div>
 <div class="about-col2-right">
 ### Questions or Comments?
+
+- For questions or comments regarding any of the content on this website, please use the **GitHub issue functionality**. 
+- For questions or comments related to the paper, please get in contact with **Enrico Wegner via e.wegner@maastrichtuniversity.nl**
+
 ### Funding Information
+
+Ines Wilms was financially supported by the Dutch Research Council (NWO) under grant number VI.Vidi.211.032.
+
+
 ### Why make this website?
+
+While some might argue that making this website was a waste of our time and we would have done better by using this time to further research on TCA and related methods, we disagree. Sure, making this website and the software packages took time, but we also believe that a new methodological method can only be impactful if appropriate software implementations are provided. Moreover, we believe that a successful new methodology requires good scientific communication, bridging the gap between practitioners and researchers. This website is our best try in bridging the gap and providing the tools that practitioners need to successfully implement TCA.
 </div>
 </div>
 <!--END OF ABOUT COL 2-->

@@ -278,6 +278,7 @@
   max-width: 1400px; 
   margin: 0 auto;
   padding: 3em;
+  padding-bottom: 0;
   display: grid; 
   grid-template-columns: 50px 1fr; 
   gap: 3em;
@@ -300,7 +301,7 @@
   grid-column: 2;
   display: grid; 
   grid-template-columns: 1fr 1fr;
-  gap: 3em;
+  gap: 5em;
 }
 #about-col2-left {
   grid-column: 1;
@@ -336,4 +337,10 @@
 }
 .collaborator-info {
   font-size: calc(0.9 * var(--bs-body-font-size));
+}
+
+#about-how-to-cite .sourceCode {
+  font-size: calc(0.7 * var(--bs-body-font-size));
+  background-color: white; 
+  border: none;
 }
