@@ -136,6 +136,11 @@
   width: 100%;
   background-color: var(--bs-primary);
   color: var(--bs-body-bg);
+}
+#overview-box {
+  height: 100vh; 
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 3em;
   display: grid; 
   grid-template-columns: 50px 1fr;
@@ -220,6 +225,10 @@
   min-height: 100vh; 
   width: 100%;
   background-color: var(--bs-body-bg);
+}
+#faq-box {
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 3em;
   padding-bottom: 6em;
   display: grid; 
@@ -244,6 +253,8 @@
   overflow: auto; 
   grid-column: 2;
 }
+
+
 #about {
   position: sticky;
   top: 0;
@@ -252,6 +263,10 @@
   width: 100%;
   background-color: var(--bs-body-color);
   color: var(--bs-body-bg);
+}
+#about-box {
+  max-width: 1400px; 
+  margin: 0 auto;
   padding: 3em;
   display: grid; 
   grid-template-columns: 50px 1fr; 

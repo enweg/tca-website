@@ -50,6 +50,7 @@ Decompose your impulse response functions, and gain insights not gained before.
 
 <!--START OF OVERVIEW-->
 <div id="overview">
+<div id="overview-box">
 <div id="overview-title">
 <h1>Overview</h1>
 </div>
@@ -100,20 +101,28 @@ We provide various software packages for TCA. These allow practitioners to apply
 </div>
 <!--END OF COLUMN 2-->
 </div>
+</div>
 <!--END OF OVERVIEW-->
 
 
+<!--START OF FAQ-->
 <div id="faq">
+<div id="faq-box">
+<!--START OF FAQ TITLE-->
 <div id="faq-title">
 <h1>FAQ</h1>
 </div>
+<!--END OF FAQ TITLE-->
 
 ::: {#faq-listings}
 :::
 </div>
+</div>
+<!--END OF FAQ-->
 
-
+<!--START OF ABOUT-->
 <div id="about">
+<div id="about-box">
 <div id="about-title">
 <h1>About</h1>
 </div>
@@ -122,3 +131,5 @@ We provide various software packages for TCA. These allow practitioners to apply
 Some text comes here blasdgkjhj ldsakjfh lkjladsg jkhadsg kljhsdhag jksdhaf 
 </div>
 </div>
+</div>
+<!--END OF ABOUT-->
