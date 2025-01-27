@@ -53,8 +53,10 @@ website:
         - section: FAQ
           contents: 
             - "faq/topics/what-is-tca.qmd"
+            - "faq/topics/how-to-implement.qmd"
             - "faq/topics/dynamic-form.qmd"
             - "faq/topics/systems-form.qmd"
+            - "faq/topics/graphical-form.qmd"
             - "faq/topics/boolean-conditions.qmd"
             - "faq/topics/algebra.qmd"
 

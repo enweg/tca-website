@@ -29,5 +29,16 @@
 }
 
 
+.assumption {
+  border-left-color: var(--bs-body-color) !important;
+}
 
+.tikz-img {
+  margin-top: 1rem; 
+  margin-bottom: 1rem; 
+}
+.tikz-img img {
+  display: block; 
+  margin: 0 auto; 
+}
 
