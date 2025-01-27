@@ -68,7 +68,7 @@ Sice TCA decomposes the impulse response function, Wegner et al (2024) are able 
 
 <a href="index.qmd" class="overview-btn" style="background-color: var(--bs-orange);">Check the Paper</a>
 </div>
-<div id="overview-example-figure"></div>
+<div id="overview-example-figure"><img src="assets/landing-example-fig.png" alt="Decomposition of contractionary monetary policy shock"></div>
 </div>
 <!--END OF EXAMPLE-->
 
