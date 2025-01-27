@@ -20,7 +20,7 @@ website:
       - text: Documentation
         href: "documentation/julia/index.qmd"
       - text: FAQ
-        href: "index.qmd#faq"
+        href: "faq/index.qmd"
     right: 
       - text: About
         href: "index.qmd#about"
@@ -49,12 +49,14 @@ website:
 
     - id: faq
       title: FAQ
-      contents: 
-        - "faq/topics/what-is-tca.qmd"
-        - "faq/topics/dynamic-form.qmd"
-        - "faq/topics/systems-form.qmd"
-        - "faq/topics/boolean-conditions.qmd"
-        - "faq/topics/algebra.qmd"
+      contents:
+        - section: FAQ
+          contents: 
+            - "faq/topics/what-is-tca.qmd"
+            - "faq/topics/dynamic-form.qmd"
+            - "faq/topics/systems-form.qmd"
+            - "faq/topics/boolean-conditions.qmd"
+            - "faq/topics/algebra.qmd"
 
 format:
   html:

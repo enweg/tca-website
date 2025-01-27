@@ -3,7 +3,7 @@ title: FAQ
 css: "../styles/faq.css"
 sidebar: false
 listing: 
-  contents: "/topics"
+  contents: "/topics/*.qmd"
   sort: "order"
   type: grid
   grid-columns: 2
