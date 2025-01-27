@@ -47,11 +47,6 @@ Transmission Channel Analysis uses the fact that graphs are often more intuitive
 # Want to know more?
 
 More information about what TCA is, including small examples, can be found in Sections 1 and 2 of @wegnerTCA2024.
-
-::: {#refs}
-**How to cite TCA?**
-:::
-
 :::
 
 {{< include ../../_action-read-paper.qmd >}}
