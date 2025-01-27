@@ -127,9 +127,68 @@ We provide various software packages for TCA. These allow practitioners to apply
 <h1>About</h1>
 </div>
 
+<!--START OF ABOUT COL 2-->
 <div id="about-col2">
-Some text comes here blasdgkjhj ldsakjfh lkjladsg jkhadsg kljhsdhag jksdhaf 
+<div class="about-col2-left">
+<!--START ABOUT COLLABORATORS-->
+### Collaborators
+
+<div class="collaborator">
+<div class="collaborator-img">
+<img src="assets/enrico.jpeg">
 </div>
+<div class="collaborator-info">
+<h4>Enrico Wegner</h4>
+<p>Department of Quantitative Economics,  
+School of Business and Economics Maastricht</p>
+</div>
+</div>
+
+<div class="collaborator">
+<div class="collaborator-img">
+<img src="assets/default-person.png">
+</div>
+<div class="collaborator-info">
+<h4>Lenard Lieb</h4>
+<p>Department of Macro, International, and Labour Economics,  
+School of Business and Economics Maastricht</p>
+</div>
+</div>
+
+
+<div class="collaborator">
+<div class="collaborator-img">
+<img src="assets/stephan.jpg">
+</div>
+<div class="collaborator-info">
+<h4>Stephan Smeekes</h4>
+<p>Department of Quantitative Economics,  
+School of Business and Economics Maastricht</p>
+</div>
+</div>
+
+<div class="collaborator">
+<div class="collaborator-img">
+<img src="assets/ines.jpeg">
+</div>
+<div class="collaborator-info">
+<h4>Ines Wilms</h4>
+<p>Department of Quantitative Economics,  
+School of Business and Economics Maastricht</p>
+</div>
+</div>
+<!--END ABOUT COLLABORATORS-->
+
+
+### How do I cite TCA?
+</div>
+<div class="about-col2-right">
+### Questions or Comments?
+### Funding Information
+### Why make this website?
+</div>
+</div>
+<!--END OF ABOUT COL 2-->
 </div>
 </div>
 <!--END OF ABOUT-->
