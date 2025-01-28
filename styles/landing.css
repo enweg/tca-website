@@ -230,7 +230,7 @@
 
 #faq {
   position: sticky;
-  top: -100px;
+  top: 0;
   z-index: 2;
   min-height: 100vh; 
   width: 100%;
