@@ -16,7 +16,7 @@ website:
     left:
       - text: Home
         href: index.qmd
-      - text: Tutorials 
+      - text: Examples 
       - text: Documentation
         href: "documentation/julia/index.qmd"
       - text: FAQ
