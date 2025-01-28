@@ -66,7 +66,7 @@ Wegner et al (2024) use Transmission Channel Analysis (TCA) to decompose the imp
 
 Sice TCA decomposes the impulse response function, Wegner et al (2024) are able to produce a decomposition plot, showing their results graphically.
 
-<a href="index.qmd" class="overview-btn" style="background-color: var(--bs-orange);">Check the Paper</a>
+<a href="https://arxiv.org/abs/2405.18987" class="overview-btn" style="background-color: var(--bs-orange);">Check the Paper</a>
 </div>
 <div id="overview-example-figure"><img src="assets/landing-example-fig.png" alt="Decomposition of contractionary monetary policy shock"></div>
 </div>
@@ -79,7 +79,7 @@ Sice TCA decomposes the impulse response function, Wegner et al (2024) are able 
 
 The best way to learn about about TCA is to check out the FAQ or the tutorials. The FAQ covers the basic and frequently asked questions, while the tutorials give hands-on examples on how to use TCA in practice.
 
-<a href="index.qmd" class="overview-btn">FAQ</a>
+<a href="index.qmd#faq" class="overview-btn">FAQ</a>
 <a href="index.qmd" class="overview-btn">Tutorials</a>
 </div>
 
@@ -91,9 +91,9 @@ We provide various software packages for TCA. These allow practitioners to apply
 **Documentation**
 
 
-<a href="index.qmd" class="overview-btn">Julia</a>
-<a href="index.qmd" class="overview-btn">Matlab</a>
-<a href="index.qmd" class="overview-btn">Dynare</a>
+<a href="/documentation/julia/index.qmd" class="overview-btn">Julia</a>
+<a href="/documentation/matlab/index.qmd" class="overview-btn">Matlab</a>
+<a href="/documentation/matlab/dynare.qmd" class="overview-btn">Dynare</a>
 
 </div>
 </div>
