@@ -58,7 +58,6 @@ website:
             - "faq/topics/systems-form.qmd"
             - "faq/topics/graphical-form.qmd"
             - "faq/topics/boolean-conditions.qmd"
-            - "faq/topics/algebra.qmd"
 
 format:
   html:
