@@ -1,5 +1,0 @@
----
-sidebar: doc
----
-
-# List of all functions

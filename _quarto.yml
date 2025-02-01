@@ -46,8 +46,8 @@ website:
             href: "documentation/matlab/internals.qmd"
           - text: "Dynare DSGE"
             href: "documentation/matlab/dynare.qmd"
-          - text: All Functions
-            href: "documentation/matlab/all-functions.qmd"
+          - section: Functions
+            contents: documentation/matlab/all-functions/*
 
     - id: faq
       title: FAQ
