@@ -1,0 +1,4 @@
+[deps]
+DocUtils = "0748f756-3ac0-4a38-93be-3d2028d1481a"
+JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+LibGit2 = "76f85450-5226-5b5a-8eaa-529ad045b433"

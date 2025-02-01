@@ -1,5 +1,212 @@
 ---
+title: Matlab Toolbox for Transmission Channel Analysis
 sidebar: doc
+engine: julia
+bibliography: ../../references.bib
 ---
 
-# Matlab toolbox for transmission channel analysis
+```{julia}
+#| echo: false 
+#| include: false 
+
+using DocUtils
+using JSON
+
+
+function load_from_json(filename)
+  dict = open(filename, "r") do file 
+    JSON.parse(file)
+  end
+  return dict
+end
+
+functions = load_from_json("matlab-documentation-functions.json")
+classes = load_from_json("matlab-documentation-classes.json")
+class_methods = load_from_json("matlab-documentation-class-methods.json")
+```
+
+The **Matlab Toolbox for Transmission Channel Analysis** provides functions for TCA in Matlab. It is as general as the Julia version and can thus, equally well, handle all kinds of transmission channels. In developing the two packages, we tried to keep the naming conventions as close as possible, with names only being brought into their respective coding styles (Camel Case for Matlab, Snake Case for Julia). Thus, users should find it hopefully easy to use examples and help that are not originally written for Matlab and still be able to apply it in Matlab. Nonetheless, the [examples](/index.qmd) section provides detailed examples using the Matlab toolbox. 
+
+The rest of this documentation gives an overview of the key functions in the toolbox. We start with simple transmission channels, how they can be defined, and how they can be computed. We then become more and more general and introduce the more advanced methods within the toolbox. These advanced methods allow for the computation of any possible transmission channel. 
+
+::: {.callout-note}
+
+# Contributer Information
+
+For interested contributers or others interested in the internals of the toolbox please have a look at the [explanation of the internals](internals.qmd).
+:::
+
+## Defining Simple Transmission Channels
+
+Two helper functions are provided that allow for the definition of transmission channels without having to use the more advanced methods. These are `through`{.matlab} and `notThrough`{.matlab}. As the names hint at, `through`{.matlab} is used to define a channel that must go through certain variables in certain periods, while `notThrough`{.matlab} is used to define a transmission channel that cannot go through certain variables in all defined periods. 
+
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("through", functions)
+```
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("notThrough", functions)
+```
+
+Both `through`{.matlab} and `notThrough`{.matlab} return a transmission condition `Q`, which is simply an internal representation of the provided transmission channel (represented as [Boolean statements](/learn/boolean-conditions.qmd)). To double check whether the condition represents the desired channel, simply display the resulting transmission condition using `disp`{.matlab}. The displayed version uses the [systems form](/learn/systems-form.qmd) and thus uses the variable notation $x$. Alternatively, `disp`{.matlab} can be called with an additional agrguments, defining the ordering of the transmission matrix. If two arguments are provided, `disp`{.matlab} will display the transmission condition using the [dynamic form](/faq/topics/dynamic-form.qmd) -- using the variable notation `y_{i,t}` with `i` being the variable index before applying the transmission matrix, and `t` is the time period with `t=0` corresponding to the contemporaneous period. 
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("Q", "disp", class_methods)
+```
+
+### Advanced Usage of `through`{.matlab} and `notThrough`{.matlab}
+
+Conditions created using `through`{.matlab} and `notThrough`{.matlab} can be combined using AND (`&`{.matlab}), OR (`|`{.matlab}) and NOT (`~`{.matlab})[^matlab-not]. Every new combination will return a new condition that combines the previous conditions. The returned conditions can again be combined using AND, OR, and NOT. For example, if `q1`{.matlab}, `q2`{.matlab} and `q3`{.matlab} are conditions obtained using `through`{.matlab} or `notThrough`{.matlab}, then the following works.
+
+[^matlab-not]: Note that `~` and `!` are both notation for NOT. Matlab uses `~`, however we will use these interchangably. If `makeCondition`{.matlabl} use used, either will work. However, if two condition are being combined, only `~` will work, since `!` is not defined in Matlab.
+
+```{.matlab}
+q1AndQ2 = q1 & q2;
+q1AndNotQ3 = q1 & ~q3;
+q4 = (q1 | q2) & ~q3;
+q5 = q4 | q1;
+```
+
+This functionality allows definitions of transmission channels that are not easily defined using `through`{.matlab} and `notThrough`{.matlab}. For example, if we were interested in the transmission channel that goes through $y_{1,0}$ OR through $y_{1,1}$, then neither of the helper functions can be used, since neither can handle OR statements. However, we can use [Boolean logic](/learn/boolean-conditions.qmd) and the [rules for the manipulation of transmission conditions](/learn/algebra.qmd) to define this transmission channel using our helper functions. 
+
+In most cases, the easiest step is to negate the original condition. The above condition can be succinctly be represented as 
+$$
+y_{1,0} \lor y_{1,1}.
+$$
+The negated statement is thus 
+$$
+\neg y_{1,0} \land \neg y_{1,1}.
+$$
+This can be defined using `notThrough`{.matlab} in the following way 
+
+```{.matlab}
+q = notThrough(1, [0,1], 1:n);
+```
+
+where we assumed that the transmission matrix is the identity matrix, implying an ordering `1:n`{.matlab}.  
+
+To obtain the original transmission channel, we can simply negate this condition.
+
+```{.matlab}
+originalCondition = ~q;
+```
+
+## Defining Complex Transmission Channels
+
+Although `through`{.matlab} and `notThrough`{.matlab} are sufficient for many situations, it is still sometimes more convenient to directly define the transmission channel as a [Boolean condition](/learn/boolean-conditions.qmd) withough having to refer back to `through`{.matlab} and `notThrough`{.matlab}. 
+
+Say, for example, we are again interested in the transmission channel going through `y_{1,0}` OR `y_{1,1}`. Instead of using the approach of first negating the statement, then using `notThrough`{.matlab}, just to negate this statement again, we may as well just define the condition directly using the more advanced functionality of the toolbox. 
+
+The advanced functionality simply takes a `String` that defines the transmission channel as a Boolean condition. The string can either be defined using the variables of the [dynamic form](/learn/dynamic-form.qmd) $y$ or the variables using the [systems form](/learn/systems-form.qmd) $x$. In the former case, the ordering defined by the transmission matrix must also be defined. `makeConditionY` and `makeCondition` handle these two cases respectively.
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("makeConditionY", functions)
+```
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("makeCondition", functions)
+```
+
+So, to define the transmission channel that goes through $y_{1,0}$ OR through $y_{1,1}$ with an identity transmission matrix, we can do either of the following. 
+
+
+```{.matlab}
+% Note, we assume 4 variables in the system. 
+q = makeConditionY("y_{1,0} | y_{1,1}", 1:4);
+% With an identity transmission matrix, y_{1,0} -> x1
+% and y_{1,1} -> x5.
+q = makeCondition("x1 | x5");
+```
+
+## Computing Transmission Effects
+
+Transmission effects, i.e. the effect through the transmission channel, can be computed in one of two ways. The first way is to use the [systems form](/learn/systems-form.qmd) to compute the transmission effect. The second way exploits the sufficiency of impulse response functions (IRFs)[^1] and uses these to compute the effects. The following sections describe both methods. 
+
+[^1]: See Section 4 in @wegnerTCA2024.
+
+### Preparing the Systems Form
+
+The [systems form](/learn/systems-form.qmd) can be used whenever a SVAR(MA) was estimated and the AR and MA coefficients are available. The first step then consists of transforming the [dynamic form](/learn/dynamic-form.qmd) of the SVAR(MA) into the systems form. We provide the utility function `makeSystemsForm`{.matlab} for this purpose. 
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("makeSystemsForm", functions)
+```
+
+The returned systems form can then be used in `transmission`{.matlab} to compute the trasnmission effect. 
+
+Besides `makeSystemsForm`{.matlab} we also offer the two separate functions `makeB`{.matlab} and `makeOmega`{.matlab} which respectively create $B$ and $\Omega$ of the [systems form](/learn/systems-form.qmd). Use of these two functions should most of the time not be required. However, for users that might want to extend TCA, having access to these two methods seperately can be helpful. 
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("makeB", functions)
+```
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("makeOmega", functions)
+```
+
+### Preparing the IRFs
+
+Estimating the transmission effects using IRFs requires Cholesky / orthogonalised IRFs for all variables, as well as the structural shock's impulse response functions. In either case, the toolbox works internally with a matrix representation of IRFs. Since many software solutions for SVAR(MA) return IRFs in the form of three-dimensional arrays, we provide the utility function `toTransmissionIrfs`{.matlab} that transforms the three-dimensional arrays into a matrix of IRFs. 
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("toTransmissionIrfs", functions)
+```
+
+`toTransmissionIrfs`{.matlab} should be applied to both the Cholesky / orthogonalised and the structural IRFs. The resulting IRFs can then be used in `transmission`{.matlab} to compute the transmission effects. 
+
+### Computing
+
+With either the IRFs or the systems form prepared, transmission effects can be computed using any of the following versions of the `transmission`{.matlab} function. In either case, the fourth argument to `transmission`{.matlab} must be a transmission condition that can be obtained in any of the ways described above. 
+
+To compute transmission effects using the systems form, `method`{.matlab} should be set equal to `"BOmega"`{.matlab}. Similarly, to use IRFs, `method`{.matlab} should be set equal to `"irfs"`{.matlab}.
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("transmission", functions)
+```
+
+It may occur that a transmission condition contains a contradiction, i.e. a part of the boolean conditions says $x_i \land \neg x_i$. These are usually automatically removed internally. However, this automatic removal can sometimes lengthen the time it takes for the condition to compile. We therefore offer the possibility not to remove contradictions. To set this alternative option, use `setRemoveContradiction`{.matlab}. Even if contradictions are not removed, the resulting transmission effect will be correct, but the computation may take a bit longer. Thus, there is a trade-off between longer compile times (if contradictions are being removed) and longer computing time (if contradictions are not removed). 
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("setRemoveContradictions", functions)
+```
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("removeContradictions", functions)
+```
