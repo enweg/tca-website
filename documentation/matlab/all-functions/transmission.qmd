@@ -32,6 +32,7 @@ the ordering of the transmission matrix.
 - `method` (string): Specifies the calculation method:
 - `"BOmega"` uses the systems form.
 - `"irf"` uses only IRFs and can thus be used with local projections.
+- `order` (vector, optional): variable ordering as defined by the transmission matrix.
 
 ## Returns:
 - `effects` (vector): A vector where entry `i` corresponds to the transmission
@@ -63,6 +64,13 @@ effect = transmission(1, irfs, irfsOrtho, cond, "irf");
 ## Notes:
 - If `method = "BOmega"`, the function applies `transmissionBOmega`.
 - If `method = "irf"`, the function applies `transmissionIrfs`.
+- If `order` is provided, the returned effects will be a 3D array
+of dimension (nVariables, 1, horizons) where the variables are in the
+original ordering (before applying the transmission matrix).
+- If `order` is not provided, the returned effects will be a (nVariable*horizons, 1)
+dimensional vector following the ordering after applying the transmission
+matrix. This is similar to the matrix obtained via $(I - B)^{-1}\Omega$
+using the matrices from the systems form.
 
 See also `transmissionBOmega`, `transmissionIrfs`, `makeCondition`, `through`, `notThrough`
 :::
