@@ -17,6 +17,7 @@ website:
       - text: Home
         href: index.qmd
       - text: Examples 
+        href: "examples/matlab/dynare/index.qmd"
       - text: Documentation
         href: "documentation/julia/index.qmd"
       - text: FAQ

@@ -1,0 +1,87 @@
+---
+title: TCA in DSGEs using Dynare
+filters: 
+    - include-code-files
+---
+
+What will we do? Well first we need to clean our environment. 
+
+```{.matlab include="sw2007.m" start-line=6 end-line=7}
+```
+
+
+```{.matlab include="sw2007.m" start-line=10 end-line=10}
+```
+
+
+```{.matlab include="sw2007.m" start-line=13 end-line=16}
+```
+
+
+```{.matlab include="sw2007.m" start-line=22 end-line=25}
+```
+
+
+```{.matlab include="sw2007.m" start-line=27 end-line=32}
+```
+
+
+```{.matlab include="sw2007.m" start-line=38 end-line=47}
+```
+
+
+```{.matlab include="sw2007.m" start-line=54 end-line=54}
+```
+
+
+```{.matlab include="sw2007.m" start-line=57 end-line=57}
+```
+
+
+```{.matlab include="sw2007.m" start-line=60 end-line=60}
+```
+
+
+```{.matlab include="sw2007.m" start-line=62 end-line=67}
+```
+
+
+```{.matlab include="sw2007.m" start-line=73 end-line=73}
+```
+
+
+```{.matlab include="sw2007.m" start-line=74 end-line=77}
+```
+
+![First-round](first-round.png)
+
+
+```{.matlab include="sw2007.m" start-line=87 end-line=88}
+```
+
+
+```{.matlab include="sw2007.m" start-line=90 end-line=92}
+```
+
+
+```{.matlab include="sw2007.m" start-line=94 end-line=96}
+```
+
+
+```{.matlab include="sw2007.m" start-line=99 end-line=102}
+```
+
+![Second-round](second-round.png)
+
+::: {#fig-dsge-decompositions layout-ncol=2}
+
+![First-round](first-round.png)
+
+![Second-round](second-round.png)
+
+:::
+
+```{.matlab include="sw2007.m" start-line=108 end-line=115}
+```
+
+![Decomposition Comparison](comparisons.png)
