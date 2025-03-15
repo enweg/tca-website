@@ -2,76 +2,177 @@
 title: TCA in DSGEs using Dynare
 filters: 
     - include-code-files
+bibliography: ../../../references.bib
 ---
 
-What will we do? Well first we need to clean our environment. 
+In this example, we will be replicating the results in Section 5.3 of @wegnerTCA2024. Before we get started, make sure to download both the [code](./sw2007.m) and the [Dynare model](./SW2007.zip) and to put both (with the Dynare model unzipped) into the same folder. Your folder should thus include a Matlab script named *sw2007.m* and a folder named *SW2007* containing the Dynare model. 
+
+To make sure that no previously run code has an effect on the code in this example, we recommend starting a new Matlab session or at the least to run the following two lines to clean the environment and the console. 
 
 ```{.matlab include="sw2007.m" start-line=6 end-line=7}
 ```
 
+## Computing the Linearised DSGE using Dynare
+
+Section 5.3 of @wegnerTCA2024 investigates the wage channel of a contractionary monetary policy shock. @wegnerTCA2024 focus on the DSGE of @smetsShocksFrictionsUS2007 which we provide for download above. To be able to anlyse this channel, we must first obtain the first-order approximation of the DSGE. We do this by using [Dynare](https://www.dynare.org). [Check out the official [installation and configuration instructions](https://www.dynare.org/manual/installation-and-configuration.html) if Dynare is not yet installed]{.aside} To use Dynare, we must first add the path to Dynare using the following code. Beware that you most likely have to change the path in the quotation marks. Instructions on the appropriate path can be found in the official [installation and configuration instructions](https://www.dynare.org/manual/installation-and-configuration.html) for Dynare.  
 
 ```{.matlab include="sw2007.m" start-line=10 end-line=10}
 ```
 
+The first-order approximation of the @smetsShocksFrictionsUS2007 DSGE model can then be obtained by running the following code. Note that we assume that the current folder contains the *SW2007* folder mentioned in the introduction. 
 
 ```{.matlab include="sw2007.m" start-line=13 end-line=16}
 ```
 
+## TCA Setup
+
+We are now ready to use TCA. To do so, we must add the [*TCA toolbox*](https://github.com/enweg/tca-matlab-toolbox) to the path. This can be achieved by running the following code. Note that you will have to change the path in quotation marks to the location where you saved the *TCA toolbox*.  
 
 ```{.matlab include="sw2007.m" start-line=22 end-line=25}
 ```
 
+The next step then involves transforming the DSGE to a VARMA. The toolbox includes the `dynareToVarma* function allowing us to transform the first-order solution returned by Dynare to a VARMA of the form. 
 
-```{.matlab include="sw2007.m" start-line=27 end-line=32}
+To obtain the VARMA form, we run the following code. 
+
+```{.matlab include="sw2007.m" start-line=27 end-line=28}
 ```
 
+Since TCA decomposes total effects, we must first obtain these total effects -- the impulse response functions. To do this, we use the VARMA just obtained. Note, the `20` in the code below corresponds to the maximum horizon, here 20 periods. 
 
-```{.matlab include="sw2007.m" start-line=38 end-line=47}
+```{.matlab include="sw2007.m" start-line=34 end-line=35}
 ```
 
+At this point we might want to double check that our IRFs are identical to the IRFs returned by Dynare. We can do this using the following steps. First, we obtain the index of the shock we are interested in. Here, we are interested in a monetary policy shock, denoted *em*. 
 
-```{.matlab include="sw2007.m" start-line=54 end-line=54}
+```{.matlab include="sw2007.m" start-line=36 end-line=37}
 ```
 
+We then filter the IRFs to only those from the shock. Since the IRFs are a three dimensional array with the first dimension corresponding to the endogenous variables, the second to the shocks, and the third to the horizon, we index the IRFs along the second dimension. **Note, this step is also important for the remaining code, in which we will assume that the shock of interest is the only one for which we have structural IRFs.** Additionally, we adjust the IRFs for the shock size of the *em* shock. 
 
-```{.matlab include="sw2007.m" start-line=57 end-line=57}
+```{.matlab include="sw2007.m" start-line=38 end-line=42}
 ```
 
+Next, we must obtain the index of the outcome variable we are interested in. Since we investigate the effects of a monetary policy shock we focus on inflation. Inflation is named *pinfobs* in the @smetsShocksFrictionsUS2007 model. 
 
-```{.matlab include="sw2007.m" start-line=60 end-line=60}
+```{.matlab include="sw2007.m" start-line=43 end-line=44}
 ```
 
+Finally, we can compare the VARMA IRFs to those returned by Dynare. If everything went well, the difference should be tiny. 
 
-```{.matlab include="sw2007.m" start-line=62 end-line=67}
+```{.matlab include="sw2007.m" start-line=45 end-line=46}
 ```
 
+Double checking the correctness is not strictly necessary. However, it is necessary to make sure that the IRFs only contain those effects of the shock of interest. Thus, the following lines (run above) must always be included. <span style="color:red">You do not have to re-run this line.</span>
 
-```{.matlab include="sw2007.m" start-line=73 end-line=73}
+```{.matlab include="sw2007.m" start-line=38 end-line=42}
 ```
 
+## Defining Transmission Channels
 
-```{.matlab include="sw2007.m" start-line=74 end-line=77}
+To this point we have obtained the first-order solution of the DSGE using Dynare, have loaded the *TCA toolbox*, obtained the total effects -- the IRFs -- and compared the IRFs to Dynare. We are thus ready to define the actual transmission channels we are interested in. 
+
+The first step to defining transmission channels is to define the transmission matrix. We provide the `defineOrder` function simplifying this task. `defineOrder` takes a list of variable names, as defined in the Dynare model files, and returns an internal representation of the transmission matrix. 
+
+@wegnerTCA2024 choose to order interest rates (*robs*) first, since they are the naturally associated variable with the shock, wages (*dw*) second, and inflation (*pinfobs*) last. This ordering can be achieved using the following code. Note that the ordering of the remaining variables does not matter as long as they are ordered between wages and inflation[^1].
+
+[^1]: This is a theoretical result derived in @wegnerTCA2024. 
+
+```{.matlab include="sw2007.m" start-line=52 end-line=53}
 ```
 
-![First-round](first-round.png)
+@wegnerTCA2024 define the demand channel as the channel not going through wages in any period. To define this channel, we must first find the index of wages. The following line of code does exactly this. 
 
-
-```{.matlab include="sw2007.m" start-line=87 end-line=88}
+```{.matlab include="sw2007.m" start-line=54 end-line=55}
 ```
 
+We can then use the `notThrough` function to define the demand channel. We simply say that the demand channel is the effect not going through wages for the periods `0:20` -- contemporaneously and up to period 20, which is out maximum period. The first argument of `notThrough` is the variable index, the seonc the periods, and the last is the transmission matrix / ordering. 
 
-```{.matlab include="sw2007.m" start-line=90 end-line=92}
+```{.matlab include="sw2007.m" start-line=56 end-line=58}
 ```
 
+The wage channel -- the effect through wages in at least one period -- is simply the negation of the demand channel. The wage channel can thus be obtained in the following way. 
 
-```{.matlab include="sw2007.m" start-line=94 end-line=96}
+```{.matlab include="sw2007.m" start-line=59 end-line=61}
 ```
 
+## Computing Transmission Effects
 
-```{.matlab include="sw2007.m" start-line=99 end-line=102}
+Having defined the transmission channels, we can now compute the effects through these transmission channels -- the transmission effects. The first step involves transforming the VARMA to the systems representation, making sure that the maximum horizon is (the last argument in the function below) is the same as the maximum horizon of our total effects. 
+
+```{.matlab include="sw2007.m" start-line=63 end-line=64}
 ```
 
-![Second-round](second-round.png)
+Next, we must obtain the index of the shock we are interested in. This is similar to when we computed the total effects -- the IRFs. For completeness, we include the code again. 
+
+```{.matlab include="sw2007.m" start-line=65 end-line=66}
+```
+
+We can now compute the transmission effect of the demand channel using the `transmission` function. Because we provide the transmission matrix / ordering, the returned result will be similar to the total effects, the `irfs` object. All variables will be in there original ordering as defined in the `varobs` block of the Dynare model. We multiply by the shock size to be consistent with the IRFs.  
+
+```{.matlab include="sw2007.m" start-line=67 end-line=69}
+```
+
+Similarly, we can obtain the effect through the wage channel. 
+
+```{.matlab include="sw2007.m" start-line=70 end-line=72}
+```
+
+## Visualising Transmission Effects
+
+The best way to inspect and anlyse transmission effects is to visualise them in a decomposition plot. We provide functions to simplify this visualisation as part of the *TCA toolbox*. To add this functionality, we need to add the *plotting* functions to the path. This can be done using the following code. Note that, similar to above, you will need to change the location of the toolbox in quotation marks to the location where you saved the toolbox. 
+
+```{.matlab include="sw2007.m" start-line=78 end-line=78}
+```
+
+Next, we define names for our channels, which in our case is simply *Demand Channel* and *Wage Channel*. We names the first channel *Demand Channel* even though it also includes labour hours. We do so, because it mostly captures demand related variables, such as consumption, investment, and aggregate output. 
+
+```{.matlab include="sw2007.m" start-line=79 end-line=79}
+```
+
+We must also obtain the index of the outcome variable of interest. @wegnerTCA2024 focus on inflation, so will we. 
+
+```{.matlab include="sw2007.m" start-line=80 end-line=80}
+```
+
+Lastly, we need to collect the transmission effects that decompose the total effect. In our case, these are the effects through the demand and wage channels. 
+
+```{.matlab include="sw2007.m" start-line=81 end-line=81}
+```
+
+A decomposition plot can then be obtained using `plotDecomposition`. 
+
+```{.matlab include="sw2007.m" start-line=82 end-line=82}
+```
+
+The returned plot should look like the following. The black scatter-line corresponds to the total effect of a monetary policy shock on inflation. The blue bars correspond to the effect through the demand channel and the red bars correspond to the effect through the wage channel. Since wages are ordered before demand variables, @wegnerTCA2024 call this decomposition the first-round decomposition. 
+
+![Decomposition of the effect of a contractionary monetary policy shock on inflation into the effect through a demand and a wage channel.](first-round.png){#fig-first-round}
+
+## Using an Alternative Transmission Matrix
+
+@wegnerTCA2024 argue that an alternative transmission matrix could also have been used. Specifically, they argue that wages are more commonly thought of playing a role in second-round effects and less in first-round effects of monetary policy. They argue that the transmission matrix reflecting this idea would order wages second to last rather then second. We can implement this alternative transmission matrix by simply changing the ordering. 
+
+```{.matlab include="sw2007.m" start-line=91 end-line=92}
+```
+
+We can then define the transmission channels and compute their effects in a similar way to above. 
+
+```{.matlab include="sw2007.m" start-line=94 end-line=103}
+```
+
+This alternative decomposition can then be visualised in a decomposition plot. 
+
+```{.matlab include="sw2007.m" start-line=106 end-line=109}
+```
+
+The resulting plot should look like the following. The black scatter-line, blue bars, and red bars have all the same meaning as in @fig-first-round. The only difference is that the transmission matrix is different.
+
+![Decomposition of the effect of a contractionary monetary policy shock on inflation into the effect through a demand and a wage channel using the alternative transmission matrix.](second-round.png){#fig-second-round}
+
+## Comparing Transmission Effects of Different Transmission Matrices
+
+We can put @fig-first-round and @fig-second-round next to each other to compare the transmission effects across the two transmission matrices. @fig-dsge-decompositions shows the two next to each other. Clearly, the differences, if they exist, are so small that they are not clearly visible. 
 
 ::: {#fig-dsge-decompositions layout-ncol=2}
 
@@ -79,9 +180,14 @@ What will we do? Well first we need to clean our environment.
 
 ![Second-round](second-round.png)
 
+Comparing the decomposition of a contractionary monetary policy shock on inflation across the two transmission matrices. 
 :::
 
-```{.matlab include="sw2007.m" start-line=108 end-line=115}
+A better way to compare transmission effects across two transmission matrices is provided by the `plotCompareDecompositions` function, which plots the decompositions into a single plot. The following code produces Figure @fig-plot-comparison. Note that @wegnerTCA2024 name the first decomposition, ordering wages second, the *first-round decomposition* and the second decomposition, ordering wages second-to-last, the *second-round decomposition*. 
+
+```{.matlab include="sw2007.m" start-line=114 end-line=122}
 ```
 
-![Decomposition Comparison](comparisons.png)
+Figure @fig-plot-comparison shows that differences exist, as would have been expected by the theory developed in @wegnerTCA2024. However, these differences are small. @wegnerTCA2024 conclude that this is most likely due to wages only playing a role in second-round effects, implying that the contemporaneous effect of wages on demand variables, which is possible under the first transmission matrix but not the second, is small. 
+
+![Comparing the decompositions of a contractionary monetary policy shock on inflation across the two transmission matrices.](comparisons.png){#fig-plot-comparison}

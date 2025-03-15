@@ -26,10 +26,6 @@ addpath("~/Documents/repos/tca-matlab-toolbox/dynare")
 
 % Getting the VARMA representation
 [Phi0, As, Psis, p, q] = dynareToVarma(M_, oo_, options_);
-% Defining the transmission matrix / order.
-order = defineOrder(["robs", "dw", "labobs", "dc", "dinve", "dy", "pinfobs"], options_);
-% Getting the systems-form used for TCA. 
-[B, Omega] = makeSystemsForm(Phi0, As, Psis, order, 20);
 
 %-------------------------------------------------------------------------------
 % TESTING TOTAL EFFECT EQUALITY
@@ -39,8 +35,11 @@ order = defineOrder(["robs", "dw", "labobs", "dc", "dinve", "dy", "pinfobs"], op
 irfs = varmaIrfs(Phi0, As, Psis, 20);
 % Getting the shock index.
 idxShock = getShockIdx("em", M_);
+% Getting the shock size of the monetary policy shock. 
+shockSize = getShockSize("em", M_);
 % We only focus on the "em" shock. 
-irfs = irfs(:, idxShock, :);
+% We need to multiply by the shock size. 
+irfs = irfs(:, idxShock, :) * shockSize;
 % Get original variable index for inflation
 idx = getVariableIdx("pinfobs", options_);
 % Comparing our IRFs to Dynare IRFs. The difference should be very small.  
@@ -50,6 +49,8 @@ vec(irfs(idx, 1, :)) - pinfobs_em
 % DEFINING THE CHANNELS AND COMPUTING EFFECTS
 %-------------------------------------------------------------------------------
 
+% Defining the transmission matrix / order.
+order = defineOrder(["robs", "dw", "labobs", "dc", "dinve", "dy", "pinfobs"], options_);
 % Obtaining the original variable index for wages. 
 idxWage = getVariableIdx("dw", options_);
 % Defining the output channel as the channel not going through wages in any
@@ -59,12 +60,16 @@ channelOutput = notThrough(idxWage, 0:20, order);
 % the effect going through wages in at least one period. 
 channelWage = ~channelOutput;
 
+% Getting the systems-form used for TCA. 
+[B, Omega] = makeSystemsForm(Phi0, As, Psis, order, 20);
 % Obtaining the index for the monetary policy shock. 
-[shockSize, shockIdx] = getShockSize(M_, "em");
+idxShock = getShockIdx("em", M_);
 % Computing the effect through the output channel. 
-effectChannelOutput = transmission(shockIdx, B, Omega, channelOutput, "BOmega", order); 
+% We need to multiply by the shock size. 
+effectChannelOutput = transmission(idxShock, B, Omega, channelOutput, "BOmega", order) * shockSize; 
 % Computing the effect through the wage channel. 
-effectChannelWage = transmission(shockIdx, B, Omega, channelWage, "BOmega", order);
+% We need to multiply by the shock size. 
+effectChannelWage = transmission(idxShock, B, Omega, channelWage, "BOmega", order) * shockSize;
 
 %-------------------------------------------------------------------------------
 % PLOTTING
@@ -85,15 +90,17 @@ exportgraphics(fig, 'first-round.png', 'Resolution', 300);
 
 % Switching the order of wages and output system.
 order = defineOrder(["robs", "labobs", "dc", "dinve", "dy", "dw", "pinfobs"], options_);
-[B, Omega] = makeSystemsForm(Phi0, As, Psis, order, 20);
+
 % Defining the channel again.
 idxWage = getVariableIdx("dw", options_);
 channelOutputAlternative = notThrough(idxWage, 0:20, order);
 channelWageAlternative = ~channelOutputAlternative;
-
-[shockSize, shockIdx] = getShockSize(M_, "em");
-effectChannelOutputAlt = transmission(shockIdx, B, Omega, channelOutputAlternative, "BOmega", order); 
-effectChannelWageAlt = transmission(shockIdx, B, Omega, channelWageAlternative, "BOmega", order);
+% Computing the transmission effects.
+[B, Omega] = makeSystemsForm(Phi0, As, Psis, order, 20);
+idxShock = getShockIdx("em", M_);
+shockSize = getShockSize("em", M_);
+effectChannelOutputAlt = transmission(idxShock, B, Omega, channelOutputAlternative, "BOmega", order) * shockSize; 
+effectChannelWageAlt = transmission(idxShock, B, Omega, channelWageAlternative, "BOmega", order) * shockSize;
 
 % Plotting
 channelNames = ["Output Channel", "Wage Channel"];
