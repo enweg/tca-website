@@ -1,4 +1,4 @@
-Starting Dynare (version 5.5-arm64).
+Starting Dynare (version 6.3).
 Calling Dynare with arguments: none
 Starting preprocessing of the model file ...
 WARNING: in the 'steady_state_model' block, variable 'ewma' is not assigned a value
@@ -35,13 +35,23 @@ WARNING: in the 'steady_state_model' block, variable 'sw' is not assigned a valu
 WARNING: in the 'steady_state_model' block, variable 'kpf' is not assigned a value
 WARNING: in the 'steady_state_model' block, variable 'kp' is not assigned a value
 Found 40 equation(s).
-Evaluating expressions...done
+Evaluating expressions...
 Computing static model derivatives (order 1).
+Normalizing the static model...
+Finding the optimal block decomposition of the static model...
+11 block(s) found:
+  9 recursive block(s) and 2 simultaneous block(s).
+  the largest simultaneous block has 13 equation(s)
+                                 and 13 feedback variable(s).
 Computing dynamic model derivatives (order 2).
-Processing outputs ...
-done
+Normalizing the dynamic model...
+Finding the optimal block decomposition of the dynamic model...
+4 block(s) found:
+  2 recursive block(s) and 2 simultaneous block(s).
+  the largest simultaneous block has 13 equation(s)
+                                 and 13 feedback variable(s).
 Preprocessing completed.
-
+Preprocessing time: 0h00m00s.
 [Warning: Some of the parameters have no value (ccs, cinvs, crdpi) when using stoch_simul. If these parameters are not initialized in a
 steadystate file or a steady_state_model-block, Dynare may not be able to solve the model. Note that simul, perfect_foresight_setup, and
 perfect_foresight_solver do not automatically call the steady state file.] 

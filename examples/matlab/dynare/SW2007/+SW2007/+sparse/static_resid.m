@@ -1,24 +1,10 @@
-function residual = static_resid(T, y, x, params, T_flag)
-% function residual = static_resid(T, y, x, params, T_flag)
-%
-% File created by Dynare Preprocessor from .mod file
-%
-% Inputs:
-%   T         [#temp variables by 1]  double   vector of temporary terms to be filled by function
-%   y         [M_.endo_nbr by 1]      double   vector of endogenous variables in declaration order
-%   x         [M_.exo_nbr by 1]       double   vector of exogenous variables in declaration order
-%   params    [M_.param_nbr by 1]     double   vector of parameter values in declaration order
-%                                              to evaluate the model
-%   T_flag    boolean                 boolean  flag saying whether or not to calculate temporary terms
-%
-% Output:
-%   residual
-%
-
-if T_flag
-    T = SW2007.static_resid_tt(T, y, x, params);
+function [residual, T_order, T] = static_resid(y, x, params, T_order, T)
+if nargin < 5
+    T_order = -1;
+    T = NaN(17, 1);
 end
-residual = zeros(40, 1);
+[T_order, T] = SW2007.sparse.static_resid_tt(y, x, params, T_order, T);
+residual = NaN(40, 1);
     residual(1) = (y(32)) - (params(9)*y(11)+(1-params(9))*y(18));
     residual(2) = (y(10)) - (y(11)*T(8));
     residual(3) = (y(11)) - (y(18)+y(17)-y(12));
@@ -59,5 +45,4 @@ residual = zeros(40, 1);
     residual(38) = (y(3)) - (params(5)+y(29));
     residual(39) = (y(2)) - (100*((1+params(5)/100)/T(3)-1)+y(31));
     residual(40) = (y(1)) - (y(28)+params(4));
-
 end
