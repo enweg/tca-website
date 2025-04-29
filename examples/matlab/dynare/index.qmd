@@ -5,126 +5,123 @@ filters:
 bibliography: ../../../references.bib
 ---
 
-In this example, we will be replicating the results in Section 5.3 of @wegnerTCA2024. Before we get started, make sure to download both the [code](./sw2007.m) and the [Dynare model](./SW2007.zip) and to put both (with the Dynare model unzipped) into the same folder. Your folder should thus include a Matlab script named *sw2007.m* and a folder named *SW2007* containing the Dynare model. 
+In this example, we replicate the results from Section 5.3 of @wegnerTCA2024. Before we begin, download both the [code](./sw2007.m) and the [Dynare model](./SW2007.zip). Make sure to unzip the Dynare model, and place both the *sw2007.m* script and the *SW2007* folder into the same directory.
 
-To make sure that no previously run code has an effect on the code in this example, we recommend starting a new Matlab session or at the least to run the following two lines to clean the environment and the console. 
+To ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:
 
 ```{.matlab include="sw2007.m" start-line=2 end-line=3}
 ```
 
 ## Computing the Linearised DSGE using Dynare
 
-Section 5.3 of @wegnerTCA2024 investigates the wage channel of a contractionary monetary policy shock. @wegnerTCA2024 focus on the DSGE of @smetsShocksFrictionsUS2007 which we provide for download above. To be able to anlyse this channel, we must first obtain the first-order approximation of the DSGE. We do this by using [Dynare](https://www.dynare.org). [Check out the official [installation and configuration instructions](https://www.dynare.org/manual/installation-and-configuration.html) if Dynare is not yet installed]{.aside} To use Dynare and the TCA Toolbox, we must first add both to the path using the following code. Beware that you most likely have to change the path in the quotation marks. Instructions on the appropriate Dynare path can be found in the official [installation and configuration instructions](https://www.dynare.org/manual/installation-and-configuration.html) for Dynare. The TCA Toolbox path is the location to which you downloaded the toolbox.  
+Section 5.3 of @wegnerTCA2024 studies the wage channel of a contractionary monetary policy shock using the DSGE model of @smetsShocksFrictionsUS2007. To analyse this channel, we first obtain the model's first-order approximation using [Dynare](https://www.dynare.org). [Follow Dynare's official [installation instructions](https://www.dynare.org/manual/installation-and-configuration.html) if necessary.]{.aside}
+
+To use Dynare and the TCA Toolbox, we first add both to the Matlab path. You will likely need to adjust the file paths in the quotation marks:
 
 ```{.matlab include="sw2007.m" start-line=6 end-line=9}
 ```
 
-The first-order approximation of the @smetsShocksFrictionsUS2007 DSGE model can then be obtained by running the following code. Note that we assume that the current folder contains the *SW2007* folder mentioned in the introduction. 
+Assuming the *SW2007* folder is in the current directory, we can now generate the first-order approximation:
 
 ```{.matlab include="sw2007.m" start-line=12 end-line=15}
 ```
 
 ## TCA Setup
 
-We aleady added the TCA Toolbox to the path above. The next step thus involves creating a model, more precisely a `DSGE` model. The following lines created a `DSGE` model from Dynare's output structures. 
+With the TCA Toolbox added to the path, we can create a `DSGE` model from Dynare's output structures:
 
 ```{.matlab include="sw2007.m" start-line=22 end-line=22}
 ```
 
-Since TCA decomposes total effects, we must first obtain these total effects -- the impulse response functions. This can be achieved using `IRF` which returns an `IRFContainer`. The container stores additional information besides the actual IRFs. Since we are currently only interested in the IRFs themselves, we obtain these using `getIrfArray`. 
+TCA requires impulse response functions (IRFs) to decompose effects. We obtain them as follows, extracting the IRF array from the `IRFContainer`:
 
 ```{.matlab include="sw2007.m" start-line=29 end-line=31}
 ```
 
 ## Defining Transmission Channels
 
-To this point we have obtained the first-order solution of the DSGE using Dynare, have loaded the *TCA toolbox*, and obtained the total effects -- the IRFs. We are thus ready to define the actual transmission channels we are interested in. 
+At this stage, we have the DSGE's first-order solution and the IRFs. We can now define the transmission channels of interest.
 
-The first step to defining transmission channels is to define the transmission matrix. @wegnerTCA2024 choose to order interest rates (*robs*) first, since they are the naturally associated variable with the shock, wages (*dw*) second, and inflation (*pinfobs*) last. This ordering can be achieved using the following code. Note that the ordering of the remaining variables does not matter as long as they are ordered between wages and inflation[^1].
+First, define the transmission matrix. Following @wegnerTCA2024, we order variables so that interest rates (*robs*) come first, wages (*dw*) second, and inflation (*pinfobs*) last. The ordering of variables between wages and inflation does not matter[^1]:
 
-[^1]: This is a theoretical result derived in @wegnerTCA2024. 
+[^1]: See @wegnerTCA2024 for the theoretical justification.
 
 ```{.matlab include="sw2007.m" start-line=38 end-line=38}
 ```
 
-Transmission matrices can thus simply be defined through a cell array that orders the endogenous variables. 
-
-We are now ready to define the transmission channels. @wegnerTCA2024 define the demand channel as the channel not going through wages in any period.  We can then use the `notThrough` function to define the demand channel. We simply say that the demand channel is the effect not going through wages (`dw`) for the periods `0:20` -- contemporaneously and up to period 20, which is out maximum period. The first argument of `notThrough` is the variable, the second the periods, and the last is the transmission matrix (`order`). 
+Next, we define the transmission channels. The demand channel is defined as the effect that does not pass through wages (*dw*) during any period from 0 to 20. We define this channel using the `notThrough` function:
 
 ```{.matlab include="sw2007.m" start-line=40 end-line=40}
 ```
 
-The wage channel -- the effect through wages in at least one period -- is simply the negation of the demand channel. The wage channel can thus be obtained in the following way. 
+The wage channel, capturing any effect through wages in at least one period, is the complement:
 
 ```{.matlab include="sw2007.m" start-line=42 end-line=42}
 ```
 
 ## Computing Transmission Effects
 
-Having defined the transmission channels, we can now compute the effects through these transmission channels -- the transmission effects. This can be done using the `transmission` function of our `DSGE` model. As the first argument we provide the shock we are interested in -- here the monetary policy shock `em`. The second argument is our channel definition, the third the transmsision matrix / ordering, and the last the maximum horizon. 
+We can now compute the transmission effects using the `transmission` method of the `DSGE` model. We specify the shock (`em`), the transmission channel, the transmission matrix, and the maximum horizon:
 
 ```{.matlab include="sw2007.m" start-line=45 end-line=46}
 ```
 
-The returned result will be similar to the total effects, the `irfs` object. All variables will be in their original ordering as defined in the `varobs` block of the Dynare model. IRFs and transmission effects are also already adjusted for the shock sizes defined in Dynare's model file. 
+The output has the same structure as the original IRFs, with variables appearing in their original order and adjustments made for the defined shock size.
 
 ## Visualising Transmission Effects
 
-The best way to inspect and anlyse transmission effects is to visualise them in a decomposition plot. We provide functions to simplify this visualisation as part of the *TCA toolbox*. These functions have already been added to the path above. 
-
-To plot the docomposition, we define names for our channels, which in our case is simply *Demand Channel* and *Wage Channel*. 
+To better understand the transmission effects, we plot their decomposition. We first name the channels:
 
 ```{.matlab include="sw2007.m" start-line=52 end-line=52}
 ```
 
-We must also obtain the index of the outcome variable of interest. @wegnerTCA2024 focus on inflation, so will we. 
+Next, identify the indices of the outcome variable (inflation) and the shock (monetary policy shock `em`):
 
-```{.matlab include="sw2007.m" start-line=53 end-line=53}
+```{.matlab include="sw2007.m" start-line=53 end-line=54}
 ```
 
-Similarly, we need to obtain the index of the shock we are interested in -- here the monetary policy shock `em`.
-
-```{.matlab include="sw2007.m" start-line=54 end-line=54}
-```
-
-Lastly, we need to collect the transmission effects that decompose the total effect. In our case, these are the effects through the demand and wage channels. 
+Then collect the transmission effects into a cell array:
 
 ```{.matlab include="sw2007.m" start-line=55 end-line=55}
 ```
 
-A decomposition plot can then be obtained using `plotDecomposition`. 
+Finally, create the decomposition plot:
 
 ```{.matlab include="sw2007.m" start-line=56 end-line=56}
 ```
 
-The returned plot should look like the following. The black scatter-line corresponds to the total effect of a monetary policy shock on inflation. The blue bars correspond to the effect through the demand channel and the red bars correspond to the effect through the wage channel. 
+The plot shows:
+
+- Total effect (black scatter-line)
+- Effect through the demand channel (blue bars)
+- Effect through the wage channel (red bars)
 
 ![Decomposition of the effect of a contractionary monetary policy shock on inflation into the effect through a demand and a wage channel.](first-round.png){#fig-first-round}
 
 ## Using an Alternative Transmission Matrix
 
-@wegnerTCA2024 argue that an alternative transmission matrix could also have been used. Specifically, they focus on the alternative transmission matrix in which wages are ordered second to last rather than second. This alternative ordering can be achieved by simply changing the ordering of the variables in `order`. 
+@wegnerTCA2024 also explore an alternative ordering, where wages are placed second to last. We define the new ordering as:
 
 ```{.matlab include="sw2007.m" start-line=66 end-line=66}
 ```
 
-We can then define the transmission channels and compute their effects in a similar way to above. 
+Transmission channels and effects are then redefined and recomputed:
 
 ```{.matlab include="sw2007.m" start-line=68 end-line=73}
 ```
 
-This alternative decomposition can then be visualised in a decomposition plot. 
+The decomposition plot for the alternative ordering can be created as follows:
 
 ```{.matlab include="sw2007.m" start-line=76 end-line=80}
 ```
 
-The resulting plot should look like the following. The black scatter-line, blue bars, and red bars have all the same meaning as in @fig-first-round. The only difference is that the transmission matrix is different.
+The resulting plot mirrors the previous setup, with the only difference being the transmission matrix. The black scatter-line and the blue and red bars retain the same meaning as in the previous plot: the black scatter-line shows the total effect, the blue bars represent the demand channel, and the red bars represent the wage channel.
 
-![Decomposition of the effect of a contractionary monetary policy shock on inflation into the effect through a demand and a wage channel using the alternative transmission matrix.](second-round.png){#fig-second-round}
+![Alternative decomposition of the effect of a contractionary monetary policy shock on inflation into the effect through a demand and a wage channel using the alternative transmission matrix.](second-round.png){#fig-second-round}
 
 ## Comparing Transmission Effects of Different Transmission Matrices
 
-We can put @fig-first-round and @fig-second-round next to each other to compare the transmission effects across the two transmission matrices. @fig-dsge-decompositions shows the two next to each other. Clearly, the differences, if they exist, are so small that they are not clearly visible. 
+We can place @fig-first-round and @fig-second-round side-by-side for comparison. As shown in @fig-dsge-decompositions, differences are minor:
 
 ::: {#fig-dsge-decompositions layout-ncol=2}
 
@@ -135,11 +132,11 @@ We can put @fig-first-round and @fig-second-round next to each other to compare 
 Comparing the decomposition of a contractionary monetary policy shock on inflation across the two transmission matrices. 
 :::
 
-A better way to compare transmission effects across two transmission matrices is provided by the `plotCompareDecompositions` function, which plots the decompositions into a single plot. The following code produces Figure @fig-plot-comparison. 
+A more precise comparison uses the `plotCompareDecompositions` function. The following code generates Figure @fig-plot-comparison:
 
 ```{.matlab include="sw2007.m" start-line=86 end-line=93}
 ```
 
-Figure @fig-plot-comparison shows that differences exist, as would have been expected by the theory developed in @wegnerTCA2024. However, these differences are small. @wegnerTCA2024 conclude that this is most likely due to wages only playing a role in second-round effects, implying that the contemporaneous effect of wages on demand variables, which is possible under the first transmission matrix but not the second, is small. 
+Figure @fig-plot-comparison shows small but detectable differences, as predicted by theory.
 
 ![Comparing the decompositions of a contractionary monetary policy shock on inflation across the two transmission matrices.](comparisons.png){#fig-plot-comparison}
