@@ -31,8 +31,11 @@ transmission matrix.
 
 - `idx` (vector of integers): Indices of the variables that paths must
 go through, using their original indices in the dynamic system.
-- `horizons` (cell array of vectors): Each element specifies the time
-horizons for the corresponding variable in `idx`.
+- `horizons` (cell array of vectors or vector of integer): If a single
+vector of integers is provided, then it will be applied to each `idx`.
+Alternatively, a cell array of integer vectors can be provided in which
+case each element in the cell array applies to the respective element
+in `idx`.
 - `order` (vector of integers): Variable ordering determined by the
 transmission matrix.
 

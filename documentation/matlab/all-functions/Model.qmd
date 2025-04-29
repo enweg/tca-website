@@ -1,0 +1,146 @@
+--- 
+title: | 
+  Model
+sidebar: doc
+---
+
+::: {.doc-box}
+::: {.callout-warning appearance="simple" icon="false" collapse="true"}    
+# Model
+
+
+Abstract Model Class
+:::
+:::
+
+
+    
+::: {.doc-box}
+::: {.callout-warning appearance="simple" icon="false" collapse="true"}    
+# vars2idx_
+
+
+`vars2idx_` Map variable names or indices to their corresponding
+column indices.
+
+`vars2idx_(obj, vars)` returns the column indices corresponding
+to the variables specified in `vars`. If `vars` is a numeric
+array, it is returned unchanged. If `vars` is a character or
+cell array of characters, the corresponding column indices in
+the model data are returned.
+
+## Arguments
+- `obj` (object): Model object that must implement `getVariableNames`.
+- `vars` (integer, char, or cell array of char): Variables
+specified either by their indices or names.
+
+## Returns
+- `varsIdx` (integer array): Column indices corresponding to
+the requested variables.
+
+## Notes
+- This function is intended for internal use only.
+- If a variable name does not exist, an error is thrown.
+
+See also `getVariableNames`.
+:::
+:::
+
+::: {.doc-box}
+::: {.callout-warning appearance="simple" icon="false" collapse="true"}    
+# defineOrder
+
+
+`defineOrder` Define the transmission ordering of variables in a
+model.
+
+`defineOrder(obj, order)` specifies the ordering of variables
+by their names and returns the corresponding indices used
+internally by the model.
+
+## Arguments
+- `obj` (object): Model object that implements `vars2idx_`.
+- `order` (cell array of char): Ordered list of variable names.
+
+## Returns
+- `orderIdx` (integer array): Ordered indices corresponding
+to the variable names.
+
+See also `vars2idx_`, `getVariableNames`.
+:::
+:::
+
+::: {.doc-box}
+::: {.callout-warning appearance="simple" icon="false" collapse="true"}    
+# requireFitted
+
+
+`requireFitted` Ensure that the model has been estimated.
+
+`requireFitted(obj)` checks whether the model `obj` has been fitted.
+If the model is not fitted, it throws an error of type `NotFitted`.
+
+## Arguments
+- `obj` (object): Model object that should have a method `isFitted`.
+
+See also `isFitted`.
+:::
+:::
+
+::: {.doc-box}
+::: {.callout-warning appearance="simple" icon="false" collapse="true"}    
+# notThrough
+
+
+`notThrough` Create a transmission condition excluding specific
+variables from the channel.
+
+`q = notThrough(obj, vars, horizons, order)` constructs a
+transmission condition `q` where paths cannot pass through
+specified variables at given time horizons.
+
+## Arguments
+- `obj` (object): A Model object.
+- `vars` (char or cell array of char): Name(s) of the variables
+that paths cannot go through.
+- `horizons` (vector or cell array of vectors): Time horizons
+at which the paths cannot pass through the variable(s).
+- `order` (char or cell array of char): Variable ordering defining
+the transission matrix.
+
+## Returns
+- `q` (Q): A transmission condition that can be used in
+`transmission` to compute the transmission effect.
+
+See also `through`, `transmission`
+:::
+:::
+
+::: {.doc-box}
+::: {.callout-warning appearance="simple" icon="false" collapse="true"}    
+# through
+
+
+`through` Create a transmission condition enforcing paths through
+specific variables.
+
+`q = through(obj, vars, horizons, order)` constructs a
+transmission condition `q` where paths must pass through
+specified variables at given time horizons.
+
+## Arguments
+- `obj` (object): A Model object.
+- `vars` (char or cell array of char): Name(s) of the
+variables that paths must go through.
+- `horizons` (vector or cell array of vectors): Time horizons at
+which the paths must pass through the variable(s).
+- `order` (char or cell array of char): Variable ordering defining
+the transmission matrix.
+
+## Returns
+- `q` (Q): A transmission condition that can be used in
+`transmission` to compute the transmission effect.
+
+See also `notThrough`, `transmission`.
+:::
+:::

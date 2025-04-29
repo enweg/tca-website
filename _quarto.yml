@@ -43,11 +43,11 @@ website:
         contents: 
           - text: Overview
             href: "documentation/matlab/index.qmd"
+          - text: Advanced Tools
+            href: "documentation/matlab/advanced.qmd"
           - text: Internals
             href: "documentation/matlab/internals.qmd"
-          - text: "Dynare DSGE"
-            href: "documentation/matlab/dynare.qmd"
-          - section: Functions
+          - section: All
             contents: documentation/matlab/all-functions/*
 
     - id: faq
