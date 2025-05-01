@@ -7,7 +7,12 @@ language:
 website:
   title: "Transmission Channel Analysis"
   page-navigation: true
-  back-to-top-navigation: true
+  announcement: 
+    icon: info-circle
+    dismissable: false
+    content: "**Note** - this website is still actively under construction."
+    type: primary
+    position: below-navbar
   search: 
     location: navbar
     type: textbox
