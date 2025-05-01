@@ -32,7 +32,7 @@ Decompose your impulse response functions, and gain insights not gained before.
 </div>
 
 <ul id="hero-nav">
-<li>[Tutorials](about.qmd)</li>
+<li>[Examples](examples/matlab/dynare/index.qmd)</li>
 <li>[Documentation](documentation/julia/index.qmd)</li>
 <li>[FAQ](#faq)</li>
 <li>[About](#about)</li>

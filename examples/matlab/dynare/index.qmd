@@ -3,6 +3,7 @@ title: TCA in DSGEs using Dynare
 filters: 
     - include-code-files
 bibliography: ../../../references.bib
+sidebar: examples
 ---
 
 In this example, we replicate the results from Section 5.3 of @wegnerTCA2024. Before we begin, download both the [code](./sw2007.m) and the [Dynare model](./SW2007.zip). Make sure to unzip the Dynare model, and place both the *sw2007.m* script and the *SW2007* folder into the same directory.

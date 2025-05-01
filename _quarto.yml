@@ -64,6 +64,24 @@ website:
             - "faq/topics/graphical-form.qmd"
             - "faq/topics/boolean-conditions.qmd"
 
+    - id: examples
+      title: Examples
+      contents: 
+      - section: Julia 
+        contents: 
+          - text: TCA in SVARs
+            href: "examples/julia/svar/index.qmd"
+          - text: TCA in LPs
+            href: "examples/julia/lp/index.qmd"
+      - section: Matlab
+        contents: 
+          - text: TCA in SVARs
+            href: "examples/matlab/svar/index.qmd"
+          - text: TCA in LPs
+            href: "examples/matlab/lp/index.qmd"
+          - text: TCA in Dynare
+            href: "examples/matlab/dynare/index.qmd"
+
 format:
   html:
     theme:
