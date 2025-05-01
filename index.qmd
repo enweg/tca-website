@@ -77,23 +77,22 @@ Sice TCA decomposes the impulse response function, Wegner et al (2024) are able 
 <div id="overview-info-learn">
 ### Learn more about TCA
 
-The best way to learn about about TCA is to check out the Wiki or the tutorials. The Wiki covers the basic and frequently asked questions, while the tutorials give hands-on examples on how to use TCA in practice.
+The best way to learn about about TCA is to check out the Wiki or the tutorials. The Wiki covers the basics of TCA, while the tutorials give hands-on examples on how to use TCA in practice.
 
 <a href="index.qmd#faq" class="overview-btn">Wiki</a>
-<a href="index.qmd" class="overview-btn">Examples</a>
+<a href="./examples/matlab/dynare/index.qmd" class="overview-btn">Examples</a>
 </div>
 
 <div id="overview-info-software">
 ### Software 
 
-We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (in Matlab). See the documentation or the tutorials for each of them to learn more
+We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (as part of the Matlab package). See the documentation or the tutorials for each of them to learn more
 
 **Documentation**
 
 
 <a href="/documentation/julia/index.qmd" class="overview-btn">Julia</a>
 <a href="/documentation/matlab/index.qmd" class="overview-btn">Matlab</a>
-<a href="/documentation/matlab/dynare.qmd" class="overview-btn">Dynare</a>
 
 </div>
 </div>
