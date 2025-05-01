@@ -1,5 +1,5 @@
 ---
-title: FAQ
+title: Wiki
 css: "../styles/faq.css"
 sidebar: false
 listing: 

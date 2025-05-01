@@ -34,7 +34,7 @@ Decompose your impulse response functions, and gain insights not gained before.
 <ul id="hero-nav">
 <li>[Examples](examples/matlab/dynare/index.qmd)</li>
 <li>[Documentation](documentation/julia/index.qmd)</li>
-<li>[FAQ](#faq)</li>
+<li>[Wiki](#faq)</li>
 <li>[About](#about)</li>
 <li id="hero-nav-paper">[Paper](https://arxiv.org/abs/2405.18987)</li>
 </ul>
@@ -77,10 +77,10 @@ Sice TCA decomposes the impulse response function, Wegner et al (2024) are able 
 <div id="overview-info-learn">
 ### Learn more about TCA
 
-The best way to learn about about TCA is to check out the FAQ or the tutorials. The FAQ covers the basic and frequently asked questions, while the tutorials give hands-on examples on how to use TCA in practice.
+The best way to learn about about TCA is to check out the Wiki or the tutorials. The Wiki covers the basic and frequently asked questions, while the tutorials give hands-on examples on how to use TCA in practice.
 
-<a href="index.qmd#faq" class="overview-btn">FAQ</a>
-<a href="index.qmd" class="overview-btn">Tutorials</a>
+<a href="index.qmd#faq" class="overview-btn">Wiki</a>
+<a href="index.qmd" class="overview-btn">Examples</a>
 </div>
 
 <div id="overview-info-software">
@@ -110,7 +110,7 @@ We provide various software packages for TCA. These allow practitioners to apply
 <div id="faq-box">
 <!--START OF FAQ TITLE-->
 <div id="faq-title">
-<h1>FAQ</h1>
+<h1>Wiki</h1>
 </div>
 <!--END OF FAQ TITLE-->
 

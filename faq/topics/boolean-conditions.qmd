@@ -28,7 +28,7 @@ And what if $x_2$ should not be on any of the paths (we don't care if $x_1$ is o
 
 Lastly, what if we wanted both $x_1$ and $x_2$ to be on the paths? In that case only the first row would be in our transmission channel. The corresponding Boolean condition would be $b=x_1 \land x_2$ where $\land$ (in math) and `&`{.julia} (in code) denotes the AND in our condition. 
 
-AND, NOT, and OR can be combined in various ways to form complex conditions and thus complex transmission channels. Moreover, parentheses can be used to make these statements even more complicated. Since these complicated statements go far beyond the scope of this little FAQ, we invite the reader to read the Appendix of @wegnerTCA2024 and the references therein. 
+AND, NOT, and OR can be combined in various ways to form complex conditions and thus complex transmission channels. Moreover, parentheses can be used to make these statements even more complicated. Since these complicated statements go far beyond the scope of this little Wiki, we invite the reader to read the Appendix of @wegnerTCA2024 and the references therein. 
 
 
 ::: {.callout-note}

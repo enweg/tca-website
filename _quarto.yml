@@ -25,7 +25,7 @@ website:
         href: "examples/matlab/dynare/index.qmd"
       - text: Documentation
         href: "documentation/julia/index.qmd"
-      - text: FAQ
+      - text: Wiki
         href: "faq/index.qmd"
     right: 
       - text: About
@@ -58,9 +58,9 @@ website:
             contents: documentation/matlab/all-functions/*
 
     - id: faq
-      title: FAQ
+      title: Wiki
       contents:
-        - section: FAQ
+        - section: Wiki
           contents: 
             - "faq/topics/what-is-tca.qmd"
             - "faq/topics/how-to-implement.qmd"
