@@ -25,9 +25,11 @@ classes = load_from_json("matlab-documentation-classes.json")
 class_methods = load_from_json("matlab-documentation-class-methods.json")
 ```
 
-The **Matlab Toolbox for Transmission Channel Analysis** provides functions for TCA in Matlab. Both standard and more advanced methods for TCA are provided. This page focuses on an overview of the methods and thus on the standard methods. These should be sufficient for most users. More advanced and customisable methods are described in the [advanced section](./advanced.qmd) and details about the internal implementations are provided in [internals section](./internals.qmd). The [examples](../../examples/matlab/dynare/index.qmd) show how to use these functions in practice. 
+The **MATLAB Toolbox for Transmission Channel Analysis** provides a suite of functions for conducting transmission channel analysis (TCA) in MATLAB. It includes both standard methods—which are sufficient for most users—and more advanced, customisable techniques.
 
-Before beginning any transmission analysis, the TCA toolbox must first be added to the path. This can be done in a similar way to the following, where the paths need to be adjusted to the location of the TCA toolbox. 
+This overview focuses on the standard methods. Advanced options are described in the [Advanced Section](./advanced.qmd), and implementation details can be found in the [Internals Section](./internals.qmd). For practical demonstrations, see the [Examples](../../examples/matlab/dynare/index.qmd).
+
+Before performing any transmission analysis, add the TCA toolbox to MATLAB’s search path. Update the paths below to match the location of the toolbox on your system:
 
 
 ```{.matlab}
@@ -39,30 +41,31 @@ addpath("~/Documents/repos/tca-matlab-toolbox/models/")
 addpath("~/Documents/repos/tca-matlab-toolbox/plotting/")
 ```
 
-Any analysis of transmission channels can be broken down into the following steps: 
+A typical transmission channel analysis workflow consists of the following steps:
 
-1. Defining and estimating a model 
-2. Obtaining total effects. 
-3. Defining a transmission matrix. 
-4. Definining transmission channels.
-5. Obtaining transimssion effects. 
-6. Visualising effects. 
+1. Define and estimate a model
+2. Compute total effects
+3. Construct a transmission matrix
+4. Define transmission channels
+5. Compute transmission effects
+6. Visualise results
 
-The rest of this page documents the various functions that can be used in each step. 
+The sections that follow document the functions available for each of these steps.
 
 ## 1. Defining and estimating a model. 
 
-The first step in analysis transission channel is to define a model. This model will then be used to obtain total dynamic causal effects -- the impulse response functions -- and to decompose these effects into the effects along transmission channels. The TCA toobox currently supports the following models: 
+The first step in transmission channel analysis is to define a model. This model will be used to derive total dynamic causal effects (impulse response functions) and to decompose these effects into effects along transmission channels. The TCA toolbox currently supports the following model types:
 
-- (Structural) Vector Autoregressions with recursive and internal instrument identification schemes. 
-- Local projections with recursive and external instrument identification schemes. 
-- DSGE models computed using *Dynare*. 
+- Vector Autoregressions (VARs) for baseline dynamic modelling, estimated via OLS without structural identification.
+- Structural VARs (SVARs) with recursive and internal identification schemes.
+- Local projections with recursive and external instrument identification schemes.
+- DSGE models computed via Dynare.
 
-Each of these models is a concrete class of the abstract type [`Model`](./all-functions/Model.qmd). The following describes each model in more detail. 
+Each model class extends the abstract type [`Model`](./all-functions/Model.qmd). Detailed descriptions of each model follow.
 
 ### Vector Autoregressions (VARs)
 
-A VAR model can be defined using the `VAR` class and it's corresponding constructor documented below.
+A VAR model can be defined using the VAR class and its constructor as shown below:
 
 ```{julia}
 #| echo: false
@@ -78,26 +81,24 @@ include_callout_block_matlab("VAR", classes)
 include_callout_block_matlab("VAR", "VAR", class_methods)
 ```
 
-The minimal requirements to construct a VAR is a dataset either in `matrix` or `table` form. Each column of the dataset should correspond to a different variable, with the rows corresponding to the different observations. The dataset should be ordered from earliest to latest.
-
-For example, if a dataset `data` exists, a VAR model can be created using the following code. 
+The constructor requires a dataset in `matrix` or `table` form, with each column representing a variable and each row an observation, ordered from earliest to latest. For example:
 
 ```{.matlab}
+% data is some dataset in matrix or table form
 p = 2  % lag length
 mode = VAR(data, p)
 ```
 
-Deterministic trend components can be included in the VAR by providing the optional `trendExponents` argument. By default only a constant is included. If, a constant and a linear trend should be included, the following code can be used. 
-
+You can include deterministic trends by specifying the `trendExponents` option:
 
 ```{.matlab}
 p = 2  % lag length
 mode = VAR(data, p, 'trendExponents', 0:1)
 ```
 
-Optional arguments are always provided via key-value pairs as above. In this case, `trendExponents` is assigned `0:1` which specifies a constant, i.e. $t^0=1$ and a linear time trend, i.e. $t^1=t$. Other trends, such as quadratic trends, can be included in a similar way by providing the required exponent on time. For a constant, linear, and quadratic trend choose `0:2`. To only include a contant and a quadratic trend, skipping the linear trend, choose `[0, 2]`. 
+Here, `0:1` indicates a constant ($t^0$) and a linear trend ($t^1$). For constant, linear, and quadratic trends use `0:2`, or `[0,2]` to skip the linear term.
 
-The lines above initialise a VAR models but do not estimate it. To estimate the model, use the `fit` function, which uses standard OLS methods to estimate the VAR. 
+To estimate the VAR via OLS, call `fit`:
 
 ```{julia}
 #| echo: false
@@ -106,15 +107,12 @@ The lines above initialise a VAR models but do not estimate it. To estimate the 
 include_callout_block_matlab("VAR", "fit", class_methods)
 ```
 
-No additional arguments are needed. Note that the method does not return anything. Instead, it overwrites the coefficient matrices in the model. 
-
-If `model` is a `VAR`, then the following code can be used to estimate the model. 
-
 ```{.matlab}
+% if model is a VAR 
 model.fit()
 ```
 
-Coefficient estimates, fitted values, and residuals can be obtained using `coeffs`, `fitted`, and `residuals` as shown below. 
+Retrieve estimates with:
 
 ```{julia}
 #| echo: false
@@ -138,17 +136,17 @@ include_callout_block_matlab("VAR", "residuals", class_methods)
 ```
 
 ```{.matlab}
-% model coefficients
+% All coefficients
 model.coeffs()  
-% model coefficients excluding those on constants and trends
+% Excluding constants/trends
 model.coeffs(true)
-% fitted values
+% Fitted values
 model.fitted()
-% model residuals
+% Residuals
 model.residuals()
 ```
 
-Defining a VAR model requires the choice of a lag length. Above, this choice was made explicitly. However, we also support automatic lag-length determination via information criteria. The `fitAndSelect` method of the `VAR` model can be used for this purpose. It takes a model, which defines the maximum lag length, and selects the best model among all VAR models with lag lengths less or equal to the provided one. 
+To select the optimal lag length automatically, use `fitAndSelect`. This method fits `VAR` models for every lag length from 0 up to the specified maximum, evaluates each using the chosen information criterion (AIC by default), and returns the model with the lowest criterion value along with a table of lag lengths and their corresponding scores:
 
 ```{julia}
 #| echo: false
@@ -157,14 +155,13 @@ Defining a VAR model requires the choice of a lag length. Above, this choice was
 include_callout_block_matlab("VAR", "fitAndSelect", class_methods)
 ```
 
-For example, if we wanted to select the best model among those with $0 \leq p \leq 20$, the following code could be used. 
-
 ```{.matlab}
+% Choosing a maximum of 20 lags
 model = VAR(data, 20);
 [modelBest, icTable] = model.fitAndSelect();
 ```
 
-`modelBest` is the best model while `icTable` is a table with the first column corresponding to the lag length, and the second column corresponding to the IC value of that model. By default, `fitAndSelect` uses AIC. Other choiced can be provided. Currently supported are AIC, BIC/SIC, and HQC. Note that underscore at the end of all of the functions.
+`fitAndSelect` supports the following information criteria. Note the underscore suffix (_) on these functions.
 
 ```{julia}
 #| echo: false
@@ -194,15 +191,14 @@ include_callout_block_matlab("VAR", "sic_", class_methods)
 include_callout_block_matlab("VAR", "hqc_", class_methods)
 ```
 
-For example, instead of using AIC, we could use BIC using the following code. 
+For example, to use the Bayesian Information Criteria, call:
 
 ```{.matlab}
 model = VAR(data, 20);
 [modelBest, icTable] = model.fitAndSelect(@VAR.bic_);
 ```
 
-
-AIC, BIC/SIC, and HQC can also be obtained from an already estimated model. However, these values may be different from the ones obtained using `fitAndSelect`. This is because `fitAndSelect` evaluates the models over a common time period. To obtain the information criteria for an already estimated model, use one of the following functions. Note that this time no underscore is present at the end of the name. 
+To compute information criteria for an already estimated model over its own sample, use methods without the trailing underscore. Note these values may differ from those returned by `fitAndSelect`, which evaluates ICs over a common sample across all models:
 
 ```{julia}
 #| echo: false
@@ -232,16 +228,14 @@ include_callout_block_matlab("VAR", "sic", class_methods)
 include_callout_block_matlab("VAR", "hqc", class_methods)
 ```
 
-For example, if we wanted to know the HQC value for `modelBest` above, the following code could be used. 
-
 ```{.matlab}
-modelBest.hqc()
+# Get the HQC value for an estimated model
+model.hqc()
 ```
-
 
 ### Structural Vector Autoregressions (SVARs)
 
-An SVAR can be defined using the `SVAR` class and its corresponding constructor documented below. 
+An SVAR can be defined using the `SVAR` class and its constructor as documented below:
 
 ```{julia}
 #| echo: false
@@ -257,24 +251,21 @@ include_callout_block_matlab("SVAR", classes)
 include_callout_block_matlab("SVAR", "SVAR", class_methods)
 ```
 
-The minimal requirements to construct a SVAR is a dataset either in `matrix` or `table` form. Each column of the dataset should correspond to a different variable, with the rows corresponding to the different observations. The dataset should be ordered from earliest to latest.
-
-For example, if a dataset `data` exists, a VAR model can be created using the following code. 
-
+The constructor requires a dataset in `matrix` or `table` form, with each column representing a variable and each row an observation, ordered from earliest to latest. For example, to specify a lag order of four (p = 4):
 
 ```{.matlab}
 p = 4  % lag length
 model = SVAR(data, p)
 ```
 
-Similar to the `VAR` case time trends can be defined using the optional `trendExponents` argument. For example, a constant and a linear trend can be defined as follows. 
+You may include deterministic trends as for the VAR case, using the `trendExponents` option:
 
 ```{.matlab}
 p = 4  % lag length
 model = SVAR(data, p, 'trendExponents', 0:1)
 ```
 
-To estimate the SVAR, and identification method must be provided. This identification method must be able to identify the structural matrices of the SVAR. Thus, identification schemes, such as internal instruments, that are only able to identify (relative) IRFs cannot be used. The only currently supported method is therefore a recursive identification using `Recursive`. The SVAR can then be estimated using `fit`. 
+To estimate the structural model, an identification method must be provided. Only recursive identification (`Recursive`) is supported for full structural identification. Note that `InternalInstrument` methods can be used to identify impulse responses to a single shock; these are documented in a later section. Fit the model as follows:
 
 ```{julia}
 #| echo: false
@@ -283,12 +274,11 @@ To estimate the SVAR, and identification method must be provided. This identific
 include_callout_block_matlab("SVAR", "fit", class_methods)
 ```
 
-
 ```{.matlab}
 model.fit(Recursive())
 ```
 
-Similar to the `VAR` case, coefficients, fitted values, and residuals can be obtained using `coeffs`, `fitted`, and `residuals`, respectively. 
+After fitting, extract coefficients, fitted values, and residuals:
 
 ```{julia}
 #| echo: false
@@ -313,17 +303,17 @@ include_callout_block_matlab("SVAR", "residuals", class_methods)
 
 
 ```{.matlab}
-% see the SVAR documentation for details about A0 and APlus
+% Structural coefficient matrices A0 and APlus
 [A0, APlus] = model.coeffs()
-% excluding coefficients on constants and time trends
+% Excluding constants and time trends
 [A0, APlus] = model.coeffs(true)
-% getting fitted value
+% Fitted values
 model.fitted()
-% model residuals
+% Residuals
 model.residuals()
 ```
 
-The lag length of the SVAR can also be automatically determined using the `fitAndSelect` method. Internally, the method simply finds the best reduced-form `VAR` model and identifies the `SVAR` from the `VAR` using the provided `identificationMethod`. 
+You can select the lag length automatically via `fitAndSelect`, which first determines the best reduced‑form `VAR` up to the maximum lag and then applies the chosen identification method:
 
 ```{julia}
 #| echo: false
@@ -332,26 +322,25 @@ The lag length of the SVAR can also be automatically determined using the `fitAn
 include_callout_block_matlab("SVAR", "fitAndSelect", class_methods)
 ```
 
-For example, using AIC as the default: 
-
+Using AIC (default) with a maximum of twenty lags:
 
 ```{.matlab}
 model = SVAR(data, 20);
 [modelBest, icTable] = model.fitAndSelect(Recursive())
 ```
 
-Or using HQC: 
+Or using HQC for model selection:
 
 ```{.matlab}
 model = SVAR(data, 20);
 [modelBest, icTable] = model.fitAndSelect(Recursive(), @VAR.hqc_)
 ```
 
-In general, all IC methods available for `VAR` can be used to select the best `SVAR`. 
+All `VAR` information‑criterion functions (with underscore) may be supplied to choose the optimal `SVAR`.
 
 ### Local Projections
 
-A local projection can be defined using the `LP` class and its corresponding constructor as documented below. 
+A local projection model can be specified using the `LP` class and its constructor:
 
 ```{julia}
 #| echo: false
@@ -367,22 +356,26 @@ include_callout_block_matlab("LP", classes)
 include_callout_block_matlab("LP", "LP", class_methods)
 ```
 
-The minimal requirements to construct a `LP` is a dataset either in `matrix` or `table` form, a `treatment` variable (the variable that is either linked to the shock or will be instrumented by an instrument of the shock), the number of lags, and the horizons for which the local projection should be estimated. 
+The constructor requires:
 
-For example, if a dataset `data` is available, our treatment variable is `Y1`, we wish to estimate the local projection for horizons `0:20` using `4` lags, then the following code can be used. 
+- A dataset in `matrix` or `table` form
+- A `treatment` variable (either the shock itself or the instrumented variable)
+- The number of lags (`p`)
+- A vector of horizons (`horizons`)
 
+For example, to estimate horizons $0$–$20$ with 4 lags for treatment variable `Y1`:
 
 ```{.matlab}
 model = LP(data, 'Y1', 4, 0:20)
 ```
 
-By default this will include a constant term in the regression for each horizon. If no constant should be included, the optional argument 'includeConstant' can be set to 'false': 
+By default, each regression includes a constant term. To omit the constant, set the `includeConstant` flag to `false`:
 
 ```{.matlab}
 model = LP(data, 'Y1', 4, 0:20, 'includeConstant', false)
 ```
 
-The local projection can be estimated using `fit`. 
+Use the `fit` method to estimate the projections:
 
 ```{julia}
 #| echo: false
@@ -391,15 +384,17 @@ The local projection can be estimated using `fit`.
 include_callout_block_matlab("LP", "fit", class_methods)
 ```
 
-By default, `fit` uses a `Recursive` identification scheme -- in micro known as conditional ignorability. This will only result in structural estimates if the true structural shock satisfies the recursivity (conditional ignorability) assumption. In all other cases, the obtained estimates should be considered reduced-form. 
-
-
 ```{.matlab}
 % Uses Recursive by default
 model.fit()
 ```
 
-Alternatively, the identification method can be explicitly provided as argument. Currently supported are `Recursive`, which is the default identification method, and `ExternalInstrument`. 
+By default, `fit` applies a recursive (conditional ignorability) assumption. These estimates are structural only if the true shock satisfies this assumption; otherwise, they should be treated as reduced‐form.
+
+Available identification schemes:
+
+- `Recursive` (default)
+- `ExternalInstrument` (for external‐instrument IV)
 
 ```{julia}
 #| echo: false
@@ -408,7 +403,7 @@ Alternatively, the identification method can be explicitly provided as argument.
 include_callout_block_matlab("ExternalInstrument", classes)
 ```
 
-To estimate the local projection using `ExternalInstrument`, we must first create an instance of it. We must therefore provide the treatment variable within the local projection and a dataset of external instruments. For example, with `Y1` the treatment variable, and with `data_instruments` a matrix of instruments observed over the same period as the model data, the following code can be used. 
+To use an external instrument, first instantiate `ExternalInstrument` with the treatment name and an instrument dataset, then supply it to `fit`:
 
 ```{.matlab}
 method = ExternalInstrument('Y1', data_instruments);
@@ -416,7 +411,10 @@ method = ExternalInstrument('Y1', data_instruments);
 model.fit(method);
 ```
 
-The coefficients, fitted values, and residuals for each estimated horizon can then be obtained using `coeffs`, `fitted` and `residuals`. Each of these functions returns a three dimensional array with dimensions explained in the documentation below. 
+After estimation, extract the results for each method (note the differing dimensions) via:
+
+- `coeffs`: (response variable × regressors × horizons)
+- `fitted`, `residuals`: (observations × variables × horizons)
 
 ```{julia}
 #| echo: false
@@ -439,7 +437,18 @@ include_callout_block_matlab("LP", "fitted", class_methods)
 include_callout_block_matlab("LP", "residuals", class_methods)
 ```
 
-The lag length of the `LP` model can also be determined automatically using `fitAndSelect`. To our best knowledge, there does not yet exist a good method to do so. We therefore determine the best lag length of the `LP` by estimating a `VAR` model and determining the best lag length for the `VAR` model instead. The best model returned by `fitAndSelect` is the `LP` model using the best lag length determined by the `VAR` procedure. 
+```{.matlab}
+# Coefficients
+model.coeffs()
+# Excluding the constant 
+model.coeffs(true)
+# Fitted values
+model.fitted()
+# Residuals
+model.residuals()
+```
+
+To select the lag order automatically, use `fitAndSelect`, which fits `VAR`s internally to choose the optimal `p`:
 
 ```{julia}
 #| echo: false
@@ -448,14 +457,7 @@ The lag length of the `LP` model can also be determined automatically using `fit
 include_callout_block_matlab("LP", "fitAndSelect", class_methods)
 ```
 
-For example, to find the best `LP` among those satisfying $0\leq p \leq 20$ the following code can be used.
-
-```{.matlab}
-model = LP(data, 'Y1', 20, 0:20);
-[modelBest, icTable] = model.fitAndSelect(Recursive());
-```
-
-Since `VAR` models are used internally, all IC method available for `VAR` models can be used to determine the best `LP` model. For example, using BIC: 
+All `VAR` underscore‑suffixed information‑criterion functions (e.g., `aic_`, `bic_`, `sic_`, `hqc_`) may be used for `LP` lag selection. For example, using BIC:
 
 ```{.matlab}
 model = LP(data, 'Y1', 20, 0:20);
@@ -464,7 +466,7 @@ model = LP(data, 'Y1', 20, 0:20);
 
 ### DSGE
 
-A DSGE model can be defined using the `DSGE` class. Prior to defining the models, the first-order approximation to the DSGE model must have been computed using Dynare. Please see [Dynare's documentation](https://www.dynare.org/manual/) for details.
+A DSGE model can be specified using the `DSGE` class. Before defining the model, you must compute its first‐order approximation in *Dynare*. Refer to [Dynare’s manual](https://www.dynare.org/manual/) for details.
 
 ```{julia}
 #| echo: false
@@ -473,32 +475,32 @@ A DSGE model can be defined using the `DSGE` class. Prior to defining the models
 include_callout_block_matlab("DSGE", classes)
 ```
 
-After computing the first-order approximation using Dynare, the structures `M_`, `oo_`, and `options_` should be available in the environment. These structures, computed by Dynare, are needed to defined a `DSGE` model. A `DSGE` can then be defined in the following way. 
+Once Dynare has run, the workspace should contain the structures `M_`, `oo_`, and `options_`. Use these to define your `DSGE` model:
 
 ```{.matlab}
 model = DSGE(M_, options_, oo_)
 ```
 
-Note that the TCA toolbox works with a VARMA reprentation of the DSGE, while Dynare works with the state-space representation. Dynare is therefore more general. In order for the VARMA representation to exist, the DSGE must have as many `varobs` variables as shocks, and these observed variables must span the space of the shocks. If this is not the case, then an error will be returned when calling any of the functions of the `DSGE` model. 
+The TCA toolbox represents the DSGE as a VARMA model, whereas Dynare uses a state‐space form. For the VARMA representation to exist, the number of observed variables (`varobs`) must equal the number of structural shocks, and these observed variables must span the shock space. If this condition is not met, calling any method on the DSGE model will return an error.
 
-Information about the observed variable names and the shocks defined in the DSGE can be obtained using `getVariableNames` and `getShockNames`.
+To inspect the observed variables and structural shocks, use:
 
 ```{.matlab}
-% Returns the variables defined in the varobs block
+% Observed variables in the varobs block
 varNames = model.getVariableNames();
-% Returns the shocks defined in the DSGE
+% Structural shock names
 shockNames = model.getShockNames();
 ```
 
 ## 2. Obtaining the effects -- structural IRFs
 
-With a model at hand, total dynamic causal effects -- the impulse response functions -- can be obtained using the `IRF` method of each model. `IRF` always takes a maximum horizon up to which the IRFs should be computed. If the model is reduced form, it additionally takes an `IdentificationMethod` used to identify structural IRFs from the reduced form model.
+Once a model is defined, you can compute total dynamic causal effects—impulse response functions (IRFs)—using the `IRF` method. The IRF function always requires a maximum horizon (`maxHorizon`) for computation. For reduced‐form models, you may also supply an `IdentificationMethod` to derive structural IRFs.
 
-Below, we give some details per model. 
+Details on IRF computation for all models are provided below.
 
 ### VARs
 
-Reduced form impulse responses can be obtained from a VAR model using `IRF` and providing a maximum horizon. 
+Obtain reduced‐form IRFs from a VAR model by specifying the maximal horizon:
 
 ```{julia}
 #| echo: false
@@ -507,15 +509,12 @@ Reduced form impulse responses can be obtained from a VAR model using `IRF` and 
 include_callout_block_matlab("VAR", "IRF", class_methods)
 ```
 
-For example, if `model` is a `VAR`, reduced form IRFs up to horizon twenty can be obtained in the following way. 
-
-
 ```{.matlab}
 maxHorizon = 20;
 irfObj = model.IRF(maxHorizon);
 ```
 
-The returned object `irfObj` is an `IRFContainer` which stores more information than just the IRFs. 
+Here, `irfObj` is an `IRFContainer` holding both the IRF array and related metadata:
 
 ```{julia}
 #| echo: false
@@ -524,19 +523,19 @@ The returned object `irfObj` is an `IRFContainer` which stores more information 
 include_callout_block_matlab("IRFContainer", classes)
 ```
 
-Evaluating the `irfObj` in the console will show the IRFs as a 3D array with dimensions 
+Printing `irfObj` displays a 3D array with dimensions:
 
-1. Response Variable
+1. Response variable
 2. Shock
-3. Horizon with the first entry corresponding to the contemporaneous horizon 
+3. Horizon (starting at 0 for contemporaneous effect)
 
-If this 3D object itself is of interest, it can be obtained using `getIrfArray` in the following way. 
+To retrieve the raw IRF array, call:
 
 ```{.matlab}
 irfObj.getIrfArray()
 ```
 
-Structural IRFs can be directly computed from an `VAR` by providing an `IdentificationMethod` to the `IRF` function. Currently supported are `Recursive` and `InternalInstrument`. 
+To compute structural IRFs, supply an `IdentificationMethod`. Supported methods include recursive and internal‐instrument schemes:
 
 ```{julia}
 #| echo: false
@@ -567,43 +566,33 @@ include_callout_block_matlab("InternalInstrument", "InternalInstrument", class_m
 ```
 
 
-For example, to obtain structural IRFs from a VAR `model` using a recursive identification scheme, the following code could be used. 
-
+For a recursive identification:
 
 ```{.matlab}
 irfObj = model.IRF(maxHorizon, 'IdentificationMethod', Recursive())
 ```
 
-Alternatively, structural IRFs can be obtained using internal instruments following XXX. To do so, we must at least define the normalising variable with respect to which IRFs are being normalised. 
-
+To use an internal instrument, specify a `normalisingVariable`, then optionally override the `instrument` (default: first variable) or the `normalisingHorizon` (default: 0 for contemporaneous effect):
 
 ```{.matlab}
 normalisingVariable = 'Y2'
 method = InternalInstrument(normalisingVariable)
-```
-
-IRFs can then be identified similar to the `Recursive` case. 
-
-```{.matlab}
 irfObj = model.IRF(maxHorizon, 'IdentificationMethod', method)
 ```
 
-By default, the internal instrument is the first variable in the data. This can be changed by prividing the optional argument `'instrument'` in the following way. 
-
-
 ```{.matlab}
+% Changing the instrument to be Y2 and the normalisingVariable to be Y3
 method = InternalInstrument('Y3', 'instrument', 'Y2')
 ```
 
-Additionally, the default normalising horizon is zero. This can be changed by providing the optional argument 'normalisingHorizon' in the following way. 
-
 ```{.matlab}
+% Changing the normalisingHorizon to be period 1
 method = InternalInstrument('Y3', 'instrument', 'Y2', 'normalisingHorizon', 1)
 ```
 
 ### SVARs
 
-Impulse response functions can be obtained from an `SVAR` using the `IRF` function, similar to the `VAR` case. Given the `SVAR` is a structural model, these IRFs are structural IRFs. 
+Impulse response functions can be obtained from an `SVAR` using the `IRF` function, analogous to the `VAR` case. Since an SVAR is already structurally identified, `IRF` returns structural IRFs directly:
 
 ```{julia}
 #| echo: false
@@ -615,9 +604,7 @@ include_callout_block_matlab("SVAR", "IRF", class_methods)
 ::: {.callout-note}
 # Using SVARs and Internal Instruments
 
-To use internal instruments for IRF identification, you must first specify a VAR model and identify the IRFs from the VAR directly. `SVAR.IRF` only works for fully identified `SVAR` models. 
-
-For example, internal instruments could be used similar to the following: 
+The `SVAR.IRF` method requires a fully identified `SVAR`. Internal instruments (via `InternalInstrument`) cannot be applied to an `SVAR` directly. To use internal instruments for IRF identification, first define a reduced‐form `VAR`, apply the instrument there, and then compute IRFs:
 
 
 ```{.matlab}
@@ -631,7 +618,7 @@ irfObj = model.IRF(maxHorizon, 'identificationMethod', method);
 
 ### Local Projections
 
-Impulse response functions can be obtained from an estimated `LP` model using `IRF`. These impulse responses are structural whenever the `LP` is structural. 
+Impulse response functions can be obtained from an estimated `LP` model using `IRF`. These IRFs are structural whenever the LP model was estimated structurally.
 
 ```{julia}
 #| echo: false
@@ -644,8 +631,7 @@ include_callout_block_matlab("LP", "IRF", class_methods)
 irfObj = model.IRF(maxHorizon)
 ```
 
-Optionally, an identification method (currently `Recursive` or `ExternalInstrument`) can be provided to `IRF`. In this case, the local projection will be re-estimated using the provided identification scheme and IRFs will be computed from this re-estimated local projection. 
-
+Optionally, supply an identification method (`Recursive` or `ExternalInstrument`) to re-estimate the local projection and compute IRFs under that scheme:
 
 ```{.matlab}
 % USing recursive identification
@@ -657,7 +643,7 @@ irfObj = model.IRF(maxHorizon, 'identificationMethod', method);
 
 ### DSGE
 
-If a VARMA representation of the `DSGE` model exists, then impulse response functions for the variables stated in the `varobs` block can be obtained using `IRF`. 
+If a VARMA representation of the `DSGE` model exists, compute IRFs for the `varobs` variables via `IRF`:
 
 ```{julia}
 #| echo: false
@@ -673,79 +659,21 @@ irfObj = model.IRF(maxHorizon);
 
 ## 3. Defining a transmission matrix. 
 
-The next step to a transmission channel analysis is to define the transmisson matrix. This is the ceteris paribus ordering of the chosen equilibrium representation. The most intuitive way to define this is to simply define an ordering of the variables in the data using a cell array. For example, if the model data contains the variables `Y1`, `Y2`, `Y3`, and `Y4` and we wish to use a transmission matrix that orders `Y4` first, followed by `Y2`, then `Y1`, and finally `Y3`, we simply define the cell array: 
-
+The next step in a transmission channel analysis is to define the transmission matrix, which specifies the ceteris paribus ordering of variables in the chosen equilibrium representation. The simplest way is to list the variables in the desired order as a cell array of `char`. For example, if your data contains `Y1`, `Y2`, `Y3`, and `Y4`, and you wish to order them as `Y4`, `Y2`, `Y1`, `Y3`, define:
 
 ```{.matlab}
 transmissionOrdering = {'Y4', 'Y2', 'Y1', 'Y3'};
 ```
 
-Note that it must be a cell array of `char` *not* of `string`. 
+::: {.callout-note appearance="minimal"}
+**Note**: The ordering must be a cell array of character vectors (not string arrays).
+:::
 
-More adanced ways to define a transmission matrix are defined in the [advanced methods section](./advanced.qmd).
+Advanced methods for constructing transmission matrices are covered in the [Advanced Methods Section](./advanced.qmd).
 
 ## 4. Definining transmission channels.
 
-With the transmission matrix defined, the transmission channels of interest can be defined next. We provide two helper functions: `through` and `notThrough` that can be used to define transmission channels using the models documented on this page. More advanced ways to define transmission channels are documented in the [advanced methods section](./advanced.qmd). 
-
-To define a transmission channel that goes through specific variables at specific horizons, use `through`. 
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("Model", "through", class_methods)
-```
-
-For example, if `transmissionOrder` defines out transmission matrix, and we wanted to define a transmission channel that goes through `Y1` for the first three periods, i.e. contemporaneously and up to horizon three, then the following code can be used. 
-
-
-```{.matlab}
-% model is either a VAR, SVAR, LP, or DSGE
-q = model.through('Y1', 0:3, transmissionOrder);
-```
-
-Alternatively, if we wanted a channel that passes through `Y1` and `Y2` contemporaneously, we could define a transmission channel using the following code. 
-
-
-```{.matlab}
-q = model.through({'Y1', 'Y2'}, 0, transmissionOrder);
-```
-
-If we wanted the channel to go through `Y1` contemporaneously and through `Y2` contemporaneously and at horizon one, then the following code could be used. 
-
-```{.matlab}
-q = model.through({'Y1', 'Y2'}, {0:0, 0:1}, transmissionOrder);
-```
-
-While `through` defines channel that go through specific variables at specific horizons, we could also define transmission channel that do not go through specific variables at specific horizons. To define such channels, `notThrough` can be used. 
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("Model", "notThrough", class_methods)
-```
-
-For example, if `transmissionOrder` is a transmission matrix and `model` is one of `VAR`, `SVAR`, `LP` or `DSGE`, and we wanted a channel that does not go through `Y1` for the first twenty periods, then the following code could be used. 
-
-```{.matlab}
-q = model.notThrough('Y1', 0:20, transmissionOrder);
-```
-
-Alternatively, if we wanted a channel that does not go through `Y1` and `Y2` for the first twenty periods, the following code could be used. 
-
-```{.matlab}
-q = model.notThrough({'Y1', 'Y2'}, 0:20, transmissionOrder);
-```
-
-Lastly, if we were intersted in a channel that does not go through `Y1` for the contemporaneously and not through `Y2` at horizon 1, the following code could be used. 
-
-```{.matlab}
-q = model.notThrough({'Y1', 'Y2'}, {0:0, 1:1}, transmissionOrder);
-```
-
-Both `through` and `notThrough` returns a transmission condition `Q`. 
+With the transmission matrix in place, you can specify transmission channels of interest via the helper functions `through` and `notThrough`. These functions return a transmission condition `Q` that you can combine to define complex transmission channels. More advanced methods for defining transmission channels are documented in the [Advanced Methods Section](./advanced.qmd).
 
 ```{julia}
 #| echo: false
@@ -754,8 +682,79 @@ Both `through` and `notThrough` returns a transmission condition `Q`.
 include_callout_block_matlab("Q", classes)
 ```
 
-Transmission conditions can be combined using logical operators `&` (AND), `|` (OR), and `~` (NOT). For example, if we were interested in a transmission channel that does go through `Y1` contemporaneously but not through `Y2`, we could define our transmission channel using the following code. 
+**through**
 
+Use `through` to define channels that pass through specified variables at given horizons:
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("Model", "through", class_methods)
+```
+
+Examples (for any model — VAR, SVAR, LP, or DSGE — with transmissionOrder or a transmission matrix as described above):
+
+1. Channel through `Y1` at horizons 0-3:
+
+```{.matlab}
+q = model.through('Y1', 0:3, transmissionOrder);
+```
+
+2. Channel through `Y1` and `Y2` contemporaneously:
+
+```{.matlab}
+q = model.through({'Y1', 'Y2'}, 0, transmissionOrder);
+```
+
+3. Channel through `Y1` at horizon 0 and `Y2` at horizons 0–1:
+
+```{.matlab}
+q = model.through({'Y1', 'Y2'}, {0:0, 0:1}, transmissionOrder);
+```
+
+**notThrough**
+
+Use `notThrough` to define channels that **do not** go through specified variables at given horizons:
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_callout_block_matlab("Model", "notThrough", class_methods)
+```
+
+Examples (for any model — VAR, SVAR, LP, or DSGE — with transmissionOrder or a transmission matrix as described above):
+
+1. Channel not through `Y1` at horizons 0-20:
+
+```{.matlab}
+q = model.notThrough('Y1', 0:20, transmissionOrder);
+```
+
+2. Channel not through `Y1` and not through `Y2` at horizons 0-20:
+
+```{.matlab}
+q = model.notThrough({'Y1', 'Y2'}, 0:20, transmissionOrder);
+```
+
+3. Channel not through `Y1` contemporaneously and not through `Y2` at horizon 1:
+
+```{.matlab}
+q = model.notThrough({'Y1', 'Y2'}, {0:0, 1:1}, transmissionOrder);
+```
+
+**Combining through and notThrough**
+
+Both `through` and `notThrough` return a transmission condition `Q`, which can be combined using logical operators: 
+
+- AND (`&`): both conditions must be satisfied.
+- OR (`|`): at least one condition must be satisfied.
+- NOT (`~`): negates a condition.
+
+Examples: 
+
+1. Channel through `Y1` contemporaneously but not through `Y2` contemporaneously:
 
 ```{.matlab}
 q1 = model.through('Y1', 0, transmissionOrder);
@@ -763,7 +762,7 @@ q2 = model.notThrough('Y2', 0, transmissionOrder);
 q = q1 & q2;
 ```
 
-If we wanted a channel that either goes through `Y1` contemporaneously or not through `Y2` contemporaneously, we could use the following code. 
+2. Channel through `Y1` contemporaneously or not through `Y2` contemporaneously:
 
 ```{.matlab}
 q1 = model.through('Y1', 0, transmissionOrder);
@@ -771,8 +770,7 @@ q2 = model.notThrough('Y2', 0, transmissionOrder);
 q = q1 | q2;
 ```
 
-Lastly, the following two ways are equivalent.
-
+3. Channel not through `Y1` contemporaneously (both ways are equivalent):
 
 ```{.matlab}
 q1 = model.through('Y1', 0, transmissionOrder);
@@ -780,20 +778,22 @@ q = ~q1;  # not through Y1 contemporaneously
 q = model.notThrough('Y1', 0, transmissionOrder);
 ```
 
-Using logical operators, `through`, and `notThrough`, various more complicated transmission channels can be defined. One such example is a transmission channel that goes through `Y1` in at least one period between period zero and period twenty. Since $x_1 \lor x_2 = \neg (\neg x_1 \land \neg x_2)$ the desired transmission channel can be defined using the following code. 
+4. Channel through `Y1` in at least one period between horizons 0-20: 
 
 ```{.matlab}
 q = model.notThrough('Y1', 0:20, transmissionOrder);
 q = ~q;
 ```
 
+By combining through and notThrough with logical operators, you can flexibly construct any complex transmission channel you require. 
+
 ## 5. Obtaining transimssion effects. 
 
-We are now ready to compute the transmission effects. Given a `model` which is either a `VAR`, `SVAR`, `LP`, or `DSGE`, transmission effects can be computed using the `transmission` method. Below we document the details for each model -- these are in general quite similar. 
+Once you have defined a `model` (VAR, SVAR, LP, or DSGE), the `transmission` method computes transmission effects along your specified channel. Below are the details for each model type.
 
-### (S)VAR or LP
+### VAR, SVAR, or LP
 
-If `model` is a `SVAR`, `VAR`, or `LP` transmission effects can be computed using `transmission`. However, if the model is a `VAR`, or an `SVAR` or `LP` that have not yet been estimaed, an `IdentificationMethod` is required, since transmission effects require the identification of at least one structural shock. 
+For `VAR`, or for `SVAR` and `LP` models that have not yet been structurally estimated, you must provide an `IdentificationMethod` (since at least one structural shock is required):
 
 ```{julia}
 #| echo: false
@@ -816,32 +816,35 @@ include_callout_block_matlab("SVAR", "transmission", class_methods)
 include_callout_block_matlab("LP", "transmission", class_methods)
 ```
 
-For example, if we are interested in the first structural shock, are interested in effects up to `maxHorizon`, have a transmission matrix `transmissionOrder` and a transmission condition `q`, the transmission effects can be computed using the following code. 
-
+For example, to compute the effects of the first structural shock up to `maxHorizon`, using a transmission matrix `transmissionOrder` and a transmission condition `q`:
 
 ```{.matlab}
-% model can be a VAR, SVAR, or LP
-effects = model.transmission(1, q, transmissionOrder, maxHorizon, 'identificationMethod', method)
+% model can be VAR, SVAR, or LP
+effects = model.transmission(
+    1, ...                % shock index
+    q, ...                % transmission condition
+    transmissionOrder, ...% transmission matrix
+    maxHorizon, ...       % maximum horizon
+    'IdentificationMethod', method ... % Recursive, InternalInstrument (VAR/SVAR) or ExternalInstrument (LP)
+);
 ```
 
-where `method` is either a `Recursive` or `InternalInstrument` identification method for `VAR` and `SVAR`, or a `Recursive` or `ExternalInstrument` identification method for a `LP`. 
+The returned `effects` array has dimensions:
 
-The returned `effects` array has the structure: 
+1. Response variables (in original data order)
+2. Transmission effect of the chosen shock
+3. Horizons (starting at 0)
 
-- Along its first dimension are the response variables in the original ordering (as in the original dataset)
-- Along the second dimension are the transmission effects of the chosen shock 
-- Along the third dimension are the horizons with the first entry being the contemporaneous horizon
-
-However if `model` is a `SVAR` or `LP` that have already been identified, then the following code is sufficient. 
+If your `SVAR` or `LP` model is already structurally identified (fitted with a structural identification scheme), you may omit the identification argument:
 
 ```{.matlab}
-% model can be a SVAR or LP
+% model is a SVAR or structurally estimated LP
 effects = model.transmission(1, q, transmissionOrder, maxHorizon)
 ```
 
 ### DSGE
 
-Similar as for the other models, transmission effects in a `DSGE` can be computed using `transmission`. However, since shocks can be named in `DSGE` models, the shock can now be defined both using an index and using its name. Additionally, since a `DSGE` model is always structural and has always been computed using Dynare, no identification method is ever needed. 
+Since `DSGE` models are inherently structural and shocks can be named, you may specify the shock by name or index. No identification method is needed:
 
 ```{julia}
 #| echo: false
@@ -850,23 +853,19 @@ Similar as for the other models, transmission effects in a `DSGE` can be compute
 include_callout_block_matlab("DSGE", "transmission", class_methods)
 ```
 
-For example, we have the same setting as above and the first shock in the model is the monetary policy shock, names `mp`, then the following code can be used. 
+For example, if `mp` (monetary policy shock) is the first shock:
 
 ```{.matlab}
-% model is a DSGE
-effects = model.transmission('mp', q, transmissionOrder, maxHorizon)
-```
+% By name
+effects = model.transmission('mp', q, transmissionOrder, maxHorizon);
 
-which is equivalent to the following using the shock's index. 
-
-```{.matlab}
-% model is a DSGE
-effects = model.transmission(1, q, transmissionOrder, maxHorizon)
+% By index (equivalent)
+effects = model.transmission(1, q, transmissionOrder, maxHorizon);
 ```
 
 ## 6. Visualising effects. 
 
-The best way to inspect transmission effects is to visualise them. We provide two helper functions. 
+To inspect transmission effects graphically, use the helper functions:
 
 ```{julia}
 #| echo: false
@@ -882,4 +881,7 @@ include_callout_block_matlab("plotDecomposition", functions)
 include_callout_block_matlab("plotCompareDecomposition", functions)
 ```
 
-`plotDecomposition` can be used to visualise a single decomposition of the IRFs. `plotCompareDecomposition`, on the other hand, is used to compare two decompositions obtained using two different transmission matrices. Examples of how to use both are given in the [examples](../../examples/matlab/dynare/index.qmd).
+- `plotDecomposition` Visualises a single transmission-channel decomposition of the IRFs.
+- `plotCompareDecomposition`: Compares two decompositions obtained from different transmission matrices.
+
+See the [Examples](../../examples/matlab/dynare/index.qmd) for usage demos.
