@@ -1,0 +1,11 @@
+---
+title: Wiki
+css: "../styles/faq.css"
+sidebar: false
+listing: 
+  contents: "/topics/*.qmd"
+  sort: "order"
+  type: grid
+  grid-columns: 2
+  fields: ["title", "description"]
+---

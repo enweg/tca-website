@@ -1,0 +1,574 @@
+---
+title: TransmissionChannelAnalysis.jl
+engine: julia
+bibliography: "../../references.bib"
+sidebar: doc
+---
+
+```{julia}
+#| echo: false
+#| output: false
+
+using Pkg; Pkg.activate(".");
+using DocUtils
+using TransmissionChannelAnalysis
+using DataFrames
+```
+
+`TransmissionChannelAnalysis.jl` provides a suite of functions for conducting transmission channel analysis (TCA) in MATLAB. It includes both standard methods—which are sufficient for most users—and more advanced, customisable techniques.
+
+This overview focuses on the standard methods. Advanced options are described in the [Advanced Section](./advanced.qmd), and implementation details can be found in the [Internals Section](./internals.qmd). 
+
+Before performing any transmission analysis, add `TransmissionChannelAnalysis.jl` to Julia and load it.
+
+
+```{julia}
+#| eval: false
+using Pkg; 
+# Currently only available on GitHub
+Pkg.add(url="https://github.com/enweg/TransmissionChannelAnalysis.jl")
+using TransmissionChannelAnalysis
+```
+
+A typical transmission channel analysis workflow consists of the following steps:
+
+1. Define and estimate a model
+2. Compute total effects
+3. Construct a transmission matrix
+4. Define transmission channels
+5. Compute transmission effects
+6. Visualise results
+
+The sections that follow document the functions available for each of these steps.
+
+## 1. Defining and estimating a model. 
+
+The first step in transmission channel analysis is to define a model. This model will be used to derive total dynamic causal effects (impulse response functions) and to decompose these effects into effects along transmission channels. Currently supported are the following model types:
+
+- Vector Autoregressions (VARs) for baseline dynamic modelling, estimated via OLS without structural identification.
+- Structural VARs (SVARs) with recursive and internal identification schemes.
+- Local projections with recursive and external instrument identification schemes.
+
+Each model class extends the abstract type [`Model`](./all-functions/Model.qmd). Detailed descriptions of each model follow.
+
+### Vector Autoregressions (VARs)
+
+A VAR model can be defined using the `VAR` type and its constructor as shown below:
+
+```{julia}
+#| echo: false 
+#| output: asis
+
+docs = Base.Docs.doc(VAR, Tuple{DataFrame, Int})
+println(DocUtils.create_quarto_callout(docs, "VAR")[1])
+```
+
+The constructor requires a dataset of type `DataFrame`, with each column representing a variable and each row an observation, ordered from earliest to latest. For example:
+
+```{julia}
+#| eval: false
+
+# data is some dataset of type DataFrame
+p = 2  # lag length
+model = VAR(data, p)
+```
+
+You can include deterministic trends by specifying the `trend_exponents` keyword-argument:
+
+```{julia}
+#| eval: false
+
+p = 2
+model = VAR(data, p; trend_exponents = 0:1)
+```
+
+Here, `0:1` indicates a constant ($t^0$) and a linear trend ($t^1$). For constant, linear, and quadratic trends use `0:2`, or `[0,2]` to skip the linear term.
+
+To estimate the VAR via OLS, call [`fit!`](./all-functions/fit!.qmd):
+
+```{julia}
+#| eval: false
+fit!(model)
+```
+
+Retrieve estimates with [`coeffs`](./all-functions/coeffs.qmd), [`fitted`](./all-functions/fitted.qmd), and [`residuals`](./all-functions/residuals.qmd):
+
+
+```{julia}
+#| eval: false
+
+# All coefficients
+coeffs(model)
+# Excluding constants/trends
+coeffs(model, true)
+# Fitted values
+fitted(mdoel)
+# Residuals
+residuals(model)
+```
+
+
+To select the optimal lag length automatically, use [`fit_and_select!`](./all-functions/fit_and_select!.qmd). This method fits `VAR` models for every lag length from 0 up to the specified maximum, evaluates each using the chosen information criterion (AIC by default), and returns the model with the lowest criterion value along with a table of lag lengths and their corresponding scores:
+
+
+```{julia}
+#| eval: false
+
+model = VAR(data, 20)
+model_best, ic_table = fit_and_select!(model)
+```
+
+`fit_and_select!` supports AIC ([`aic`](./all-functions/aic.qmd)), BIC/SIC ([`bic`](./all-functions/bic.qmd)/[`sic`](./all-functions/sic.qmd)), and HQC ([`hqc`](./all-functions/hqc.qmd)). For example, to use the Bayesian Information Criteria (BIC), call:
+
+
+```{julia}
+#| eval: false
+
+model = VAR(data, 20)
+model_best, ic_table = fit_and_select!(model, bic)
+```
+
+To compute information criteria for an already estimated model over its own sample, call [`aic`](./all-functions/aic.qmd), [`bic`](./all-functions/bic.qmd), [`sic`](./all-functions/sic.qmd), or [`hqc`](./all-functions/hqc.qmd) on the model. Note these values may differ from those returned by `fit_and_select!`, which evaluates ICs over a common sample across all models:
+
+
+```{julia}
+#| eval: false
+aic(model)  # computes the AIC of the model
+bic(model)  # computes the BIC of the model
+sic(model)  # computes the SIC of the model
+hqc(model)  # computes the HQC of the model
+```
+
+### Structural Vector Autoregressions (SVARs)
+
+An SVAR can be defined using the [`SVAR`](./all-functions/SVAR.qmd) class and its constructor as documented below:
+
+```{julia}
+#| echo: false 
+#| output: asis
+
+docs = Base.Docs.doc(SVAR, Tuple{DataFrame, Int})
+println(DocUtils.create_quarto_callout(docs, "SVAR")[1])
+```
+
+The constructor requires a dataset of type `DataFrame`, with each column representing a variable and each row an observation, ordered from earliest to latest. For example:
+
+
+```{julia}
+#| eval: false
+p = 4  # lag length
+model = SVAR(data, p)
+```
+
+You may include deterministic trends as for the VAR case, using the `trend_exponents` keyword-argument:
+
+
+```{julia}
+#| eval: false
+model = SVAR(data, p; trend_exponents=0:1)
+```
+
+To estimate the structural model, an identification method must be provided. Only recursive identification ([`Recursive`](./all-functions/Recursive.qmd)) is supported for full structural identification. Note that [`InternalInstrument`](./all-functions/InternalInstrument.qmd) methods can be used to identify impulse responses to a single shock; these are documented in a later section. Fit the model as follows:
+
+
+```{julia}
+#| eval: false
+fit!(model, Recursive())
+```
+
+After estimation, coefficients, fitted values, and residuals can be obtained analogenously to the `VAR` using [`coeffs`](./all-functions/coeffs.qmd), [`fitted`](./all-functions/fit_and_select!.qmd), and [`residuals`](./all-functions/residuals.qmd), respectively.
+
+```{julia}
+#| eval: false
+
+# All coefficients (A0, A_plus)
+coeffs(model)
+# Excluding constants/trends
+coeffs(model, true)
+# Fitted values
+fitted(mdoel)
+# Residuals
+residuals(model)
+```
+
+You can select the lag length automatically via [`fit_and_select!`](./all-functions/fit_and_select!.qmd), which first determines the best reduced‑form `VAR` up to the maximum lag and then applies the chosen identification method:
+
+Using AIC (default) with a maximum of twenty lags:
+
+```{julia}
+#| eval: false
+model = SVAR(data, 20)
+model_best, ic_table = fit_and_select!(model, Recursive())
+```
+
+Or using HQC for model selection:
+
+```{julia}
+#| eval: false
+model = SVAR(data, 20)
+model_best, ic_table = fit_and_select!(model, Recursive(), hqc)
+```
+
+All `VAR` information‑criterion functions may be supplied to choose the optimal `SVAR`.
+
+### Local Projections
+
+A local projection model can be specified using the [`LP`](./all-functions/LP.qmd) class and its constructor:
+
+```{julia}
+#| echo: false 
+#| output: asis
+
+docs = Base.Docs.doc(LP, Tuple{DataFrame, Int, Int, Int})
+println(DocUtils.create_quarto_callout(docs, "VAR")[1])
+```
+
+The constructor requires:
+
+- A dataset of type `DataFrame`
+- A `treatment` variable (either the shock itself or the instrumented variable)
+- The number of lags (`p`)
+- A vector of horizons (`horizons`)
+
+For example, to estimate horizons $0$–$20$ with 4 lags for treatment variable `Y1`:
+
+
+```{julia}
+#| eval: false
+model = LP(data, :Y1, 4, 0:20)
+```
+
+By default, each regression includes a constant term. To omit the constant, set the `include_constant` keyword-argument to `false`:
+
+```{julia}
+#| eval: false
+model = LP(data, :Y1, 4, 0:20; include_constant=false)
+```
+
+Use the [`fit!`](./all-functions/fit!.qmd) method to estimate the projections:
+
+```{julia}
+#| eval: false
+fit!(model)
+```
+
+By default, `fit!` applies a recursive (conditional ignorability) assumption. These estimates are structural only if the true shock satisfies this assumption; otherwise, they should be treated as reduced‐form.
+
+Available identification schemes:
+
+- [`Recursive`](./all-functions/Recursive.qmd) (default)
+- [`ExternalInstrument`](./all-functions/ExternalInstrument.qmd) (for external‐instrument IV)
+
+To use an external instrument, first instantiate `ExternalInstrument` with the treatment name and an instrument dataset, then supply it to `fit!`:
+
+
+```{julia}
+#| eval: false
+method = ExternalInstrument(:Y1, data_instruments)
+fit!(model, method)
+```
+
+After estimation, extract the results (note the differing dimensions) via:
+
+- [`coeffs`](./all-functions/coeffs.qmd): (response variable × regressors × horizons)
+- [`fitted`](./all-functions/fitted.qmd), [`residuals`](./all-functions/residuals.qmd): (observations × variables × horizons)
+
+```{julia}
+#| eval: false
+
+# All coefficients
+coeffs(model)
+# Excluding the constant
+coeffs(model, true)
+# Fitted values 
+fitted(model)
+# Residuals
+residuals(model)
+```
+
+To select the lag order automatically, use [`fit_and_select!`](./all-functions/fit_and_select!.qmd), which fits `VAR`s internally to choose the optimal `p`:
+
+All `VAR` information‑criterion functions (e.g., `aic`, `bic`, `sic`, `hqc`) may be used for `LP` lag selection. For example, using BIC:
+
+```{julia}
+#| eval: false
+model = LP(data, :Y1, 20, 0:20)
+model_best, ic_table = fit_and_select!(model, Recursive(), bic)
+```
+
+## 2. Obtaining the effects -- structural IRFs
+
+Once a model is defined, you can compute total dynamic causal effects—impulse response functions (IRFs)—using the [`IRF`](./all-functions/IRF.qmd) method. The IRF function always requires a maximum horizon (`max_horizon`) for computation. For reduced‐form models, you may also supply an `IdentificationMethod` to derive structural IRFs.
+
+Details on IRF computation for all models are provided below.
+
+### VARs
+
+Obtain reduced‐form IRFs from a VAR model by specifying the maximal horizon:
+
+
+```{julia}
+#| eval: false
+
+max_horizon = 20
+irf_obj = IRF(model, max_horizon)
+```
+
+Here, `irf_obj` is of type [`IRF`](./all-functions/IRF.qmd) holding both the IRF array and related metadata:
+
+Printing `irf_obj` displays a 3D array with dimensions:
+
+1. Response variable
+2. Shock
+3. Horizon (starting at 0 for contemporaneous effect)
+
+To retrieve the raw IRF array, call:
+
+
+```{julia}
+#| eval: false
+irf_obj.irfs
+```
+
+To compute structural IRFs, supply an `IdentificationMethod`. Supported methods include recursive ([`Recursive`](./all-functions/Recursive.qmd)) and internal‐instrument ([`InternalInstrument`](./all-functions/InternalInstrument.qmd)) schemes:
+
+For a recursive identification:
+
+```{julia}
+#| eval: false
+irf_obj = IRF(model, Recursive(), max_horizon)
+```
+
+To use an internal instrument, specify a `normalising_variable`, then optionally override the `instrument` (default: first variable) or the `normalising_horizon` (default: 0 for contemporaneous effect):
+
+```{julia}
+#| eval: false
+normalising_variable = :Y1
+method = InternalInstrument(normalising_variable)
+irf_obj = IRF(model, method, max_horizon)
+```
+
+```{julia}
+#| eval: false
+
+# Changing the instrument to be Y2 and the normalising variable to be Y3
+method = InternalInstrument(:Y3; instrument=:Y2)
+```
+
+```{julia}
+#| eval: false
+
+# Changing the normalising horizon to period 1
+method = InternalInstrument(:Y3; instrument=:Y2, normalising_horizon=1)
+```
+
+### SVARs
+
+Impulse response functions can be obtained from an `SVAR` using the `IRF` function, analogous to the `VAR` case. Since an SVAR is already structurally identified, `IRF` returns structural IRFs directly:
+
+
+```{julia}
+#| eval: false 
+
+# model is a SVAR
+irf_obj = IRF(model, max_horizon)  # will be structural IRFs
+```
+
+::: {.callout-note}
+# Using SVARs and Internal Instruments
+
+The `IRF` method for `SVAR`s requires a fully identified `SVAR`. Internal instruments (via `InternalInstrument`) cannot be applied to an `SVAR` directly. To use internal instruments for IRF identification, first define a reduced‐form `VAR`, apply the instrument there, and then compute IRFs:
+
+
+```{julia}
+#| eval: false
+model = VAR(data, p);
+normalising_variable = :Y2;
+method = InternalInstrument(normalising_variable);
+irf_obj = IRF(model, method, max_horizon)
+```
+
+:::
+
+### Local Projections
+
+Impulse response functions can be obtained from an estimated `LP` model using `IRF` and providing an identification method. Available methods are:
+
+- Recursive identification via [`Recursive`](./all-functions/Recursive.qmd)
+- External instruments via [`ExternalInstrument`](./all-functions/ExternalInstrument.qmd)
+
+For example, using `Recursive`: 
+
+
+```{julia}
+#| eval: false
+
+# model is an LP model
+irf_obj = IRF(model, Recursive(), max_horizon)
+```
+
+Or using external instruments
+
+```{julia}
+#| eval: false
+method = ExternalInstrument(:Y1, data_instruments)
+irf_obj = IRF(model, method, max_horizon)
+```
+
+## 3. Defining a transmission matrix. 
+
+The next step in a transmission channel analysis is to define the transmission matrix, which specifies the ceteris paribus ordering of variables in the chosen equilibrium representation. The simplest way is to list the variables in the desired order as a vector of `Symbol`. For example, if your data contains `Y1`, `Y2`, `Y3`, and `Y4`, and you wish to order them as `Y4`, `Y2`, `Y1`, `Y3`, define:
+
+
+```{julia}
+#| eval: false
+transmission_order = [:Y3, :Y2, :Y1, :Y3]
+```
+
+::: {.callout-note appearance="minimal"}
+**Note**: The ordering must be a vector of `Symbol` **not** `String`.
+:::
+
+Advanced methods for constructing transmission matrices are covered in the [Advanced Methods Section](./advanced.qmd).
+
+## 4. Definining transmission channels.
+
+With the transmission matrix in place, you can specify transmission channels of interest via the helper functions [`through`](./all-functions/through.qmd) and [`not_through`](./all-functions/not_through.qmd). These functions return a transmission condition `Q` that you can combine to define complex transmission channels. More advanced methods for defining transmission channels are documented in the [Advanced Methods Section](./advanced.qmd).
+
+**through**
+
+Use [`through`](./all-functions/through.qmd) to define channels that pass through specified variables at given horizons.
+
+Examples (for any model — VAR, SVAR, or LP — with `transmission_order` or a transmission matrix as described above):
+
+1. Channel through `Y1` at horizons 0-3:
+
+```{julia}
+#| eval: false
+q = through(model, :Y1, 0:0, transmission_order)
+```
+
+2. Channel through `Y1` and `Y2` contemporaneously:
+
+```{julia}
+#| eval: false
+q = through(model, [:Y1, :Y2], 0:0, transmission_order)
+```
+
+3. Channel through `Y1` at horizon 0 and `Y2` at horizons 0–1:
+
+```{julia}
+#| eval: false
+q = through(model, [:Y1, :Y2], [0:0, 0:1])
+```
+
+**not_through**
+
+Use [`not_through`](./all-functions/not_through.qmd) to define channels that **do not** go through specified variables at given horizons.
+
+Examples (for any model — VAR, SVAR, or LP — with `transmission_order` a transmission matrix as described above):
+
+1. Channel not through `Y1` at horizons 0-20:
+
+```{julia}
+#| eval: false
+q = not_through(model, :Y1, 0:20, transmission_order)
+```
+
+2. Channel not through `Y1` and not through `Y2` at horizons 0-20:
+
+```{julia}
+#| eval: false
+q = not_through(model, [:Y1, :Y2], 0:20, transmission_order)
+```
+
+3. Channel not through `Y1` contemporaneously and not through `Y2` at horizon 1:
+
+
+```{julia}
+#| eval: false
+q = not_through(model, [:Y1, :Y2], [0:0, 1:1], transmission_order)
+```
+
+**Combining through and not_through**
+
+Both `through` and `not_through` return a transmission condition `Q`, which can be combined using logical operators: 
+
+- AND (`&`): both conditions must be satisfied.
+- OR (`|`): at least one condition must be satisfied.
+- NOT (`!`): negates a condition.
+
+Examples: 
+
+1. Channel through `Y1` contemporaneously but not through `Y2` contemporaneously:
+
+```{julia}
+#| eval: false
+q1 = through(model, :Y1, 0:0, transmission_order)
+q2 = not_through(model, :Y2, 0:0, transmission_order)
+q = q1 & q2
+```
+
+2. Channel through `Y1` contemporaneously or not through `Y2` contemporaneously:
+
+
+```{julia}
+#| eval: false
+q1 = through(model, :Y1, 0:0, transmission_order)
+q2 = not_through(model, :Y2, 0:0, transmission_order)
+q = q1 | q2
+```
+
+3. Channel not through `Y1` contemporaneously (both ways are equivalent):
+
+```{julia}
+#| eval: false
+q1 = through(model, :Y1, 0:0, transmission_order)
+q = !q1
+q = not_through(model, :Y1, 0:0, transmission_order)
+```
+
+4. Channel through `Y1` in at least one period between horizons 0-20: 
+
+```{julia}
+#| eval: false
+
+q = not_through(model, :Y1, 0:20, transmission_order)
+q = !q
+```
+
+By combining `through` and `not_through` with logical operators, you can flexibly construct any complex transmission channel you require. 
+
+## 5. Obtaining transimssion effects. 
+
+Once you have defined a `model` (VAR, SVAR, or LP), the [`transmission`](./all-functions/transmission.qmd) method computes transmission effects along your specified channel. Below are the details for each model type.
+
+For `VAR` and `LP`, or for `SVAR`  models that have not yet been structurally estimated, you must provide an identification method (since at least one structural shock is required). As outlined above, this can be `Recursive` for `SVAR` and `LP`, `InternalInstrument` for `SVAR`, or `ExternalInstrument` for `LP`. 
+
+For example, to compute the effects of the first structural shock up to `max_horizon`, using a transmission matrix `transmission_order` and a transmission condition `q`:
+
+```{julia}
+#| eval: false 
+effects = transmission(
+    model,               # VAR, SVAR, or LP
+    method,              # identification method
+    1,                   # shock index
+    q,                   # transmission condition
+    transmission_order,  # transmission matrix
+    max_horizon          # maximum horizon
+)
+```
+
+The returned `effects` array has dimensions:
+
+1. Response variables (in original data order)
+2. Transmission effect of the chosen shock
+3. Horizons (starting at 0)
+
+If your `SVAR` model is already structurally identified (fitted with a structural identification scheme), you may omit the identification argument:
+
+
+```{julia}
+#| eval: false
+effects = transmission(model, 1, q, transmission_order, max_horizon)
+```

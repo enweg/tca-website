@@ -1,0 +1,44 @@
+/* css styles */
+
+.doc-box h1, .doc-box h2, .doc-box h3 {
+  font-size: 1.1rem !important;
+}
+
+.navbar .aa-Form {
+  width: 250px !important;
+}
+
+.action-read-paper {
+  width: 100%; 
+  text-align: center;
+}
+.action-read-paper > p {
+  margin: 0;
+}
+.action-read-paper a {
+  display: inline-block; 
+  color: var(--bs-body-bg); 
+  background-color: var(--bs-primary);
+  text-decoration: none; 
+  padding: 10px 20px; 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.action-read-paper a:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 2px 5px var(--bs-body-color);
+}
+
+
+.assumption {
+  border-left-color: var(--bs-body-color) !important;
+}
+
+.tikz-img {
+  margin-top: 1rem; 
+  margin-bottom: 1rem; 
+}
+.tikz-img img {
+  display: block; 
+  margin: 0 auto; 
+}
+

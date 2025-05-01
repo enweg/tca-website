@@ -1,0 +1,22 @@
+  --- 
+title: | 
+  map_y_to_x
+sidebar: doc
+engine: julia
+---
+
+```{julia}
+#| echo: false 
+#| output: false 
+
+using DocUtils
+using TransmissionChannelAnalysis
+```
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_quarto_callout_doc(TransmissionChannelAnalysis, Symbol("map_y_to_x"))
+```
+    

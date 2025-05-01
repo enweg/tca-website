@@ -1,0 +1,43 @@
+---
+bibliography: "../../references.bib"
+title: What is the Dynamic Form?
+description: | 
+  TCA makes use of two forms (1) the dynamic form and (2) the systems form. In this article we describe what the dynamic form is.  
+order: 2
+sidebar: faq
+---
+
+{{< include ../../_math-utilities.qmd >}}
+
+@wegnerTCA2024 refer to the following structural VARMA form as the *dynamic form*,
+$$
+\begin{equation}
+    \bA_0\by_t = \sum_{i=1}^{\ell}\bA_i\by_{t-i} + \sum_{j=1}^{q}\bPsi_{j}\bvarepsilon_{t-j} + \bvarepsilon_t ,
+    \label{eq:general-model}
+\end{equation}
+$$
+where $\{\bA_i\}_{i=1}^{\ell}$ and $\{\bPsi_j\}_{j=1}^{q}$ are $K\times K$ coefficient matrices which are statistically identified using any common scheme such as the echelon form, $\bA_0$ is a contemporaneous coefficient matrix assumed to be (partially) identified using some economic identification scheme, and $\bvarepsilon_t$ is a $K\times 1$ vector of white noise.  
+
+Additionally, two assumptions are made
+
+::: {.callout-note .assumption appearance="minimal"}
+# Assumption 1
+The white noise vector $\bvarepsilon_t$ consists of $K$ structural shocks satisfying $\E[\bvarepsilon_{t}]=\bzero_K$, $\E[\bvarepsilon_{t}\bvarepsilon_{t}']=\bI_K$ and $\E[\bvarepsilon_t\bvarepsilon_{t-r}']=\bO_K$ for all $r\geq 1$.
+:::
+
+::: {.callout-note .assumption appearance="minimal"}
+# Assumption 2
+$\bA_0$ is non-singular.
+:::
+
+The first step towards a definition of transmission channel is then the transformation of the dynamic form to the [systems form](systems-form.qmd). 
+
+::: {.callout-note}
+# Where can I find more information? 
+
+More information can be found in Section 3 of @wegnerTCA2024. 
+:::
+
+{{< include ../../_action-read-paper.qmd >}}
+
+

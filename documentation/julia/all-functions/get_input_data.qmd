@@ -1,0 +1,22 @@
+  --- 
+title: | 
+  get_input_data
+sidebar: doc
+engine: julia
+---
+
+```{julia}
+#| echo: false 
+#| output: false 
+
+using DocUtils
+using TransmissionChannelAnalysis
+```
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_quarto_callout_doc(TransmissionChannelAnalysis, Symbol("get_input_data"))
+```
+    
