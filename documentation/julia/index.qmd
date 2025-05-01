@@ -15,7 +15,7 @@ using TransmissionChannelAnalysis
 using DataFrames
 ```
 
-`TransmissionChannelAnalysis.jl` provides a suite of functions for conducting transmission channel analysis (TCA) in MATLAB. It includes both standard methods—which are sufficient for most users—and more advanced, customisable techniques.
+`TransmissionChannelAnalysis.jl` provides a suite of functions for conducting transmission channel analysis (TCA) in Julia. It includes both standard methods—which are sufficient for most users—and more advanced, customisable techniques.
 
 This overview focuses on the standard methods. Advanced options are described in the [Advanced Section](./advanced.qmd), and implementation details can be found in the [Internals Section](./internals.qmd). 
 
