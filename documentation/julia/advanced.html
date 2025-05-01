@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>TransmissionChannelAnalysis.jl – Transmission Channel Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../documentation/julia/internals.html" rel="next">
+<link href="../../documentation/julia/index.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "What would you like to know?",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../examples/matlab/dynare/index.html"> 
+<span class="menu-text">Examples</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../documentation/julia/index.html" aria-current="page"> 
+<span class="menu-text">Documentation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../faq/index.html"> 
+<span class="menu-text">Wiki</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html#about"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../documentation/julia/index.html">Julia</a></li><li class="breadcrumb-item"><a href="../../documentation/julia/advanced.html">Advanced Tools</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+  <div id="quarto-announcement" data-announcement-id="d1d45beed765f3aac4870d27d9123622" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p><strong>Note</strong> - this website is still actively under construction.</p>
+</div></div>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Julia</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/advanced.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Advanced Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Internals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">All</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/@show_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">@show_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/AbstractIdentificationMethod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AbstractIdentificationMethod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/aic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">aic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/bic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">bic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/coeffs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">coeffs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">cov</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/ExternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ExternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/fit_and_select!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fit_and_select!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/fit!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fit!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/fitted.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fitted</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_dependent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_dependent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_independent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_independent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_input_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_input_data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_variable_names.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_variable_names</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/hqc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">hqc</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/identify.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">identify</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/identify!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">identify!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/InternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">InternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/IRF.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IRF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/is_fitted.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_fitted</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/is_stable.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_stable</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/is_structural.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_structural</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/LP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_B</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_companion_matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_companion_matrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_condition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_condition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_Omega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_Omega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_systems_form.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_systems_form</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/map_x_to_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">map_x_to_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/map_y_to_x.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">map_y_to_x</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/Model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/nobs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">nobs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/not_through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">not_through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/Recursive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">residuals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/set_remove_contradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">set_remove_contradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/show_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">show_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/sic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">sic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/simulate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">simulate</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/simulate!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">simulate!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/spectral_radius.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">spectral_radius</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/SVAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SVAR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/to_transmission_irfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">to_transmission_irfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/transmission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmission</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/VAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VAR</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Matlab</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/advanced.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Advanced Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Internals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">All</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/applyAndToB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">applyAndToB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/applyNotToB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">applyNotToB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/calculateQAndOnly.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">calculateQAndOnly</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/checkContradiction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">checkContradiction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/collectTerms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">collectTerms</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/combinations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">combinations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/DSGE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DSGE</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/ExternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ExternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/findVariableIndex.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">findVariableIndex</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/getVarNumsAndMultiplier.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">getVarNumsAndMultiplier</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/IdentificationMethod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IdentificationMethod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/InternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">InternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/IRFContainer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IRFContainer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/logdet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">logdet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/LP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeCondition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeCondition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeConditionY.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeConditionY</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeLagMatrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeLagMatrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeLeadMatrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeLeadMatrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeOmega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeOmega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeSystemsForm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeSystemsForm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/Model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/notThrough.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">notThrough</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/Q.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Q</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/Recursive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/removeContradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">removeContradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/setRemoveContradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">setRemoveContradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/slideIn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">slideIn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/SVAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SVAR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/toTransmissionIrfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">toTransmissionIrfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/transmission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmission</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/transmissionBOmega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmissionBOmega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/transmissionIrfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmissionIrfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/VAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VAR</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#defining-simple-transmission-channels" id="toc-defining-simple-transmission-channels" class="nav-link active" data-scroll-target="#defining-simple-transmission-channels">Defining Simple Transmission Channels</a>
+  <ul class="collapse">
+  <li><a href="#advanced-usage-of-through-and-not_through" id="toc-advanced-usage-of-through-and-not_through" class="nav-link" data-scroll-target="#advanced-usage-of-through-and-not_through">Advanced Usage of <code class="sourceCode julia">through</code> and <code class="sourceCode julia">not_through</code></a></li>
+  </ul></li>
+  <li><a href="#defining-complex-transmission-channels" id="toc-defining-complex-transmission-channels" class="nav-link" data-scroll-target="#defining-complex-transmission-channels">Defining Complex Transmission Channels</a></li>
+  <li><a href="#computing-transmission-effects" id="toc-computing-transmission-effects" class="nav-link" data-scroll-target="#computing-transmission-effects">Computing Transmission Effects</a>
+  <ul class="collapse">
+  <li><a href="#preparing-the-systems-form" id="toc-preparing-the-systems-form" class="nav-link" data-scroll-target="#preparing-the-systems-form">Preparing the Systems Form</a></li>
+  <li><a href="#preparing-the-irfs" id="toc-preparing-the-irfs" class="nav-link" data-scroll-target="#preparing-the-irfs">Preparing the IRFs</a></li>
+  <li><a href="#computing" id="toc-computing" class="nav-link" data-scroll-target="#computing">Computing</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../documentation/julia/index.html">Julia</a></li><li class="breadcrumb-item"><a href="../../documentation/julia/advanced.html">Advanced Tools</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">TransmissionChannelAnalysis.jl</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The package <code>TransmissionChannelAnalysis.jl</code> provides functionns for TCA in Julia. It is to date the most advanced of the packages, allowing for all kinds of transmission channels. However, implementing more advanced trasnmission channels requires the use of more advanced methods within the package. For most users and for most applications, the basic funcionality is sufficient. This basic functionality will be documented first, with some more advanced features discussed later.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Contributer Information
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For interested contributers or others interested in the internals of <code>TransmissionChannelAnalysis.jl</code> please have a look at the <a href="../../documentation/julia/internals.html">explanation of the internals</a>.</p>
+</div>
+</div>
+<section id="defining-simple-transmission-channels" class="level2">
+<h2 class="anchored" data-anchor-id="defining-simple-transmission-channels">Defining Simple Transmission Channels</h2>
+<p>Two helper functions are provided that allow for the definition of transmission channels without having to use the more advanced methods. These are <code class="sourceCode julia">through</code> and <code class="sourceCode julia">not_throug</code>. As the names hint at, <code class="sourceCode julia">through</code> is used to define a channel that must go through certain variables in certain periods, while <code class="sourceCode julia">not_through</code> is used to define a transmission channel that cannot go through certain variables in all defined periods.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+through
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>through(idx, horizons, order) --&gt; Q</code></pre>
+<p>All paths must go through variables in <code>idx</code> in periods <code>horizons</code>. Note, this uses the dynamic system notation <code>y</code> such that <code>idx</code> refers to the index of the variable in the original dynamic system, i.e.&nbsp;in the SVARMA.</p>
+<section id="arguments" class="level2">
+<h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
+<p><strong>For the single variable version</strong>:</p>
+<ul>
+<li><code>idx::Int</code>: Index of variable through which the paths should go. This is the original index in the dynamic system, e.g.&nbsp;the SVAR, before applying the transmission matrix.</li>
+<li><code>horizons::AbstractVector{&lt;:Int}</code>: Horizons for which the paths must go through the variable.</li>
+<li><code>order::AbstractVector{&lt;:Int}</code>: Variable ordering determined by the transmission matrix</li>
+</ul>
+<p><strong>For the multiple variable version</strong>:</p>
+<ul>
+<li><code>idx::AbstractVector{&lt;:Int}</code>: Indices of variables through which the paths should go. These are the original indices in the dynamic system, e.g.&nbsp;the SVAR, before applying the transmission matrix.</li>
+<li><code>horizons::Union{AbstractVector{&lt;:Int},Vector{AbstractVector{&lt;:Int}}}</code>: Horizons for which the paths must go through the variable. Must either be a vector for each variable in <code>idx</code> or a single vector. If it is a single vector, then the horizons will be applied to each variable in <code>idx</code>.</li>
+<li><code>order::AbstractVector{&lt;:Int}</code>: Variable ordering determined by the transmission matrix</li>
+</ul>
+</section>
+<section id="returns" class="level2">
+<h2 class="anchored" data-anchor-id="returns">Returns</h2>
+<ul>
+<li>Returns a transmission condition <code>Q</code>.</li>
+</ul>
+</section>
+<section id="notes" class="level2">
+<h2 class="anchored" data-anchor-id="notes">Notes</h2>
+<ul>
+<li>The transmission effect can be calculated using <code>transmission</code>.</li>
+</ul>
+</section>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<p>Suppose we are interested in the contemporaneous channel in Section 5.1 of Wegner et al (2024), i.e.&nbsp;we are interested in the effect going through the federal funds rate contemporaneously. In our estimated model, the federal funds rate is the first variable. We would thus define the contemporaneous channe```{julia}s</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>contemporaneous_channel <span class="op">=</span> <span class="fu">through</span>(<span class="fl">1</span>, [<span class="fl">0</span>], <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)  <span class="co"># we have four variables with ffr being first</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>More generally, we could define the following, which would be the effect through the federal funds rate in the first t```{julia}periods.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">through</span>(<span class="fl">1</span>, [<span class="fl">0</span>, <span class="fl">1</span>], <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The following is also allowed which is the effect through the federal funds rate contemporaneously and one period later, and through the output gap contemporaneously and one period later, where the federal funds rate is ordered first and the ```{julia}put gap second.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">through</span>([<span class="fl">1</span>, <span class="fl">2</span>], [[<span class="fl">0</span>, <span class="fl">1</span>], [<span class="fl">0</span>, <span class="fl">1</span>]], <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If we want to re-order the federal funds rate after the output gap, we simply change the ordering to <code>[2, 1, 3, 4]</code> where <code>2</code> corresponds to the output gap ```{julia}the original ordering.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">through</span>([<span class="fl">1</span>, <span class="fl">2</span>], [[<span class="fl">0</span>, <span class="fl">1</span>], [<span class="fl">0</span>, <span class="fl">1</span>]], [<span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+through
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>through(
+    model::Model, 
+    variables::Union{AbstractVector{Symbol}, Symbol}, 
+    horizons::Union{AbstractVector{&lt;:Int},Vector{&lt;:AbstractVector{&lt;:Int}}}, 
+    order::AbstractVector{Symbol}
+) --&gt; Q</code></pre>
+<p>Define a transmission channel through <code>variables</code> for <code>horizons</code>. Contrary to the other <code>through</code> methods, <code>variables</code> and <code>order</code> are defined using the variable names of the model – other <code>through</code> methods use indices.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+not_through
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>not_through(idx, horizons, order) --&gt; Q</code></pre>
+<p>All paths cannot go through variables in <code>idx</code> in periods <code>horizons</code>. Note, this uses the dynamic system notation <code>y</code> such that <code>idx</code> refers to the index of the variable in the original dynamic system, i.e.&nbsp;in the SVARMA.</p>
+<section id="arguments-1" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-1">Arguments</h2>
+<p><strong>For the single variable version</strong>:</p>
+<ul>
+<li><code>idx::Int</code>: Index of variable through which the paths cannot go. This is the original index in the dynamic system, e.g.&nbsp;the SVAR, before applying the transmission matrix.</li>
+<li><code>horizons::AbstractVector{&lt;:Int}</code>: Horizons for which the paths cannot go through the variable.</li>
+<li><code>order::AbstractVector{&lt;:Int}</code>: Variable ordering determined by the transmission matrix</li>
+</ul>
+<p><strong>For the multiple variable version</strong>:</p>
+<ul>
+<li><code>idx::AbstractVector{&lt;:Int}</code>: Indices of variables through which the paths cannot go. These are the original indices in the dynamic system, e.g.&nbsp;the SVAR, before applying the transmission matrix.</li>
+<li><code>horizons::Union{AbstractVector{&lt;:Int},Vector{AbstractVector{&lt;:Int}}}</code>: Horizons for which the paths cannot go through the variable. Must either be a vector for each variable in <code>idx</code> or a single vector. If it is a single vector, then the horizons will be applied to each variable in <code>idx</code>.</li>
+<li><code>order::AbstractVector{&lt;:Int}</code>: Variable ordering determined by the transmission matrix</li>
+</ul>
+</section>
+<section id="returns-1" class="level2">
+<h2 class="anchored" data-anchor-id="returns-1">Returns</h2>
+<ul>
+<li>Returns a transmission condition <code>Q</code>.</li>
+</ul>
+</section>
+<section id="notes-1" class="level2">
+<h2 class="anchored" data-anchor-id="notes-1">Notes</h2>
+<ul>
+<li>The transmission effect can be calculated using <code>transmission</code>.</li>
+</ul>
+</section>
+<section id="examples-1" class="level2">
+<h2 class="anchored" data-anchor-id="examples-1">Examples</h2>
+<p>The non-contemporaneous channel of monetary policy is defined in Section 5.1 of Wegner et al (2024) as the effect not going through a contemporaneous adjustment of the federal funds rate, where the transmission matrix orders the federal funds rate first. Thus, if the original SVAR has the federal funds rate ordered first, the non-contemporaneous effect can be obtained in the following ```{julia}.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">not_through</span>(<span class="fl">1</span>, [<span class="fl">0</span>], <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Similarly, Wegner et al (2024) define the anticipation channel of government defense spending as the effect not going through government defense spending. With government defense spending ordered second in the VAR, the following can be used to obtain the anticipati```{julia}channel.</p>
+<pre class="{julia}"><code>q = not_through(2, 0:20, 1:4)</code></pre>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+not_through
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>not_through(
+    model::Model, 
+    variables::Union{AbstractVector{Symbol}, Symbol}, 
+    horizons::Union{AbstractVector{&lt;:Int},Vector{&lt;:AbstractVector{&lt;:Int}}}, 
+    order::AbstractVector{Symbol}
+) --&gt; Q</code></pre>
+<p>Define a transmission channel not through <code>variables</code> for <code>horizons</code>. Contrary to the other <code>not_through</code> methods, <code>variables</code> and <code>order</code> are defined using the variable names of the model – other <code>not_through</code> methods use indices.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Both <code class="sourceCode julia">through</code> and <code class="sourceCode julia">not_through</code> return a transmission condition <code>Q</code>, which is simply an internal representation of the provided transmission channel (represented as <a href="../../learn/boolean-conditions.qmd">Boolean statements</a>). To double check whether the condition represents the desired channel, simply run <code class="sourceCode julia">Q</code> in the REPL, which will display the internal representation using the <a href="../../learn/systems-form.qmd">systems form</a> and thus using the variable notation <span class="math inline">\(x\)</span>. Alternatively, <code class="sourceCode julia">show_y</code> or <code class="sourceCode julia"><span class="pp">@show_y</span></code> can be used to display the internal representation in the <a href="../../learn/dynamic-form.qmd">dynamic form</a> and thus using the variable notation <span class="math inline">\(y\)</span>.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+show_y
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>show_y(q::Q, order::AbstractVector{&lt;:Int})
+@show_y(q, order)</code></pre>
+<p>Pretty print the condition <code>q::Q</code> using the variables of the dynamic system, i.e.&nbsp;<code>y</code>.</p>
+<section id="arguments-2" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-2">Arguments</h2>
+<ul>
+<li><code>q::Q</code>: A transmission condition. See also <code>Q</code>.</li>
+<li><code>order::AbstractVector{&lt;:Int}</code>: The order of variables defined by the transmission matrix.</li>
+</ul>
+</section>
+<section id="exajuliaes" class="level2">
+<h2 class="anchored" data-anchor-id="exajuliaes">Exa```{julia}es</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>s_y <span class="op">=</span> <span class="st">"y_{1,0} | !y_{1,1}"</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> [<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">2</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">make_condition</span>(s_y, order)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="pp">@show_y</span> q <span class="op">$</span>order</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<section id="advanced-usage-of-through-and-not_through" class="level3">
+<h3 class="anchored" data-anchor-id="advanced-usage-of-through-and-not_through">Advanced Usage of <code class="sourceCode julia">through</code> and <code class="sourceCode julia">not_through</code></h3>
+<p>Conditions created using <code class="sourceCode julia">through</code> and <code class="sourceCode julia">not_through</code> can be combined using AND (<code class="sourceCode julia"><span class="op">&amp;</span></code>), OR (<code class="sourceCode julia"><span class="op">|</span></code>) and NOT (<code class="sourceCode julia">!</code>). Every new combination will return a new condition that combines the previous conditions. The returned conditions can again be combined using AND, OR, and NOT. For example, if <code class="sourceCode julia">q1</code>, <code class="sourceCode julia">q2</code> and <code class="sourceCode julia">q3</code> are conditions obtained using <code class="sourceCode julia">through</code> or <code class="sourceCode julia">not_through</code>, then the following works.</p>
+<div id="10" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>q1_and_q2 <span class="op">=</span> q1 <span class="op">&amp;</span> q2</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>q1_and_not_q3 <span class="op">=</span> q1 <span class="op">&amp;</span> !q3</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>q4 <span class="op">=</span> (q1 <span class="op">|</span> q2) <span class="op">&amp;</span> !q3</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>q5 <span class="op">=</span> q4 <span class="op">|</span> q1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This functionality allows definitions of transmission channels that are not easily defined using <code class="sourceCode julia">through</code> and <code class="sourceCode julia">not_through</code>. For example, if we were interested in the transmission channel that goes through <span class="math inline">\(y_{1,0}\)</span> OR through <span class="math inline">\(y_{1,1}\)</span>, then neither of the helper functions can be used, since neither can handle OR statements. However, we can use <a href="../../learn/boolean-conditions.qmd">Boolean logic</a> and the <a href="../../learn/algebra.qmd">rules for the manipulation of transmission conditions</a> to define this transmission channel using our helper functions.</p>
+<p>In most cases, the easiest step is to negate the original condition. The above condition can be succintly be represented as <span class="math display">\[
+y_{1,0} \lor y_{1,1}.
+\]</span> The negated statement is thus <span class="math display">\[
+\neg y_{1,0} \land \neg y_{1,1}.
+\]</span> This can be defined using <code class="sourceCode julia">not_through</code> in the following way</p>
+<div id="12" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">not_through</span>(<span class="fl">1</span>, [<span class="fl">0</span>,<span class="fl">1</span>], <span class="fl">1</span><span class="op">:</span>n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>where we assumed that the transmission matrix is the identity matrix, implying an ordering <code class="sourceCode julia"><span class="fl">1</span><span class="op">:</span>n</code>.</p>
+<p>To obtain the original transmission channel, we can simply negate this condition.</p>
+<div id="14" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>original_condition <span class="op">=</span> !q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="defining-complex-transmission-channels" class="level2">
+<h2 class="anchored" data-anchor-id="defining-complex-transmission-channels">Defining Complex Transmission Channels</h2>
+<p>Although <code class="sourceCode julia">through</code> and <code class="sourceCode julia">not_through</code> are sufficient for many situations, it is still sometimes more convenient to directly define the transmission channel as a <a href="../../learn/boolean-conditions.qmd">Boolean condition</a> withough having to refer back to <code class="sourceCode julia">though</code> and <code class="sourceCode julia">not_through</code>.</p>
+<p>Say, for example, we are again interested in the transmission channel going through <code>y_{1,0}</code> OR <code>y_{1,1}</code>. Instead of using the approach of first negating the statement, then using <code class="sourceCode julia">not_through</code>, just to negate this statement again, we may as well just define the condition directly using the more advanced functionality of <code>TransmissionChannelAnalysis.jl</code>.</p>
+<p>The advanced functionality simply takes a <code>String</code> that defines the transmission channel as a Boolean condition. The string can either be defined using the variables of the <a href="../../learn/dynamic-form.qmd">dynamic form</a> <span class="math inline">\(y\)</span> or the variables using the <a href="../../learn/systems-form.qmd">systems form</a> <span class="math inline">\(x\)</span>. In the former case, the ordering defined by the transmission matrix must also be defined. In either case, <code class="sourceCode julia">make_condition</code> is used.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+make_condition
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>make_condition(s::String)
+make_condition(s_y::String, order::AbstractVector{&lt;:Int})</code></pre>
+<p>Make a transmission condition, i.e.&nbsp;Q(b), out of a string.</p>
+<p>Transmission channels are described using Boolean statements involving the variables in the dynamic model. <code>make_condition</code> allows for specifying these Boolean conditions as a string which is then converted to an internal representation allowing the computation of transmission channels.</p>
+<p>Two ways of specifying the Boolean conditions exist:</p>
+<ol type="1">
+<li><code>make_condition(s::String)</code> takes the Boolean condition in the systems form of Wegner et al (2024), i.e.&nbsp;variables must start with <code>x</code> followed by a number. For example, given a three variable VAR(1), <code>y_{1,t} -&gt; x_1</code>, <code>y_{2, t} -&gt; x_2</code>, <code>y_{3, t} -&gt; x_3</code>, <code>y_{1, t+1} -&gt; x_4</code>, <code>y_{2, t+1} -&gt; x_5</code>, … Boolean statements then involve expressions in the <code>x</code> variables and define which paths can be taken. Each path involved in the transmission mechanism must satisfy the Boolean statement.</li>
+<li><code>make_condition(s_y::String, order::AbstractVector{&lt;:Int})</code> does the same as the first method, however the Boolean condition can be specified using the variables of the dynamic systems, i.e.&nbsp;<code>y</code>. Variables must then be specified using <code>y_{i,t}</code> where <code>i</code> is the variable number and <code>t</code> is the period. At all times <code>t &gt;= 0</code> with <code>0</code> denoting the contemporaneous horizon.</li>
+</ol>
+<section id="arguments-3" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-3">Arguments</h2>
+<ul>
+<li><code>s::String</code>: A Boolean statement given as a string. Variables must start with <code>x</code> for them to be valid variables.</li>
+<li><code>s_y::String</code>: A Boolean statement given as a string. Variabls must have the form <code>y_{i,t}</code> where <code>i</code> is the variable number and <code>t &gt;= 0</code> is the time period. <code>t=0</code> corresponds to the contemporaneous horizon.</li>
+<li><code>order::AbstractVector{&lt;:Int}</code>: The variable ordering defined by the transmission matrix.</li>
+</ul>
+</section>
+<section id="returns-2" class="level2">
+<h2 class="anchored" data-anchor-id="returns-2">Returns</h2>
+<ul>
+<li>Returns a transmission condition. See also <code>Q</code>.</li>
+</ul>
+</section>
+<section id="exajuliaes-1" class="level2">
+<h2 class="anchored" data-anchor-id="exajuliaes-1">Exa```{julia}es</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"x2 &amp; !x3"</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>cond <span class="op">=</span> make_cond<span class="ss">```{julia}on(s)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>s_y <span class="op">=</span> <span class="st">"y_{1,0} &amp; !y_{1,1}"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> [<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">2</span>]</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>cond <span class="op">=</span> <span class="fu">make_condition</span>(s_y, order)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="notes-2" class="level2">
+<h2 class="anchored" data-anchor-id="notes-2">Notes</h2>
+<ul>
+<li>Boolean conditions can consist of AND (&amp;), NOT (!), OR (|), and parentheses.</li>
+<li>The resulting transmission condition can be used in <code>transmission</code> to calculate the transmission effect.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p>So, to define the transmission channel that goes through <code>y_{1,0}</code> OR through <span class="math inline">\(y_{1,1}\)</span> with an identity transmission matrix, we can do either of the following.</p>
+<div id="18" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note, we assume 4 variables in the system. </span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">make_condition</span>(<span class="st">"y_{1,0} | y_{1,1}"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># With an identity transmission matrix, y_{1,0} -&gt; x1</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># and y_{1,1} -&gt; x5 if the transmission matrix</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># is the identity matrix.</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">make_condition</span>(<span class="st">"x1 | x5"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="computing-transmission-effects" class="level2">
+<h2 class="anchored" data-anchor-id="computing-transmission-effects">Computing Transmission Effects</h2>
+<p>Transmission effects, i.e.&nbsp;the effect through the transmission channel, can be computed in one of two ways in <code>TransmissionChannelAnalysis.jl</code>. The first way is to use the <a href="../../learn/systems-form.qmd">systems form</a> to compute the transmission effect. The second way exploits the sufficiency of impulse response functions (IRFs)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> and uses these to compute the effects. The following sections describe both methods.</p>
+<section id="preparing-the-systems-form" class="level3">
+<h3 class="anchored" data-anchor-id="preparing-the-systems-form">Preparing the Systems Form</h3>
+<p>The <a href="../../learn/systems-form.qmd">systems form</a> can be used whenever a SVAR(MA) was estimated and the AR and MA coefficients are available. The first step then consists of transforming the <a href="../../learn/dynamic-form.qmd">dynamic form</a> of the SVAR(MA) into the systems form. We provide the utility function <code class="sourceCode julia">make_systems_form</code> for this purpose.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+make_systems_form
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>make_systems_form(
+    Phi0::AbstractMatrix, 
+    As::Vector{&lt;:AbstractMatrix}, 
+    Psis::Vector{&lt;:AbstractMatrix}, 
+    Sigma::AbstractMatrix{&lt;:Real}, 
+    order::AbstractVector{&lt;:Int}, 
+    max_horizon::Int
+) -&gt; Tuple{AbstractMatrix, AbstractMatrix}</code></pre>
+<p>Transform an SVARMA dynamic model into the systems representation <span class="math inline">\(x = Bx + Omega\varepsilon\)</span>.</p>
+<section id="arguments-4" class="level1">
+<h1>Arguments</h1>
+<ul>
+<li><code>Phi0::AbstractMatrix</code>: The matrix of contemporaneous structural impulse responses.</li>
+<li><code>As::Vector{&lt;:AbstractMatrix}</code>: A vector of reduced-form autoregressive (AR). First entry corresponds to the AR matrix for the first lag, etc.</li>
+<li><code>Psis::Vector{&lt;:AbstractMatrix}</code>: A vector of reduced-form moving average (MA) matrices. First index corresponds to the first lag, etc.</li>
+<li><code>Sigma::AbstractMatrix{&lt;:Real}</code>: The covariance matrix of reduced-form errors.</li>
+<li><code>order::AbstractVector{&lt;:Int}</code>: The vector indicating the order of variables, typically determined by the transmission matrix.</li>
+<li><code>max_horizon::Int</code>: The maximum time horizon to consider for the systems model, with <code>0</code> representing the contemporaneous period.</li>
+</ul>
+</section>
+<section id="returns-3" class="level1">
+<h1>Returns</h1>
+<ul>
+<li><code>(B, Omega)</code> with the meaning being the same as in Wegner et al (2024).</li>
+</ul>
+</section>
+<section id="notes-3" class="level1">
+<h1>Notes</h1>
+<ul>
+<li>Use <code>make_B</code> and <code>make_Omega</code> to construct the two matrices seperately.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p>The returned systems form can then be used in <code class="sourceCode julia">transmission</code> to compute the trasnmission effect.</p>
+<p>Besides <code class="sourceCode julia">make_systems_form</code> we also offer the two separate functions <code class="sourceCode julia">make_B</code> and <code class="sourceCode julia">make_Omega</code> which respectively create <span class="math inline">\(B\)</span> and <span class="math inline">\(\Omega\)</span> of the <a href="../../learn/systems-form.qmd">systems form</a>. Use of these two functions should most of the time not be required. However, for users that might want to research of TCA, having access to these two methods seperately can be helpful.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+make_B
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Construct B of the systems representation <span class="math inline">\(x = Bx + Omega\varepsilon\)</span>.</p>
+<section id="notes-4" class="level1">
+<h1>Notes</h1>
+<ul>
+<li>See <code>make_systems_form</code> for further information.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+make_Omega
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Construct Omega of the systems representation <span class="math inline">\(x = Bx + Omega\varepsilon\)</span>.</p>
+<section id="notes-5" class="level1">
+<h1>Notes</h1>
+<ul>
+<li>See <code>make_systems_form</code> for further information.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="preparing-the-irfs" class="level3">
+<h3 class="anchored">Preparing the IRFs</h3>
+<p>Estimating the transmission effects using IRFs requires Cholesky / orthogonalised IRFs for all variables, as well as the structural shocks impulse response functions. In either case, <code class="sourceCode julia">TransmissionChannelAnalysis.jl</code> works internally with a matrix representation of IRFs. Since many software solutions for SVAR(MA) return IRFs in the form of three-dimensional arrays, we provide the utility function <code class="sourceCode julia">to_transmission_irfs</code> that transforms the three-dimensional arrays into a matrix of IRFs.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+to_transmission_irfs
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>to_transmission_irfs(irfs::AbstractArray{T, 3})</code></pre>
+<p>Transform a standard three dimensional IRF array into a IRF matrix. The</p>
+<section id="arguments-5" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-5">Arguments</h2>
+<ul>
+<li><code>irfs::AbstractArray{T, 3}</code>: IRF Array of dimension n<em>variabels × n</em>shocks × n_horizons with the first horizons corresponding to horizon 0.</li>
+</ul>
+</section>
+<section id="returns-4" class="level2">
+<h2 class="anchored" data-anchor-id="returns-4">Returns</h2>
+<ul>
+<li><code>Matrix{T}</code> of dimension (n<em>variables </em> n<em>horizons) × (n</em>variables * n*horizons). This is the same as what would be obtained via <span class="math inline">\((I-B)^{-1}\mathbb{Q}\)</span> using the notation of Wegner et al (2024).</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p><code class="sourceCode julia">to_transmission_irfs</code> should be applied to both the Cholesky / orthogonalised and the structural IRFs. The resulting IRFs can then be used in <code class="sourceCode julia">transmission</code> to compute the transmission effects.</p>
+</section>
+<section id="computing" class="level3">
+<h3 class="anchored">Computing</h3>
+<p>With either the IRFs or the systems form prepared, transmission effects can be computed using any of the following versions of the <code class="sourceCode julia">transmission</code> function. In either case, the fourth argument to <code class="sourceCode julia">transmission</code> must be a transmission condition that can be obtained in any of the ways described above.</p>
+<p>To compute transmission effects using the systems form, <code class="sourceCode julia">method</code> should be set equal to <code class="sourceCode julia"><span class="op">:</span>BOmega</code>. Similarly, to use IRFs, <code class="sourceCode julia">method</code> should be set equal to <code class="sourceCode julia"><span class="op">:</span>irfs</code>. The default is set to <code class="sourceCode julia"><span class="op">:</span>BOmega</code> and thus, if not further specified, <code class="sourceCode julia">TransmissionChannelAnalysis.jl</code> assumes that the systems form is being used. This choice was mostly made because the computations under the systems form are faster than the computations using IRFs.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+transmission
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>transmission(from::Int, arr1::AbstractMatrix{T}, arr2::AbstractMatrix{T}, q::Q; method = :BOmega) where {T}</code></pre>
+<p>Given a transmission condition <code>q</code>, calculate the transmission effect using the either the <code>:BOmega</code> method (the default), or the <code>:irfs</code> method.</p>
+<section id="arguments-6" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-6">Arguments</h2>
+<ul>
+<li><code>from::Int</code>: Shock number.</li>
+<li><code>arr1::AbstractMatrix{T}</code>. In case of <code>:BOmega</code> this must be <code>B</code>, in case of <code>:irfs</code> this must be <code>irfs</code>. See the documentation for the specific methods for <code>transmission(..., ::Type{Val{:BOmega}})</code> and <code>transmission(...,::Type{Val{:irfs}})</code>.</li>
+<li><code>arr2::AbstractMatrix{T}</code>: In case of <code>:BOmega</code> this must be <code>Omega</code>, in case of <code>:irfs</code> this must be <code>irfs_ortho</code>. See the documentation for the specific methods for <code>transmission(..., ::Type{Val{:BOmega}})</code> and <code>transmission(...,::Type{Val{:irfs}})</code>.</li>
+<li><code>q::Q</code>: A transmission condition. See also <a href="@ref"><code>Q</code></a>.</li>
+</ul>
+</section>
+<section id="keyword-arguments" class="level2">
+<h2 class="anchored" data-anchor-id="keyword-arguments">Keyword Arguments</h2>
+<ul>
+<li><code>method::Symbol</code>: Either <code>:BOmega</code> in which case the transmission effect will be calculated using the second method in Wegner et al (2024), or <code>:irfs</code> in which case the transmission effect is calculated using the first method in Wegner et al (2024).</li>
+</ul>
+</section>
+<section id="returns-5" class="level2">
+<h2 class="anchored" data-anchor-id="returns-5">Returns</h2>
+<ul>
+<li>Returns a <code>Vector{T}</code> with entry <code>i</code> corresponding to the transmission effect on variable <span class="math inline">\(x_i\)</span>. If <span class="math inline">\(x_k\)</span> is the variable in the transmission condition with the highest subscript, then all entries in the returned vector with index less thatn <code>k</code> are <code>NaN</code> since interpretation of those results is nonsensical.</li>
+</ul>
+</section>
+<section id="exajuliaes-2" class="level2">
+<h2 class="anchored" data-anchor-id="exajuliaes-2">Exa```{julia}es</h2>
+<div class="sourceCode" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="fl">6</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fl">3</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"(x1 | x2) &amp; !x3"</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>cond <span class="op">=</span> <span class="fu">make_condition</span>(s)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="fu">randn</span>(<span class="fu">k*</span>(h<span class="op">+</span><span class="fl">1</span>), <span class="fu">k*</span>(h<span class="op">+</span><span class="fl">1</span>))</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>Omega <span class="op">=</span> <span class="fu">randn</span>(<span class="fu">k*</span>(h<span class="op">+</span><span class="fl">1</span>), <span class="fu">k*</span>(h<span class="op">+</span><span class="fl">1</span>))</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>effect <span class="op">=</span> <span class="fu">transmission</span>(<span class="fl">1</span>, B, Omega, cond; method <span class="op">=</span> <span class="op">:</span>BOmega)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>effect <span class="op">=</span> <span class="fu">transmission</span>(<span class="fl">1</span>, B, Omega, cond)  <span class="co"># same as above; default is :BOmega</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>irfs <span class="op">=</span> <span class="fu">randn</span>(k, k, h<span class="op">+</span><span class="fl">1</span>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>irfs_ortho <span class="op">=</span> <span class="fu">randn</span>(k, k, h<span class="op">+</span><span class="fl">1</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>irfs <span class="op">=</span> <span class="fu">to_transmission_irfs</span>(irfs)</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>irfs_ortho <span class="op">=</span> <span class="fu">to_transmission_irfs</span>(irfs_ortho)</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>effect <span class="op">=</span> <span class="fu">transmission</span>(<span class="fl">1</span>, irfs, irfs_ortho, cond; method <span class="op">=</span> <span class="op">:</span>irfs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+transmission
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>transmission(
+    from::Int, 
+    B::AbstractMatrix{T},
+    Omega::AbstractMatrix{T}, 
+    q::Q, 
+    ::Type{Val{:BOmega}}
+) where {T}</code></pre>
+<p>Given a transmission condition <code>q</code>, calculate the transmission effect using the <code>:BOmega</code> method.</p>
+<section id="arguments-7" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-7">Arguments</h2>
+<ul>
+<li><code>from::Int</code>: Shock number.</li>
+<li><code>B::AbstractMatrix{T}</code>: Part of the systems representation in Wegner et al (2024).</li>
+<li><code>Omega::AbstractMatrix{T}</code>: Part of the systems representation in Wegner et al (2024).</li>
+<li><code>q::Q</code>: A transmission condition. See also <code>Q</code>.</li>
+</ul>
+</section>
+<section id="returns-6" class="level2">
+<h2 class="anchored" data-anchor-id="returns-6">Returns</h2>
+<ul>
+<li>Returns a <code>Vector{T}</code> with entry <code>i</code> corresponding to the transmission effect on variable <span class="math inline">\(x_i\)</span>. If <span class="math inline">\(x_k\)</span> is the variable in the transmission condition with the highest subscript, then all entries in the returned vector with index less thatn <code>k</code> are <code>NaN</code> since interpretation of those results is nonsensical.</li>
+</ul>
+</section>
+<section id="exajuliaes-3" class="level2">
+<h2 class="anchored" data-anchor-id="exajuliaes-3">Exa```{julia}es</h2>
+<div class="sourceCode" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="fl">6</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fl">3</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"(x1 | x2) &amp; !x3"</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>cond <span class="op">=</span> <span class="fu">make_condition</span>(s)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="fu">randn</span>(<span class="fu">k*</span>(h<span class="op">+</span><span class="fl">1</span>), <span class="fu">k*</span>(h<span class="op">+</span><span class="fl">1</span>))</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>Omega <span class="op">=</span> <span class="fu">randn</span>(<span class="fu">k*</span>(h<span class="op">+</span><span class="fl">1</span>), <span class="fu">k*</span>(h<span class="op">+</span><span class="fl">1</span>))</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>effect <span class="op">=</span> <span class="fu">transmission</span>(<span class="fl">1</span>, B, Omega, cond)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+transmission
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>transmission(from::Int, 
+    irfs::AbstractMatrix{T}, 
+    irfs_ortho::AbstractMatrix{T}, 
+    q::Q, 
+    ::Type{Val{:irfs}}
+) where {T}</code></pre>
+<p>Given a transmission condition <code>q</code>, calculate the transmission effect using the <code>:irfs</code> method.</p>
+<section id="arguments-8" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-8">Arguments</h2>
+<ul>
+<li><code>from::Int</code>: Shock number.</li>
+<li><code>irfs::AbstractMatrix{T}</code>: Impulse responses. These should be in the form of the structural transmission model. See also <a href="@ref"><code>to_transmission_irfs</code></a>.</li>
+<li><code>irfs_ortho::AbstractMatrix{T}</code>: Orthogonalised IRFs. These should be in the form of the structural transmission model. See also <a href="@ref"><code>to_transmission_irfs</code></a>.</li>
+<li><code>q::Q</code>: A transmission condition. See also <a href="@ref"><code>Q</code></a>.</li>
+</ul>
+</section>
+<section id="returns-7" class="level2">
+<h2 class="anchored" data-anchor-id="returns-7">Returns</h2>
+<ul>
+<li>Returns a <code>Vector{T}</code> with entry <code>i</code> corresponding to the transmission effect on variable <span class="math inline">\(x_i\)</span>. If <span class="math inline">\(x_k\)</span> is the variable in the transmission condition with the highest subscript, then all entries in the returned vector with index less thatn <code>k</code> are <code>NaN</code> since interpretation of those results is nonsensical.</li>
+</ul>
+</section>
+<section id="exajuliaes-4" class="level2">
+<h2 class="anchored" data-anchor-id="exajuliaes-4">Exa```{julia}es</h2>
+<div class="sourceCode" id="cb27"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="fl">6</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fl">3</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"(x1 | x2) &amp; !x3"</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>cond <span class="op">=</span> <span class="fu">make_condition</span>(s)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>irfs <span class="op">=</span> <span class="fu">randn</span>(k, k, h<span class="op">+</span><span class="fl">1</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>irfs_ortho <span class="op">=</span> <span class="fu">randn</span>(k, k, h<span class="op">+</span><span class="fl">1</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>irfs <span class="op">=</span> <span class="fu">to_transmission_irfs</span>(irfs)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>irfs_ortho <span class="op">=</span> <span class="fu">to_transmission_irfs</span>(irfs_ortho)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>effect <span class="op">=</span> <span class="fu">transmission</span>(<span class="fl">1</span>, irfs, irfs_ortho, cond; method <span class="op">=</span> <span class="op">:</span>irfs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+transmission
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>transmission(model::Model, 
+             from::Int, 
+             q::Q, 
+             order::AbstractVector{&lt;:Int}, 
+             max_horizon::Int) --&gt; Array{&lt;:Number, 3}
+
+transmission(model::Model, 
+             method::AbstractIdentificationMethod, 
+             from::Int, 
+             q::Q,
+             order::AbstractVector{&lt;:Int}, 
+             max_horizon::Int) --&gt; Array{&lt;:Number, 3}
+
+transmission(model::Model, 
+             from::Int, 
+             q::Q, 
+             order::AbstractVector{Symbol}, 
+             max_horizon::Int) --&gt; Array{&lt;:Number, 3}
+
+transmission(model::Model, 
+             method::AbstractIdentificationMethod, 
+             from::Int, 
+             q::Q,
+             order::AbstractVector{Symbol}, 
+             max_horizon::Int) --&gt; Array{&lt;:Number, 3}</code></pre>
+<p>Compute the transmission effect of a transmission channel defined by the condition <code>q</code>. If <code>model</code> is a reduced-form model, <code>method</code> will be used to identify the required structural shock.</p>
+<section id="arguments-9" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-9">Arguments</h2>
+<ul>
+<li><code>model::Model</code>: A model, such as an <code>SVAR</code>, <code>VAR</code>, or <code>LP</code>.</li>
+<li><code>method::AbstractIdentificationMethod</code>: An identification method to identify the <code>from</code>-th structural shock.</li>
+<li><code>from::Int</code>: Shock number.</li>
+<li><code>q::Q</code>: A transmission condition. See also <code>Q</code> and <code>make_condition</code>.</li>
+<li><code>order::AbnstractVector{&lt;:Int}</code>: order of variables defined by the transmission matrix using variable indices.</li>
+<li><code>order::AbnstractVector{Symbol}</code>: order of variables defined by the transmission matrix using variable names.</li>
+<li><code>max_horizon::Int</code>: Maximum horizon for the transmission effect.</li>
+</ul>
+</section>
+<section id="returns-8" class="level2">
+<h2 class="anchored" data-anchor-id="returns-8">Returns</h2>
+<ul>
+<li>Returns a three dimensional array with the first dimension correspondin to the endogenous variables (in original order), the second to the shock, and the third to the horizon (from 0 to <code>max_horizon</code>).</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p>It may occur that a transmission condition contains a contradiction, i.e.&nbsp;a part of the boolean conditions says <span class="math inline">\(x_i \land \neg x_i\)</span>. These are usually automatically removed internally. However, this automatic removal can sometimes lengthen the time it takes for the condition to compile. We therefore offer the utility function <code class="sourceCode julia">set_remove_contradictions</code> that can be used to turn this off. Even if off, the resulting transmission effect will be correct, but the computation may take a bit longer. Thus, there is a trade-off between longer compile times (if contradictions are being removed) and longer computing time (if contradictions are not removed).</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+set_remove_contradictions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>set_remove_contradictions(b::Bool)</code></pre>
+<p>Sets REMOVE_CONTRADICTIONS to <code>b</code>.</p>
+<p>If <code>REMOVE_CONTRADICTIONS==true</code>, then contradicting terms are removed before the transmission effect is computed. A term is deemed contradicting if it includes some “xi &amp; !xi”. This would result in the entire Boolean statement to be false, and thus in the effect of this terms to be zero.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-wegnerTCA2024" class="csl-entry" role="listitem">
+Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2024. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2024. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>See Section 4 in <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2024</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/enweg\.github\.io\/tca-website\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../documentation/julia/index.html" class="pagination-link" aria-label="Overview">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Overview</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../documentation/julia/internals.html" class="pagination-link" aria-label="Internals">
+        <span class="nav-page-text">Internals</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

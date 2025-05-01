@@ -1,0 +1,24 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/faq/topics/what-is-tca.html",
+      "/faq/topics/how-to-implement.html",
+      "/faq/topics/dynamic-form.html",
+      "/faq/topics/systems-form.html",
+      "/faq/topics/graphical-form.html",
+      "/faq/topics/boolean-conditions.html"
+    ]
+  },
+  {
+    "listing": "/faq/index.html",
+    "items": [
+      "/faq/topics/what-is-tca.html",
+      "/faq/topics/how-to-implement.html",
+      "/faq/topics/dynamic-form.html",
+      "/faq/topics/systems-form.html",
+      "/faq/topics/graphical-form.html",
+      "/faq/topics/boolean-conditions.html"
+    ]
+  }
+]

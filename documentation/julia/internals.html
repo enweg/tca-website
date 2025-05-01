@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>internals – Transmission Channel Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../documentation/julia/all-functions/@show_y.html" rel="next">
+<link href="../../documentation/julia/advanced.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "What would you like to know?",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../examples/matlab/dynare/index.html"> 
+<span class="menu-text">Examples</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../documentation/julia/index.html" aria-current="page"> 
+<span class="menu-text">Documentation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../faq/index.html"> 
+<span class="menu-text">Wiki</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html#about"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../documentation/julia/index.html">Julia</a></li><li class="breadcrumb-item"><a href="../../documentation/julia/internals.html">Internals</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+  <div id="quarto-announcement" data-announcement-id="d1d45beed765f3aac4870d27d9123622" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p><strong>Note</strong> - this website is still actively under construction.</p>
+</div></div>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Julia</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/advanced.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Advanced Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/internals.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Internals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">All</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/@show_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">@show_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/AbstractIdentificationMethod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AbstractIdentificationMethod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/aic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">aic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/bic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">bic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/coeffs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">coeffs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">cov</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/ExternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ExternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/fit_and_select!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fit_and_select!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/fit!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fit!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/fitted.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fitted</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_dependent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_dependent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_independent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_independent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_input_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_input_data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_variable_names.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_variable_names</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/hqc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">hqc</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/identify.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">identify</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/identify!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">identify!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/InternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">InternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/IRF.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IRF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/is_fitted.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_fitted</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/is_stable.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_stable</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/is_structural.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_structural</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/LP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_B</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_companion_matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_companion_matrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_condition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_condition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_Omega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_Omega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_systems_form.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_systems_form</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/map_x_to_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">map_x_to_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/map_y_to_x.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">map_y_to_x</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/Model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/nobs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">nobs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/not_through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">not_through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/Recursive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">residuals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/set_remove_contradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">set_remove_contradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/show_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">show_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/sic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">sic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/simulate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">simulate</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/simulate!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">simulate!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/spectral_radius.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">spectral_radius</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/SVAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SVAR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/to_transmission_irfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">to_transmission_irfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/transmission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmission</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/VAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VAR</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Matlab</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/advanced.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Advanced Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Internals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">All</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/applyAndToB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">applyAndToB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/applyNotToB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">applyNotToB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/calculateQAndOnly.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">calculateQAndOnly</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/checkContradiction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">checkContradiction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/collectTerms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">collectTerms</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/combinations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">combinations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/DSGE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DSGE</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/ExternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ExternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/findVariableIndex.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">findVariableIndex</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/getVarNumsAndMultiplier.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">getVarNumsAndMultiplier</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/IdentificationMethod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IdentificationMethod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/InternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">InternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/IRFContainer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IRFContainer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/logdet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">logdet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/LP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeCondition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeCondition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeConditionY.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeConditionY</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeLagMatrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeLagMatrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeLeadMatrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeLeadMatrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeOmega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeOmega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeSystemsForm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeSystemsForm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/Model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/notThrough.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">notThrough</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/Q.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Q</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/Recursive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/removeContradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">removeContradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/setRemoveContradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">setRemoveContradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/slideIn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">slideIn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/SVAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SVAR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/toTransmissionIrfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">toTransmissionIrfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/transmission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmission</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/transmissionBOmega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmissionBOmega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/transmissionIrfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmissionIrfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/VAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VAR</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#internals" id="toc-internals" class="nav-link active" data-scroll-target="#internals">Internals</a>
+  <ul class="collapse">
+  <li><a href="#combining-two-conditions-using-and" id="toc-combining-two-conditions-using-and" class="nav-link" data-scroll-target="#combining-two-conditions-using-and">Combining two conditions using AND (<code class="sourceCode julia"><span class="op">&amp;</span></code>)</a></li>
+  <li><a href="#combining-two-conditions-using-or" id="toc-combining-two-conditions-using-or" class="nav-link" data-scroll-target="#combining-two-conditions-using-or">Combining two conditions using OR (<code class="sourceCode julia"><span class="op">|</span></code>)</a></li>
+  <li><a href="#negating-a-condition-using-not" id="toc-negating-a-condition-using-not" class="nav-link" data-scroll-target="#negating-a-condition-using-not">Negating a condition using NOT (<code class="sourceCode julia">!</code>)</a></li>
+  <li><a href="#parsing-transmission-conditions-using-make_condition" id="toc-parsing-transmission-conditions-using-make_condition" class="nav-link" data-scroll-target="#parsing-transmission-conditions-using-make_condition">Parsing transmission conditions using <code class="sourceCode julia">make_condition</code></a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../documentation/julia/index.html">Julia</a></li><li class="breadcrumb-item"><a href="../../documentation/julia/internals.html">Internals</a></li></ol></nav></header>
+
+
+
+
+<section id="internals" class="level1">
+<h1>Internals</h1>
+<p>The internals of <code class="sourceCode julia">TransmissionChannelAnalysis.jl</code> all resolve around the type <code class="sourceCode julia">Q</code>, which is the internal representation of a transmission condition using the variables of the <a href="../../faq/topics/systems-form.html">systems form</a>; thus <span class="math inline">\(x_i\)</span> and <strong>not</strong> <span class="math inline">\(y_{i,t}\)</span>.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Q
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>Q(s::String)
+Q(s::String, m::Number)
+Q(s::Vector{String})
+Q(s::Vector{String}, m::Vector{Number})
+Q(i::Int)</code></pre>
+<p>Represents a transmission condition.</p>
+<p>We denote with Q(b), where b is a Boolean statement, a transmission question.</p>
+<p><strong>Important</strong>: Each string in <code>s:</code> should be a Boolean statement involving variables <code>x``followed by a number, i.e.</code>x1<code>,</code>x2`, etc. Additionally, each Boolean statement should contain only AND (&amp;) and NOT (!) statements.</p>
+<p><strong>Important</strong>: Users should only use the <code>Q(i::Int)</code> constructor. All other constructors are for internal use only. Misuse of the other constructors easily leads to mistakes.</p>
+<section id="fields" class="level2">
+<h2 class="anchored" data-anchor-id="fields">Fields</h2>
+<ul>
+<li><code>vars::Vector{String}</code>: Contains the variables. These will be Boolean statements containing only AND and NOT.</li>
+<li><code>multiplier::Vector{Number}</code>: Multiplier in front of Q(b).</li>
+</ul>
+</section>
+<section id="arguments" class="level2">
+<h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
+<ul>
+<li><code>s::Union{String, Vector{String}}</code>: String representation of transmission condition.</li>
+<li><code>m::Union{Number, Vector{Number}}</code>: Multipliers for transmission conditions.</li>
+<li><code>i::Int</code>: Variable number.</li>
+</ul>
+</section>
+<section id="juliage" class="level2">
+<h2 class="anchored" data-anchor-id="juliage">```{julia}ge</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Defining all variables in one go</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="fu">Q</span>(<span class="st">"x</span><span class="sc">$</span>i<span class="st">"</span>) for i <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> (x[<span class="fl">1</span>] <span class="op">|</span> x[<span class="fl">2</span>]) <span class="op">&amp;</span> !x[<span class="fl">3</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively variables can be defined separaterly</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> <span class="fu">Q</span>(<span class="st">"x1"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>x2 <span class="op">=</span> <span class="fu">Q</span>(<span class="st">"x2"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>x3 <span class="op">=</span> <span class="fu">Q</span>(<span class="st">"x3"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> (x1 <span class="op">|</span> x2) <span class="op">&amp;</span> !x3</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The following are also valid</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">Q</span>(<span class="st">"x1 &amp; !x3"</span>, <span class="fl">1</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">Q</span>([<span class="st">"x1"</span>, <span class="st">"x2"</span>, <span class="st">"x1 &amp; x2"</span>], [<span class="fl">1</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>])</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># The following is NOT valid but does not yet throw an error or warning</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="fu">Q</span>(<span class="st">"x1 | x2"</span>)  <span class="co"># DO NOT DO THIS!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p>The basic idea is to start with a singleton statement, such as <span class="math inline">\(x_i\)</span>, <span class="math inline">\(\neg x_i\)</span> or sometimes even just <span class="math inline">\(\text{TRUE}\)</span>. Each of these singleton – or atomic – statements refers to the simplest transmission channel in which <span class="math inline">\(x_i\)</span> must be on the path, <span class="math inline">\(x_i\)</span> cannot be on the path, or in which case the condition is always true. Such singleton statement can be created in the following way.</p>
+<div id="6" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Q is not exported</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># x1 must be on the path</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> TransmissionChannelAnalysis.<span class="fu">Q</span>(<span class="fl">1</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># x1 cannot be on the path</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>not_x2 <span class="op">=</span> TransmissionChannelAnalysis.<span class="fu">Q</span>(<span class="st">"!x2"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># TRUE</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> TransmissionChannelAnalysis.<span class="fu">Q</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>More complex transmission conditions are then simply a combination of these singleton statements. More precisely, a transmission condition <code class="sourceCode julia">q1<span class="op">::</span><span class="dt">Q</span></code> can be combined with another transmission condition <code class="sourceCode julia">q2<span class="op">::</span><span class="dt">Q</span></code> using any of AND (<code class="sourceCode julia"><span class="op">&amp;</span></code>), OR (<code class="sourceCode julia"><span class="op">|</span></code>) and NOT (<code class="sourceCode julia">!</code>). Throughout, parentheses can be used to change the precedence. In the following we will describe how such combinations are internally implemented.</p>
+<section id="combining-two-conditions-using-and" class="level2">
+<h2 class="anchored" data-anchor-id="combining-two-conditions-using-and">Combining two conditions using AND (<code class="sourceCode julia"><span class="op">&amp;</span></code>)</h2>
+<p>Suppose we wanted to combine two conditions <code class="sourceCode julia">q1<span class="op">::</span><span class="dt">Q</span></code> and <code class="sourceCode julia">q2<span class="op">::</span><span class="dt">Q</span></code> using an AND. Thus, suppose we wanted to do</p>
+<div id="8" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>q1 <span class="op">&amp;</span> q2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is achieved by extending <code class="sourceCode julia"><span class="bu">Base</span><span class="op">.&amp;</span></code>. However, key in the internal implementation is the following assumption.</p>
+<div id="nte-assumption1-internal-julia" class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note&nbsp;1: Assumption 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The transmission condition <code class="sourceCode julia">q<span class="op">::</span><span class="dt">Q</span></code> consists of only conjunctions (<code class="sourceCode julia"><span class="op">&amp;</span></code>) and negations (<code class="sourceCode julia">!</code>).</p>
+</div>
+</div>
+<p>Under <a href="#nte-assumption1-internal-julia" class="quarto-xref">Assumption&nbsp;1</a> <code class="sourceCode julia">q1<span class="op">::</span><span class="dt">Q</span></code> and <code class="sourceCode julia">q2<span class="op">::</span><span class="dt">Q</span></code> both consists of only conjunctions and disjunctions. This immediately implies that their conjunction will also only consist of conjunctions and negations. We can thus simply “concatenate” the two conditions. This is basically what we internally do, with the caveat that the conditions are represented using <code class="sourceCode julia"><span class="dt">String</span></code> and that, for algorithimic purposes, we prefer the variables to be ordered in the statement.</p>
+<p>The detailed internal implementation is given by</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+&amp;
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>Base.&amp;(q1::Q, q2::Q)</code></pre>
+<p>Combine two transmission conditions using AND.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+string_and
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>string_and(s1::String, s2::String)</code></pre>
+<p>Combine two strings using “&amp;”.</p>
+<p>Makes sure that only unique variables occur. Also sorts the string such that negated variables only come after all non-negated variables, and higher-variables come before lower variables.</p>
+<section id="exajuliaes" class="level2">
+<h2 class="anchored" data-anchor-id="exajuliaes">Exa```{julia}es</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>s1 <span class="op">=</span> <span class="st">"x1 &amp; x2"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>s2 <span class="op">=</span> <span class="st">"x1 &amp; !x2"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">string_and</span>(s1, s2)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># output: "x2 &amp; x1 &amp; !x2"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p>While concatenating the two conditions, we need to watch out that no contradictions are being introduced. Contradictions are any statements along the lines <span class="math inline">\(x_i \land \neg x_i\)</span> which would always result in <code class="sourceCode julia"><span class="cn">false</span></code>. This is taken care of by the following functions.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+check_contradiction
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>check_contradiction(var_and::Vector{Int}, var_not::Vector{Int})
+check_contradiction(var_and::Vector{Vector{Int}}, var_not::Vector{Vector{Int}})</code></pre>
+<p>Check whether there is a contradiction of the form x1 &amp; !x1.</p>
+<section id="arguments-1" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-1">Arguments</h2>
+<ul>
+<li><code>var_and::Union{Vector{Int}, Vector{Vector{Int}}}</code>: AND variable numbers obtained from <a href="@ref"><code>get_varnums_and_multiplier</code></a>.</li>
+<li><code>var_not::Union{Vector{Int}, Vector{Vector{Int}}}</code>: NOT variable numbers obtained from <a href="@ref"><code>get_varnums_and_multiplier</code></a></li>
+</ul>
+</section>
+<section id="returns" class="level2">
+<h2 class="anchored" data-anchor-id="returns">Returns</h2>
+<ol type="1">
+<li><code>Bool</code> indicating whether there are any contradictions.</li>
+<li><code>Vector{Bool}</code> indicating which elements yielded a contradiction.</li>
+</ol>
+</section>
+<section id="notes" class="level2">
+<h2 class="anchored" data-anchor-id="notes">Notes</h2>
+<ul>
+<li>This is used in <a href="@ref"><code>remove_contradictions</code></a> to remove contradicting terms. This speeds up simplification of terms, since the total number of terms can often be reduced.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+remove_contradictions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>remove_contradictions(q::Q)</code></pre>
+<p>Remove contradicting terms.</p>
+<p>A terms is deemed contradicting if it includes some “xi &amp; !xi”. This would result in the entire Boolean statement to be false, and thus in the effect of this terms to be zero.</p>
+<section id="arguments-2" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-2">Arguments</h2>
+<ul>
+<li><code>q::Q</code>: A transmission condition. See also <a href="@ref"><code>Q</code></a> and <a href="@ref"><code>make_condition</code></a>.</li>
+</ul>
+</section>
+<section id="returns-1" class="level2">
+<h2 class="anchored" data-anchor-id="returns-1">Returns</h2>
+<ul>
+<li><p>If <code>TransmissionChannelAnalysis.REMOVE_CONTRADICTIONS[] == false</code>, then <code>q</code> will simply be returned again.</p></li>
+<li><p>If <code>TransmissionChannelAnalysis.REMOVE_CONTRADICTIONS[] == true</code>, then</p>
+<ol type="1">
+<li>If all terms are contradicting, then <code>Q("", 0)</code> will be retuned, which has a transmission effect of zero.</li>
+<li>If some terms are non-contradicting, then a transmission condition consisting of only the non-contradicting terms will be returned.</li>
+</ol></li>
+</ul>
+</section>
+<section id="exajuliaes-1" class="level2">
+<h2 class="anchored" data-anchor-id="exajuliaes-1">Exa```{julia}es</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>TransmissionChannelAnalysis.REMOVE_CONTRADICTIONS[] <span class="op">=</span> <span class="cn">true</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> TransmissionChannelAnalysis.<span class="fu">Q</span>(<span class="st">"x1"</span>, <span class="fl">1</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">remove_contradictions</span>(q)  <span class="co"># will return q again since no contradictions exist</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> TransmissionChannelAnalysis.<span class="fu">Q</span>(<span class="st">"x1 &amp; !x1"</span>, <span class="fl">1</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">remove_contradictions</span>(q)  <span class="co"># Will return Q("", 0)</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> TransmissionChannelAnalysis.<span class="fu">Q</span>([<span class="st">"x1 &amp; !x1"</span>, <span class="st">"x1 &amp; x2"</span>], [<span class="fl">1</span>, <span class="fl">1</span>])</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">remove_contradictions</span>(q)  <span class="co"># Will return Q("x1 &amp; x2", 1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p>As stated in the <a href="&quot;./index.qmd&quot;">overview</a> of the documentation, removal of contradictions is governed by <code class="sourceCode julia">REMOVE_CONTRADICTION</code> and the utility function <code class="sourceCode julia">set_remove_contradictions</code>. Not removing contradictions does not lead to a mistakes in the computation, but can result in longer computations. Contrary, removing contradictions can lead to longer compile times – it takes longer to compile the transmission conditions. Thus, a trade-off between compile and computing time exists.</p>
+</section>
+<section id="combining-two-conditions-using-or" class="level2">
+<h2 class="anchored" data-anchor-id="combining-two-conditions-using-or">Combining two conditions using OR (<code class="sourceCode julia"><span class="op">|</span></code>)</h2>
+<p>Let <code class="sourceCode julia">q1<span class="op">::</span><span class="dt">Q</span></code> and <code class="sourceCode julia">q2<span class="op">::</span><span class="dt">Q</span></code> be again two transmission conditions. Suppose their internal Boolean conditions are given by <span class="math inline">\(b\)</span> and <span class="math inline">\(b'\)</span> respectively, with both satisfying <a href="#nte-assumption1-internal-julia" class="quarto-xref">Assumption&nbsp;1</a>. The <a href="../../faq/topics/algebra.qmd">rules for manipulating transmission conditions</a> then imply <span class="math display">\[
+Q(b \lor b') = Q(b) + Q(b') - Q(b \land b').
+\]</span> Implementation of OR (<code class="sourceCode julia"><span class="op">|</span></code>) therefore simply uses AND and the ability for <code class="sourceCode julia">Q</code> to represent multiple terms with different multipliers. The precise implementation of OR can be found in the following function.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+|
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>Base.|(q1::Q, q2::Q)</code></pre>
+<p>Combine two transmission conditions using OR.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="negating-a-condition-using-not" class="level2">
+<h2 class="anchored" data-anchor-id="negating-a-condition-using-not">Negating a condition using NOT (<code class="sourceCode julia">!</code>)</h2>
+<p>Suppose a transmission condition is given by <code class="sourceCode julia">q<span class="op">::</span><span class="dt">Q</span></code> which internally represents the Boolean condition <span class="math inline">\(b\)</span>. By the <a href="../../faq/topics/algebra.qmd">rules for manipulating transmission conditions</a> we then know that <span class="math display">\[
+Q(\neg b) = Q(T) - Q(b),
+\]</span> where <span class="math inline">\(T\)</span> represents the Boolean condition that is always true. This can easily be represented using <code class="sourceCode julia">Q</code> through its ability to represent multiple terms and multipliers. Specifically, we simply replace the original transmission condition with a new one that consists one one additional term, representing true, and switch the sign of all original terms of the condition. The following function implements this behaviour.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+!
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>Base.!(q1::Q)</code></pre>
+<p>Return NOT the transmission condition if the condition involves more than one variables. If the condition only involves one variables, then “!x1” is returned where “1” is replaced by the respective variable number.</p>
+<p>Note: The decision not to simplify terms of the form “!x1” was made because calculations usign the second calculation method in Wegner et al (2024) are faster than having to simplify “!x1” type of terms and using the first calculation method.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="parsing-transmission-conditions-using-make_condition" class="level2">
+<h2 class="anchored" data-anchor-id="parsing-transmission-conditions-using-make_condition">Parsing transmission conditions using <code class="sourceCode julia">make_condition</code></h2>
+<p>Rather than letting the user create all variables manually via <code class="sourceCode julia">x1 <span class="op">=</span> <span class="fu">Q</span>(<span class="fl">1</span>)</code> etc., we provide the function <code class="sourceCode julia">make_condition</code>. This function simply matches all variables in a string with the regex <code>x\d+</code>, creates teh variables using the above way, and then evaluates the entire condition to create the final condition. Due to the operator overloading above, the final result will be a valid and correct transmission condtion. However, key to this correctness is that all variables math the provided regex pattern. Thus, all variables must be of the form <code>x1</code>, <code>x2</code>, etc.</p>
+<p>For user friendliness, we also provide a version of <code class="sourceCode julia">make_condition</code> that takes variables of the <a href="../../faq/topics/dynamic-form.html">dynamic form</a>, i.e.&nbsp;<span class="math inline">\(y_{i,t}\)</span>. However, all that this function does is to translate all variables into variables of the <a href="../../faq/topics/systems-form.html">systems form</a> and then calls the method explained above.</p>
+<p>In any case, <code class="sourceCode julia">make_conditions</code> should be seen as a utility function with the main funcionality being dependent on correct implementation of <code class="sourceCode julia">Q</code>, <code class="sourceCode julia"><span class="op">&amp;</span></code>, <code class="sourceCode julia"><span class="op">|</span></code>, and <code class="sourceCode julia">!</code> as explained above.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+make_condition
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="{julia}"><code>make_condition(s::String)
+make_condition(s_y::String, order::AbstractVector{&lt;:Int})</code></pre>
+<p>Make a transmission condition, i.e.&nbsp;Q(b), out of a string.</p>
+<p>Transmission channels are described using Boolean statements involving the variables in the dynamic model. <code>make_condition</code> allows for specifying these Boolean conditions as a string which is then converted to an internal representation allowing the computation of transmission channels.</p>
+<p>Two ways of specifying the Boolean conditions exist:</p>
+<ol type="1">
+<li><code>make_condition(s::String)</code> takes the Boolean condition in the systems form of Wegner et al (2024), i.e.&nbsp;variables must start with <code>x</code> followed by a number. For example, given a three variable VAR(1), <code>y_{1,t} -&gt; x_1</code>, <code>y_{2, t} -&gt; x_2</code>, <code>y_{3, t} -&gt; x_3</code>, <code>y_{1, t+1} -&gt; x_4</code>, <code>y_{2, t+1} -&gt; x_5</code>, … Boolean statements then involve expressions in the <code>x</code> variables and define which paths can be taken. Each path involved in the transmission mechanism must satisfy the Boolean statement.</li>
+<li><code>make_condition(s_y::String, order::AbstractVector{&lt;:Int})</code> does the same as the first method, however the Boolean condition can be specified using the variables of the dynamic systems, i.e.&nbsp;<code>y</code>. Variables must then be specified using <code>y_{i,t}</code> where <code>i</code> is the variable number and <code>t</code> is the period. At all times <code>t &gt;= 0</code> with <code>0</code> denoting the contemporaneous horizon.</li>
+</ol>
+<section id="arguments-3" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-3">Arguments</h2>
+<ul>
+<li><code>s::String</code>: A Boolean statement given as a string. Variables must start with <code>x</code> for them to be valid variables.</li>
+<li><code>s_y::String</code>: A Boolean statement given as a string. Variabls must have the form <code>y_{i,t}</code> where <code>i</code> is the variable number and <code>t &gt;= 0</code> is the time period. <code>t=0</code> corresponds to the contemporaneous horizon.</li>
+<li><code>order::AbstractVector{&lt;:Int}</code>: The variable ordering defined by the transmission matrix.</li>
+</ul>
+</section>
+<section id="returns-2" class="level2">
+<h2 class="anchored" data-anchor-id="returns-2">Returns</h2>
+<ul>
+<li>Returns a transmission condition. See also <code>Q</code>.</li>
+</ul>
+</section>
+<section id="exajuliaes-2" class="level2">
+<h2 class="anchored" data-anchor-id="exajuliaes-2">Exa```{julia}es</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"x2 &amp; !x3"</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>cond <span class="op">=</span> make_cond<span class="ss">```{julia}on(s)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>s_y <span class="op">=</span> <span class="st">"y_{1,0} &amp; !y_{1,1}"</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> [<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">2</span>]</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>cond <span class="op">=</span> <span class="fu">make_condition</span>(s_y, order)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="notes-1" class="level2">
+<h2 class="anchored" data-anchor-id="notes-1">Notes</h2>
+<ul>
+<li>Boolean conditions can consist of AND (&amp;), NOT (!), OR (|), and parentheses.</li>
+<li>The resulting transmission condition can be used in <code>transmission</code> to calculate the transmission effect.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/enweg\.github\.io\/tca-website\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../documentation/julia/advanced.html" class="pagination-link" aria-label="Advanced Tools">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Advanced Tools</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../documentation/julia/all-functions/@show_y.html" class="pagination-link" aria-label="\@show_y">
+        <span class="nav-page-text">@show_y</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

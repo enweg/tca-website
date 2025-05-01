@@ -1,3 +1,0 @@
-::: {.action-read-paper}
-<a href="https://arxiv.org/abs/2405.18987">Read the Paper</a>
-:::

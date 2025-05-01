@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Matlab Toolbox for Transmission Channel Analysis – Advanced – Transmission Channel Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../documentation/matlab/internals.html" rel="next">
+<link href="../../documentation/matlab/index.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "What would you like to know?",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../examples/matlab/dynare/index.html"> 
+<span class="menu-text">Examples</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../documentation/julia/index.html" aria-current="page"> 
+<span class="menu-text">Documentation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../faq/index.html"> 
+<span class="menu-text">Wiki</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html#about"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../documentation/matlab/index.html">Matlab</a></li><li class="breadcrumb-item"><a href="../../documentation/matlab/advanced.html">Advanced Tools</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+  <div id="quarto-announcement" data-announcement-id="d1d45beed765f3aac4870d27d9123622" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p><strong>Note</strong> - this website is still actively under construction.</p>
+</div></div>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Julia</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/advanced.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Advanced Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Internals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">All</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/@show_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">@show_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/AbstractIdentificationMethod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AbstractIdentificationMethod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/aic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">aic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/bic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">bic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/coeffs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">coeffs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">cov</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/ExternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ExternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/fit_and_select!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fit_and_select!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/fit!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fit!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/fitted.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fitted</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_dependent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_dependent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_independent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_independent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_input_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_input_data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/get_variable_names.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_variable_names</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/hqc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">hqc</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/identify.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">identify</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/identify!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">identify!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/InternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">InternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/IRF.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IRF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/is_fitted.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_fitted</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/is_stable.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_stable</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/is_structural.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_structural</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/LP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_B</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_companion_matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_companion_matrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_condition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_condition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_Omega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_Omega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/make_systems_form.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_systems_form</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/map_x_to_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">map_x_to_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/map_y_to_x.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">map_y_to_x</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/Model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/nobs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">nobs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/not_through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">not_through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/Recursive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">residuals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/set_remove_contradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">set_remove_contradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/show_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">show_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/sic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">sic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/simulate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">simulate</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/simulate!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">simulate!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/spectral_radius.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">spectral_radius</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/SVAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SVAR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/to_transmission_irfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">to_transmission_irfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/transmission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmission</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/VAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VAR</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Matlab</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/advanced.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Advanced Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Internals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">All</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/applyAndToB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">applyAndToB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/applyNotToB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">applyNotToB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/calculateQAndOnly.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">calculateQAndOnly</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/checkContradiction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">checkContradiction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/collectTerms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">collectTerms</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/combinations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">combinations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/DSGE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DSGE</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/ExternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ExternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/findVariableIndex.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">findVariableIndex</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/getVarNumsAndMultiplier.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">getVarNumsAndMultiplier</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/IdentificationMethod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IdentificationMethod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/InternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">InternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/IRFContainer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IRFContainer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/logdet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">logdet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/LP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeCondition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeCondition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeConditionY.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeConditionY</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeLagMatrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeLagMatrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeLeadMatrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeLeadMatrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeOmega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeOmega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/makeSystemsForm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeSystemsForm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/Model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/notThrough.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">notThrough</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/Q.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Q</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/Recursive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/removeContradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">removeContradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/setRemoveContradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">setRemoveContradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/slideIn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">slideIn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/SVAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SVAR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/toTransmissionIrfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">toTransmissionIrfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/transmission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmission</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/transmissionBOmega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmissionBOmega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/transmissionIrfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmissionIrfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/matlab/all-functions/VAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VAR</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#defining-simple-transmission-channels" id="toc-defining-simple-transmission-channels" class="nav-link active" data-scroll-target="#defining-simple-transmission-channels">Defining Simple Transmission Channels</a>
+  <ul class="collapse">
+  <li><a href="#advanced-usage-of-through-and-notthrough" id="toc-advanced-usage-of-through-and-notthrough" class="nav-link" data-scroll-target="#advanced-usage-of-through-and-notthrough">Advanced Usage of <code class="sourceCode matlab"><span class="va">through</span></code> and <code class="sourceCode matlab"><span class="va">notThrough</span></code></a></li>
+  </ul></li>
+  <li><a href="#defining-complex-transmission-channels" id="toc-defining-complex-transmission-channels" class="nav-link" data-scroll-target="#defining-complex-transmission-channels">Defining Complex Transmission Channels</a></li>
+  <li><a href="#computing-transmission-effects" id="toc-computing-transmission-effects" class="nav-link" data-scroll-target="#computing-transmission-effects">Computing Transmission Effects</a>
+  <ul class="collapse">
+  <li><a href="#preparing-the-systems-form" id="toc-preparing-the-systems-form" class="nav-link" data-scroll-target="#preparing-the-systems-form">Preparing the Systems Form</a></li>
+  <li><a href="#preparing-the-irfs" id="toc-preparing-the-irfs" class="nav-link" data-scroll-target="#preparing-the-irfs">Preparing the IRFs</a></li>
+  <li><a href="#computing" id="toc-computing" class="nav-link" data-scroll-target="#computing">Computing</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../documentation/matlab/index.html">Matlab</a></li><li class="breadcrumb-item"><a href="../../documentation/matlab/advanced.html">Advanced Tools</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Matlab Toolbox for Transmission Channel Analysis – Advanced</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The <strong>Matlab Toolbox for Transmission Channel Analysis</strong> provides functions for TCA in Matlab. It is as general as the Julia version and can thus, equally well, handle all kinds of transmission channels. In developing the two packages, we tried to keep the naming conventions as close as possible, with names only being brought into their respective coding styles (Camel Case for Matlab, Snake Case for Julia). Thus, users should find it hopefully easy to use examples and help that are not originally written for Matlab and still be able to apply it in Matlab. Nonetheless, the <a href="../../index.html">examples</a> section provides detailed examples using the Matlab toolbox.</p>
+<p>The rest of this documentation gives an overview of the key functions in the toolbox. We start with simple transmission channels, how they can be defined, and how they can be computed. We then become more and more general and introduce the more advanced methods within the toolbox. These advanced methods allow for the computation of any possible transmission channel.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Contributer Information
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For interested contributers or others interested in the internals of the toolbox please have a look at the <a href="../../documentation/matlab/internals.html">explanation of the internals</a>.</p>
+</div>
+</div>
+<section id="defining-simple-transmission-channels" class="level2">
+<h2 class="anchored" data-anchor-id="defining-simple-transmission-channels">Defining Simple Transmission Channels</h2>
+<p>Two helper functions are provided that allow for the definition of transmission channels without having to use the more advanced methods. These are <code class="sourceCode matlab"><span class="va">through</span></code> and <code class="sourceCode matlab"><span class="va">notThrough</span></code>. As the names hint at, <code class="sourceCode matlab"><span class="va">through</span></code> is used to define a channel that must go through certain variables in certain periods, while <code class="sourceCode matlab"><span class="va">notThrough</span></code> is used to define a transmission channel that cannot go through certain variables in all defined periods.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+through
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>through</code> Construct a transmission condition enforcing paths through specific variables.</p>
+<p><code>q = through(idx, horizons, order)</code> creates a transmission condition <code>Q</code> where paths must pass through the variables specified in <code>idx</code>. The variable indices refer to their positions in the original dynamic system (e.g., in the SVARMA model), before applying the transmission matrix.</p>
+<section id="arguments" class="level2">
+<h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
+<p><strong>For a single variable:</strong></p>
+<ul>
+<li><code>idx</code> (integer): Index of the variable that paths must go through, using its original index in the dynamic system (before transmission ordering).</li>
+<li><code>horizons</code> (vector of integers): Time horizons at which the paths must pass through the variable.</li>
+<li><code>order</code> (vector of integers): Variable ordering determined by the transmission matrix.</li>
+</ul>
+<p><strong>For multiple variables:</strong></p>
+<ul>
+<li><code>idx</code> (vector of integers): Indices of the variables that paths must go through, using their original indices in the dynamic system.</li>
+<li><code>horizons</code> (cell array of vectors or vector of integer): If a single vector of integers is provided, then it will be applied to each <code>idx</code>. Alternatively, a cell array of integer vectors can be provided in which case each element in the cell array applies to the respective element in <code>idx</code>.</li>
+<li><code>order</code> (vector of integers): Variable ordering determined by the transmission matrix.</li>
+</ul>
+</section>
+<section id="returns" class="level2">
+<h2 class="anchored" data-anchor-id="returns">Returns</h2>
+<ul>
+<li><code>q</code> (Q): A transmission condition.</li>
+</ul>
+</section>
+<section id="notes" class="level2">
+<h2 class="anchored" data-anchor-id="notes">Notes</h2>
+<ul>
+<li>The resulting transmission condition can be used in <code>transmission</code> to compute the transmission effect.</li>
+</ul>
+</section>
+<section id="example" class="level2">
+<h2 class="anchored" data-anchor-id="example">Example</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">% Contemporaneous channel (Section 5.1 in Wegner)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">contemporaneous_channel</span> <span class="op">=</span> <span class="va">through</span>(<span class="fl">1</span><span class="op">,</span> [<span class="fl">0</span>]<span class="op">,</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">% Effect through the federal funds rate in the first two periods</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">through</span>(<span class="fl">1</span><span class="op">,</span> [<span class="fl">0</span><span class="op">,</span> <span class="fl">1</span>]<span class="op">,</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">% Effect through both the federal funds rate and output gap</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">through</span>([<span class="fl">1</span><span class="op">,</span> <span class="fl">2</span>]<span class="op">,</span> {[<span class="fl">0</span><span class="op">,</span> <span class="fl">1</span>]<span class="op">,</span> [<span class="fl">0</span><span class="op">,</span> <span class="fl">1</span>]}<span class="op">,</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)<span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">% Adjusting for a re-ordered system where the output gap comes first</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">through</span>([<span class="fl">1</span><span class="op">,</span> <span class="fl">2</span>]<span class="op">,</span> {[<span class="fl">0</span><span class="op">,</span> <span class="fl">1</span>]<span class="op">,</span> [<span class="fl">0</span><span class="op">,</span> <span class="fl">1</span>]}<span class="op">,</span> [<span class="fl">2</span><span class="op">,</span> <span class="fl">1</span><span class="op">,</span> <span class="fl">3</span><span class="op">,</span> <span class="fl">4</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>See also <code>notThrough</code>, <code>transmission</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+notThrough
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>notThrough</code> Construct a transmission condition excluding specific variables from the channel.</p>
+<p><code>q = notThrough(idx, horizons, order)</code> creates a transmission condition <code>Q</code> where paths cannot pass through specified variables at given time horizons. The variable indices refer to their positions in the original dynamic system (e.g., in the SVARMA model), before applying the transmission matrix.</p>
+<section id="arguments-1" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-1">Arguments</h2>
+<p><strong>For a single variable:</strong></p>
+<ul>
+<li><code>idx</code> (integer): Index of the variable that paths cannot go through, using its original index in the dynamic system (before transmission ordering).</li>
+<li><code>horizons</code> (vector of integers): Time horizons at which the paths cannot pass through the variable.</li>
+<li><code>order</code> (vector of integers): Variable ordering determined by the transmission matrix.</li>
+</ul>
+<p><strong>For multiple variables:</strong></p>
+<ul>
+<li><code>idx</code> (vector of integers): Indices of the variables that paths cannot go through, using their original indices in the dynamic system.</li>
+<li><code>horizons</code> (cell array of vectors or vector of integer): If a single vector of integers is provided, then it will be applied to each <code>idx</code>. Alternatively, a cell array of integer vectors can be provided in which case each element in the cell array applies to the respective element in <code>idx</code>.</li>
+<li><code>order</code> (vector of integers): Variable ordering determined by the transmission matrix.</li>
+</ul>
+</section>
+<section id="returns-1" class="level2">
+<h2 class="anchored" data-anchor-id="returns-1">Returns</h2>
+<ul>
+<li><code>q</code> (Q): A transmission condition.</li>
+</ul>
+</section>
+<section id="notes-1" class="level2">
+<h2 class="anchored" data-anchor-id="notes-1">Notes</h2>
+<ul>
+<li>The resulting transmission condition can be used in <code>transmission</code> to compute the transmission effect.</li>
+</ul>
+</section>
+<section id="example-1" class="level2">
+<h2 class="anchored" data-anchor-id="example-1">Example</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">% Non-contemporaneous monetary policy channel (Section 5.1 in Wegner etal 2024)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">notThrough</span>(<span class="fl">1</span><span class="op">,</span> [<span class="fl">0</span>]<span class="op">,</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">% Anticipation channel of government defense spending (Section 5.2 in Wegner etal 2024)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">notThrough</span>(<span class="fl">2</span><span class="op">,</span> <span class="fl">0</span><span class="op">:</span><span class="fl">20</span><span class="op">,</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>See also <code>through</code>, <code>transmission</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p>Both <code class="sourceCode matlab"><span class="va">through</span></code> and <code class="sourceCode matlab"><span class="va">notThrough</span></code> return a transmission condition <code>Q</code>, which is simply an internal representation of the provided transmission channel (represented as <a href="../../learn/boolean-conditions.qmd">Boolean statements</a>). To double check whether the condition represents the desired channel, simply display the resulting transmission condition using <code class="sourceCode matlab"><span class="va">disp</span></code>. The displayed version uses the <a href="../../learn/systems-form.qmd">systems form</a> and thus uses the variable notation <span class="math inline">\(x\)</span>. Alternatively, <code class="sourceCode matlab"><span class="va">disp</span></code> can be called with an additional agrguments, defining the ordering of the transmission matrix. If two arguments are provided, <code class="sourceCode matlab"><span class="va">disp</span></code> will display the transmission condition using the <a href="../../faq/topics/dynamic-form.html">dynamic form</a> – using the variable notation <code>y_{i,t}</code> with <code>i</code> being the variable index before applying the transmission matrix, and <code>t</code> is the time period with <code>t=0</code> corresponding to the contemporaneous period.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Q.disp
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>disp</code> Display a transmission condition in either systems form or dynamic form.</p>
+<p><code>disp(q)</code> displays the transmission condition using the systems form notation.</p>
+<p><code>disp(q, order)</code> displays the transmission condition using the dynamic form notation, where <code>order</code> is the variable ordering defined by the transmission matrix.</p>
+<section id="arguments-2" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-2">Arguments</h2>
+<ul>
+<li><code>q</code> (Q): A transmission condition.</li>
+<li><code>order</code> (vector of integers, optional): The variable ordering defined by the transmission matrix. If provided, the condition is displayed using the dynamic form notation.</li>
+</ul>
+</section>
+<section id="example-2" class="level2">
+<h2 class="anchored" data-anchor-id="example-2">Example</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">makeCondition</span>(<span class="st">"x1 | x2"</span>)<span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">disp</span>(<span class="va">q</span>)<span class="op">;</span> <span class="co">% Displays condition in systems form.</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">order</span> <span class="op">=</span> [<span class="fl">3</span><span class="op">,</span> <span class="fl">1</span><span class="op">,</span> <span class="fl">2</span>]<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="va">disp</span>(<span class="va">q</span><span class="op">,</span> <span class="va">order</span>)<span class="op">;</span> <span class="co">% Displays condition in dynamic form.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<section id="advanced-usage-of-through-and-notthrough" class="level3">
+<h3 class="anchored" data-anchor-id="advanced-usage-of-through-and-notthrough">Advanced Usage of <code class="sourceCode matlab"><span class="va">through</span></code> and <code class="sourceCode matlab"><span class="va">notThrough</span></code></h3>
+<p>Conditions created using <code class="sourceCode matlab"><span class="va">through</span></code> and <code class="sourceCode matlab"><span class="va">notThrough</span></code> can be combined using AND (<code class="sourceCode matlab"><span class="op">&amp;</span></code>), OR (<code class="sourceCode matlab"><span class="op">|</span></code>) and NOT (<code class="sourceCode matlab"><span class="op">~</span></code>)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Every new combination will return a new condition that combines the previous conditions. The returned conditions can again be combined using AND, OR, and NOT. For example, if <code class="sourceCode matlab"><span class="va">q1</span></code>, <code class="sourceCode matlab"><span class="va">q2</span></code> and <code class="sourceCode matlab"><span class="va">q3</span></code> are conditions obtained using <code class="sourceCode matlab"><span class="va">through</span></code> or <code class="sourceCode matlab"><span class="va">notThrough</span></code>, then the following works.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">q1AndQ2</span> <span class="op">=</span> <span class="va">q1</span> <span class="op">&amp;</span> <span class="va">q2</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">q1AndNotQ3</span> <span class="op">=</span> <span class="va">q1</span> <span class="op">&amp;</span> <span class="op">~</span><span class="va">q3</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="va">q4</span> <span class="op">=</span> (<span class="va">q1</span> <span class="op">|</span> <span class="va">q2</span>) <span class="op">&amp;</span> <span class="op">~</span><span class="va">q3</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="va">q5</span> <span class="op">=</span> <span class="va">q4</span> <span class="op">|</span> <span class="va">q1</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This functionality allows definitions of transmission channels that are not easily defined using <code class="sourceCode matlab"><span class="va">through</span></code> and <code class="sourceCode matlab"><span class="va">notThrough</span></code>. For example, if we were interested in the transmission channel that goes through <span class="math inline">\(y_{1,0}\)</span> OR through <span class="math inline">\(y_{1,1}\)</span>, then neither of the helper functions can be used, since neither can handle OR statements. However, we can use <a href="../../learn/boolean-conditions.qmd">Boolean logic</a> and the <a href="../../learn/algebra.qmd">rules for the manipulation of transmission conditions</a> to define this transmission channel using our helper functions.</p>
+<p>In most cases, the easiest step is to negate the original condition. The above condition can be succinctly be represented as <span class="math display">\[
+y_{1,0} \lor y_{1,1}.
+\]</span> The negated statement is thus <span class="math display">\[
+\neg y_{1,0} \land \neg y_{1,1}.
+\]</span> This can be defined using <code class="sourceCode matlab"><span class="va">notThrough</span></code> in the following way</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">notThrough</span>(<span class="fl">1</span><span class="op">,</span> [<span class="fl">0</span><span class="op">,</span><span class="fl">1</span>]<span class="op">,</span> <span class="fl">1</span><span class="op">:</span><span class="va">n</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>where we assumed that the transmission matrix is the identity matrix, implying an ordering <code class="sourceCode matlab"><span class="fl">1</span><span class="op">:</span><span class="va">n</span></code>.</p>
+<p>To obtain the original transmission channel, we can simply negate this condition.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">originalCondition</span> <span class="op">=</span> <span class="op">~</span><span class="va">q</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="defining-complex-transmission-channels" class="level2">
+<h2 class="anchored" data-anchor-id="defining-complex-transmission-channels">Defining Complex Transmission Channels</h2>
+<p>Although <code class="sourceCode matlab"><span class="va">through</span></code> and <code class="sourceCode matlab"><span class="va">notThrough</span></code> are sufficient for many situations, it is still sometimes more convenient to directly define the transmission channel as a <a href="../../learn/boolean-conditions.qmd">Boolean condition</a> withough having to refer back to <code class="sourceCode matlab"><span class="va">through</span></code> and <code class="sourceCode matlab"><span class="va">notThrough</span></code>.</p>
+<p>Say, for example, we are again interested in the transmission channel going through <code>y_{1,0}</code> OR <code>y_{1,1}</code>. Instead of using the approach of first negating the statement, then using <code class="sourceCode matlab"><span class="va">notThrough</span></code>, just to negate this statement again, we may as well just define the condition directly using the more advanced functionality of the toolbox.</p>
+<p>The advanced functionality simply takes a <code>String</code> that defines the transmission channel as a Boolean condition. The string can either be defined using the variables of the <a href="../../learn/dynamic-form.qmd">dynamic form</a> <span class="math inline">\(y\)</span> or the variables using the <a href="../../learn/systems-form.qmd">systems form</a> <span class="math inline">\(x\)</span>. In the former case, the ordering defined by the transmission matrix must also be defined. <code>makeConditionY</code> and <code>makeCondition</code> handle these two cases respectively.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+makeConditionY
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>makeConditionY</code> Create a transmission condition from a Boolean string using dyanmic form variables.</p>
+<p><code>q = makeConditionY(strY, order)</code> constructs a transmission condition <span class="math inline">\(Q(b)\)</span> from a Boolean statement specified in terms of dynamic system variables (i.e., <code>y_{i,t}</code> notation).</p>
+<section id="arguments-3" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-3">Arguments</h2>
+<ul>
+<li><code>strY</code> (string): A Boolean condition string where variables are represented as <code>y_{i,t}</code>, with <code>i</code> as the variable index and <code>t &gt;= 0</code> as the time period. <code>t=0</code> corresponds to the contemporaneous horizon.</li>
+<li><code>order</code> (vector of integers): The variable ordering defined by the transmission matrix.</li>
+</ul>
+</section>
+<section id="returns-2" class="level2">
+<h2 class="anchored" data-anchor-id="returns-2">Returns</h2>
+<ul>
+<li><code>q</code> (Q): A transmission condition object.</li>
+</ul>
+</section>
+<section id="example-3" class="level2">
+<h2 class="anchored" data-anchor-id="example-3">Example</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="va">s_y</span> <span class="op">=</span> <span class="st">"y_{1,0} &amp; !y_{1,1}"</span><span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="va">order</span> <span class="op">=</span> [<span class="fl">3</span><span class="op">,</span><span class="fl">1</span><span class="op">,</span><span class="fl">2</span>]<span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="va">cond</span> <span class="op">=</span> <span class="va">makeConditionY</span>(<span class="va">s_y</span><span class="op">,</span> <span class="va">order</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="notes-2" class="level2">
+<h2 class="anchored" data-anchor-id="notes-2">Notes</h2>
+<ul>
+<li>Boolean conditions can include AND (&amp;), NOT (! or ~), OR (|), and parentheses.</li>
+<li>The resulting transmission condition can be used in <code>transmission</code> to calculate the transmission effect.</li>
+</ul>
+<p>See also <code>transmission</code>, <code>makeCondition</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+makeCondition
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>makeCondition</code> Create a transmission condition from a Boolean string.</p>
+<p><code>q = makeCondition(s)</code> constructs a transmission condition <span class="math inline">\(Q(b)\)</span> from a Boolean statement given as a string. The Boolean expression should use variables of the systems form <code>x&lt;num&gt;</code>, where <code>&lt;num&gt;</code> represents a variable index.</p>
+<section id="arguments-4" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-4">Arguments</h2>
+<ul>
+<li><code>s</code> (string): A Boolean condition string where variables must be represented using <code>x&lt;num&gt;</code>.</li>
+</ul>
+</section>
+<section id="returns-3" class="level2">
+<h2 class="anchored" data-anchor-id="returns-3">Returns</h2>
+<ul>
+<li><code>q</code> (Q): A transmission condition.</li>
+</ul>
+</section>
+<section id="example-4" class="level2">
+<h2 class="anchored" data-anchor-id="example-4">Example</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">s</span> <span class="op">=</span> <span class="st">"x2 &amp; !x3"</span><span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="va">cond</span> <span class="op">=</span> <span class="va">makeCondition</span>(<span class="va">s</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="notes-3" class="level2">
+<h2 class="anchored" data-anchor-id="notes-3">Notes</h2>
+<ul>
+<li>Boolean conditions can include AND (&amp;), NOT (! or ~), OR (|), and parentheses.</li>
+<li>The resulting transmission condition can be used in <code>transmission</code> to calculate the transmission effect.</li>
+</ul>
+<p>See also <code>transmission</code>, <code>makeConditionY</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p>So, to define the transmission channel that goes through <span class="math inline">\(y_{1,0}\)</span> OR through <span class="math inline">\(y_{1,1}\)</span> with an identity transmission matrix, we can do either of the following.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">% Note, we assume 4 variables in the system. </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">makeConditionY</span>(<span class="st">"y_{1,0} | y_{1,1}"</span><span class="op">,</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>)<span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">% With an identity transmission matrix, y_{1,0} -&gt; x1</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">% and y_{1,1} -&gt; x5.</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">makeCondition</span>(<span class="st">"x1 | x5"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="computing-transmission-effects" class="level2">
+<h2 class="anchored" data-anchor-id="computing-transmission-effects">Computing Transmission Effects</h2>
+<p>Transmission effects, i.e.&nbsp;the effect through the transmission channel, can be computed in one of two ways. The first way is to use the <a href="../../learn/systems-form.qmd">systems form</a> to compute the transmission effect. The second way exploits the sufficiency of impulse response functions (IRFs)<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and uses these to compute the effects. The following sections describe both methods.</p>
+<section id="preparing-the-systems-form" class="level3">
+<h3 class="anchored">Preparing the Systems Form</h3>
+<p>The <a href="../../learn/systems-form.qmd">systems form</a> can be used whenever a SVAR(MA) was estimated and the AR and MA coefficients are available. The first step then consists of transforming the <a href="../../learn/dynamic-form.qmd">dynamic form</a> of the SVAR(MA) into the systems form. We provide the utility function <code class="sourceCode matlab"><span class="va">makeSystemsForm</span></code> for this purpose.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+makeSystemsForm
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>makeSystemsForm</code> Transform an SVARMA dynamic model into the system representation <span class="math inline">\(x = Bx + \Omega\varepsilon\)</span>.</p>
+<section id="arguments-5" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-5">Arguments</h2>
+<ul>
+<li><code>Phi0</code> (matrix): The matrix of contemporaneous structural impulse responses.</li>
+<li><code>As</code> (cell array of matrices): A vector of reduced-form autoregressive (AR) matrices, where the first entry corresponds to the AR matrix for the first lag, etc.</li>
+<li><code>Psis</code> (cell array of matrices): A vector of reduced-form moving average (MA) matrices, where the first entry corresponds to the MA matrix for the first lag, etc.</li>
+<li><code>order</code> (vector): The vector of intergers indicating the order of variables, typically determined by the transmission matrix.</li>
+<li><code>maxHorizon</code> (integer): The maximum time horizon to consider for the systems form, with <code>0</code> representing the contemporaneous period.</li>
+</ul>
+</section>
+<section id="returns-4" class="level2">
+<h2 class="anchored" data-anchor-id="returns-4">Returns</h2>
+<ul>
+<li><code>B</code> (matrix)</li>
+<li><code>Omega</code> (matrix)</li>
+</ul>
+<p>See also <code>makeB</code>, <code>makeOmega</code>.</p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p>The returned systems form can then be used in <code class="sourceCode matlab"><span class="va">transmission</span></code> to compute the trasnmission effect.</p>
+<p>Besides <code class="sourceCode matlab"><span class="va">makeSystemsForm</span></code> we also offer the two separate functions <code class="sourceCode matlab"><span class="va">makeB</span></code> and <code class="sourceCode matlab"><span class="va">makeOmega</span></code> which respectively create <span class="math inline">\(B\)</span> and <span class="math inline">\(\Omega\)</span> of the <a href="../../learn/systems-form.qmd">systems form</a>. Use of these two functions should most of the time not be required. However, for users that might want to extend TCA, having access to these two methods seperately can be helpful.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+makeB
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>makeB</code> Construct the matrix B in the system representation <span class="math inline">\(x = Bx + \Omega\varepsilon\)</span>.</p>
+<section id="arguments-6" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-6">Arguments</h2>
+<ul>
+<li><code>As</code> (cell array of matrices): Autoregressive coefficient matrices.</li>
+<li><code>Sigma</code> (matrix): Covariance matrix of the shocks.</li>
+<li><code>order</code> (vector): Ordering of variables given by the transmission matrix.</li>
+<li><code>maxHorizon</code> (integer): Maximum IRF horizon.</li>
+</ul>
+</section>
+<section id="returns-5" class="level2">
+<h2 class="anchored" data-anchor-id="returns-5">Returns</h2>
+<ul>
+<li><code>B</code> (matrix): Part of the sytems representation.</li>
+</ul>
+<p>See also <code>makeOmega</code>, <code>makeSystemsForm</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+makeOmega
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>makeOmega</code> Construct the Omega matrix in the system representation <span class="math inline">\(x = Bx + \Omega\varepsilon\)</span>.</p>
+<section id="arguments-7" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-7">Arguments</h2>
+<ul>
+<li><code>Phi0</code> (matrix): Impact matrix for the shocks.</li>
+<li><code>Psis</code> (cell array of matrices): MA terms for the dynamic model.</li>
+<li><code>order</code> (vector): Ordering of variables.</li>
+<li><code>maxHorizon</code> (integer): Maximum IRF horizon.</li>
+</ul>
+</section>
+<section id="returns-6" class="level2">
+<h2 class="anchored" data-anchor-id="returns-6">Returns</h2>
+<ul>
+<li><code>Omega</code> (matrix): Part of the systems form.</li>
+</ul>
+<p>See also <code>makeB</code>, <code>makeSystemsForm</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="preparing-the-irfs" class="level3">
+<h3 class="anchored">Preparing the IRFs</h3>
+<p>Estimating the transmission effects using IRFs requires Cholesky / orthogonalised IRFs for all variables, as well as the structural shock’s impulse response functions. In either case, the toolbox works internally with a matrix representation of IRFs. Since many software solutions for SVAR(MA) return IRFs in the form of three-dimensional arrays, we provide the utility function <code class="sourceCode matlab"><span class="va">toTransmissionIrfs</span></code> that transforms the three-dimensional arrays into a matrix of IRFs.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+toTransmissionIrfs
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>toTransmissionIrfs</code> Transform a standard 3D IRF array into a 2D IRF matrix.</p>
+<p><code>irfs = toTransmissionIrfs(irfs)</code> converts an impulse response function (IRF) array of dimensions <code>(n_variables × n_shocks × n_horizons)</code> into a 2D matrix. The first horizon in the input corresponds to horizon 0.</p>
+<p>Arguments: - <code>irfs</code> (3D array): An IRF array of size <code>(n_variables × n_shocks × n_horizons)</code>, where: - <code>n_variables</code> is the number of variables, - <code>n_shocks</code> is the number of shocks, - <code>n_horizons</code> is the number of forecast horizons.</p>
+<section id="returns-7" class="level2">
+<h2 class="anchored" data-anchor-id="returns-7">Returns</h2>
+<ul>
+<li><code>irfs</code> (2D matrix): A transformed IRF matrix of size <code>(n_variables * n_horizons) × (n_variables * n_horizons)</code>. This is equivalent to computing <span class="math inline">\((I - B)^{-1}Q\)</span> using the systems form.</li>
+</ul>
+</section>
+<section id="example-5" class="level2">
+<h2 class="anchored" data-anchor-id="example-5">Example</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">irfs3D</span> <span class="op">=</span> <span class="va">rand</span>(<span class="fl">4</span><span class="op">,</span> <span class="fl">2</span><span class="op">,</span> <span class="fl">10</span>)<span class="op">;</span> <span class="co">% Example 3D IRF array with 4 variables, 2 shocks, and 10 horizons</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="va">irfs2D</span> <span class="op">=</span> <span class="va">toTransmissionIrfs</span>(<span class="va">irfs3D</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="notes-4" class="level2">
+<h2 class="anchored" data-anchor-id="notes-4">Notes</h2>
+<ul>
+<li>The first <code>n_shocks</code> column of the returned matrix are simply the standard slices of the IRF 3D-array stacked vertically. The next <code>n_shocks</code> columns follow the same principle, but with the first <code>n_variables</code> columns being zero because the shocks are time t shocks which cannot affect time t-1 variables.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p><code class="sourceCode matlab"><span class="va">toTransmissionIrfs</span></code> should be applied to both the Cholesky / orthogonalised and the structural IRFs. The resulting IRFs can then be used in <code class="sourceCode matlab"><span class="va">transmission</span></code> to compute the transmission effects.</p>
+</section>
+<section id="computing" class="level3">
+<h3 class="anchored">Computing</h3>
+<p>With either the IRFs or the systems form prepared, transmission effects can be computed using any of the following versions of the <code class="sourceCode matlab"><span class="va">transmission</span></code> function. In either case, the fourth argument to <code class="sourceCode matlab"><span class="va">transmission</span></code> must be a transmission condition that can be obtained in any of the ways described above.</p>
+<p>To compute transmission effects using the systems form, <code class="sourceCode matlab"><span class="va">method</span></code> should be set equal to <code class="sourceCode matlab"><span class="st">"BOmega"</span></code>. Similarly, to use IRFs, <code class="sourceCode matlab"><span class="va">method</span></code> should be set equal to <code class="sourceCode matlab"><span class="st">"irfs"</span></code>.</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+transmission
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>transmission</code> Compute the transmission effect given a transmission condition.</p>
+<p><code>effects = transmission(from, arr1, arr2, q, method)</code> calculates the transmission effect for a given transmission condition <code>q</code> using either the <code>BOmega</code> method or the <code>irf</code> method. If <code>BOmega</code> is used, then transmission effects will be calculated using the systems form <span class="math inline">\(x = Bx + \Omega\varepsilon\)</span></p>
+<section id="arguments-8" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-8">Arguments</h2>
+<ul>
+<li><code>from</code> (integer): Index of the shock.</li>
+<li><code>arr1</code> (matrix):</li>
+<li>If <code>method = "BOmega"</code>, this must be <code>B</code> from the systems form.</li>
+<li>If <code>method = "irf"</code>, this must be structural <code>irfs</code> (technically only those of the shock that is being investigates (<code>from</code>)). Has to be a IRF matrix. See <code>toTransmissionIrfs</code> for more information.</li>
+<li><code>arr2</code> (matrix):</li>
+<li>If <code>method = "BOmega"</code>, this must be <code>Omega</code> from the systems form.</li>
+<li>If <code>method = "irf"</code>, this must be <code>irfsOrtho</code> (Cholesky IRFs) following the ordering of the transmission matrix.</li>
+<li><code>q</code> (Q): A transmission condition. See also <code>Q</code>.</li>
+<li><code>method</code> (string): Specifies the calculation method:</li>
+<li><code>"BOmega"</code> uses the systems form.</li>
+<li><code>"irf"</code> uses only IRFs and can thus be used with local projections.</li>
+<li><code>order</code> (vector, optional): variable ordering as defined by the transmission matrix.</li>
+</ul>
+</section>
+<section id="returns-8" class="level2">
+<h2 class="anchored" data-anchor-id="returns-8">Returns:</h2>
+<ul>
+<li><code>effects</code> (vector): A vector where entry <code>i</code> corresponds to the transmission effect on variable <code>x_i</code>. If <code>x_k</code> is the variable in the transmission condition with the highest index, all entries in the returned vector with index less than <code>k</code> are <code>NaN</code>, since interpretation of those results is nonsensical.</li>
+</ul>
+</section>
+<section id="example-6" class="level2">
+<h2 class="anchored" data-anchor-id="example-6">Example:</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">k</span> <span class="op">=</span> <span class="fl">6</span><span class="op">;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="va">h</span> <span class="op">=</span> <span class="fl">3</span><span class="op">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="va">s</span> <span class="op">=</span> <span class="st">"(x1 | x2) &amp; !x3"</span><span class="op">;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="va">cond</span> <span class="op">=</span> <span class="va">makeCondition</span>(<span class="va">s</span>)<span class="op">;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="va">B</span> <span class="op">=</span> <span class="va">randn</span>(<span class="va">k</span><span class="op">*</span>(<span class="va">h</span><span class="op">+</span><span class="fl">1</span>)<span class="op">,</span> <span class="va">k</span><span class="op">*</span>(<span class="va">h</span><span class="op">+</span><span class="fl">1</span>))<span class="op">;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="va">Omega</span> <span class="op">=</span> <span class="va">randn</span>(<span class="va">k</span><span class="op">*</span>(<span class="va">h</span><span class="op">+</span><span class="fl">1</span>)<span class="op">,</span> <span class="va">k</span><span class="op">*</span>(<span class="va">h</span><span class="op">+</span><span class="fl">1</span>))<span class="op">;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="va">effect</span> <span class="op">=</span> <span class="va">transmission</span>(<span class="fl">1</span><span class="op">,</span> <span class="va">B</span><span class="op">,</span> <span class="va">Omega</span><span class="op">,</span> <span class="va">cond</span><span class="op">,</span> <span class="st">"BOmega"</span>)<span class="op">;</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="va">irfs</span> <span class="op">=</span> <span class="va">randn</span>(<span class="va">k</span><span class="op">,</span> <span class="va">k</span><span class="op">,</span> <span class="va">h</span><span class="op">+</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="va">irfsOrtho</span> <span class="op">=</span> <span class="va">randn</span>(<span class="va">k</span><span class="op">,</span> <span class="va">k</span><span class="op">,</span> <span class="va">h</span><span class="op">+</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="va">irfs</span> <span class="op">=</span> <span class="va">toTransmissionIrfs</span>(<span class="va">irfs</span>)<span class="op">;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="va">irfsOrtho</span> <span class="op">=</span> <span class="va">toTransmissionIrfs</span>(<span class="va">irfsOrtho</span>)<span class="op">;</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="va">effect</span> <span class="op">=</span> <span class="va">transmission</span>(<span class="fl">1</span><span class="op">,</span> <span class="va">irfs</span><span class="op">,</span> <span class="va">irfsOrtho</span><span class="op">,</span> <span class="va">cond</span><span class="op">,</span> <span class="st">"irf"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="notes-5" class="level2">
+<h2 class="anchored" data-anchor-id="notes-5">Notes:</h2>
+<ul>
+<li>If <code>method = "BOmega"</code>, the function applies <code>transmissionBOmega</code>.</li>
+<li>If <code>method = "irf"</code>, the function applies <code>transmissionIrfs</code>.</li>
+<li>If <code>order</code> is provided, the returned effects will be a 3D array of dimension (nVariables, 1, horizons) where the variables are in the original ordering (before applying the transmission matrix).</li>
+<li>If <code>order</code> is not provided, the returned effects will be a (nVariable*horizons, 1) dimensional vector following the ordering after applying the transmission matrix. This is similar to the matrix obtained via <span class="math inline">\((I - B)^{-1}\Omega\)</span> using the matrices from the systems form.</li>
+</ul>
+<p>See also <code>transmissionBOmega</code>, <code>transmissionIrfs</code>, <code>makeCondition</code>, <code>through</code>, <code>notThrough</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<p>It may occur that a transmission condition contains a contradiction, i.e.&nbsp;a part of the boolean conditions says <span class="math inline">\(x_i \land \neg x_i\)</span>. These are usually automatically removed internally. However, this automatic removal can sometimes lengthen the time it takes for the condition to compile. We therefore offer the possibility not to remove contradictions. To set this alternative option, use <code class="sourceCode matlab"><span class="va">setRemoveContradiction</span></code>. Even if contradictions are not removed, the resulting transmission effect will be correct, but the computation may take a bit longer. Thus, there is a trade-off between longer compile times (if contradictions are being removed) and longer computing time (if contradictions are not removed).</p>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+setRemoveContradictions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>setRemoveContradictions</code> Set the global flag for removing contradictions in transmission conditions.</p>
+<p><code>setRemoveContradictions(bool)</code> controls whether contradictions in transmission conditions are removed when calling <code>setRemoveContradictions</code>.</p>
+<section id="arguments-9" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-9">Arguments</h2>
+<ul>
+<li><code>bool</code> (logical): If <code>true</code>, contradictions of the form “x_i &amp; !x_i” will be removed from transmission conditions. If <code>false</code>, contradictions will not be removed.</li>
+</ul>
+</section>
+<section id="example-7" class="level2">
+<h2 class="anchored" data-anchor-id="example-7">Example</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">% Enable contradiction removal</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="va">setRemoveContradictions</span>(<span class="va">true</span>)<span class="op">;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">% Disable contradiction removal</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="va">setRemoveContradictions</span>(<span class="va">false</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>See also <code>removeContradictions</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+removeContradictions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>removeContradictions</code> Remove contradicting terms from a transmission condition.</p>
+<p><code>q = removeContradictions(q)</code> removes terms that contain contradictions of the form <code>x_i &amp; !x_i</code>, which always evaluate to false and contribute zero to the transmission effect. Behaviour of the function can be changed by setting <code>REMOVECONTRADICTIONS=false</code> locally.</p>
+<p>Arguments: - <code>q</code> (Q): A transmission condition. See also <code>Q</code> and <code>makeCondition</code>.</p>
+<p>Returns: - If <code>REMOVECONTRADICTIONS</code> is set to <code>false</code>, the input <code>q</code> is returned unchanged. - If <code>REMOVECONTRADICTIONS</code> is <code>true</code> or not set: 1. If all terms are contradicting, <code>Q("T", 0)</code> is returned, which represents a transmission effect of zero. 2. If some terms are non-contradicting, only the non-contradicting terms are retained in the output.</p>
+<section id="example-8" class="level2">
+<h2 class="anchored" data-anchor-id="example-8">Example</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="va">setRemoveContradictions</span>(<span class="va">true</span>)<span class="op">;</span> <span class="co">% on by default</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">Q</span>(<span class="ss">'x1'</span><span class="op">,</span> <span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">removeContradictions</span>(<span class="va">q</span>)<span class="op">;</span> <span class="co">% Returns q unchanged (no contradictions).</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">Q</span>(<span class="ss">'x1 &amp; !x1'</span><span class="op">,</span> <span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">removeContradictions</span>(<span class="va">q</span>)<span class="op">;</span> <span class="co">% Returns Q('T', 0).</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">Q</span>({<span class="ss">'x1 &amp; !x1'</span><span class="op">,</span> <span class="ss">'x1 &amp; x2'</span>}<span class="op">,</span> [<span class="fl">1</span><span class="op">,</span> <span class="fl">1</span>])<span class="op">;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">removeContradictions</span>(<span class="va">q</span>)<span class="op">;</span> <span class="co">% Returns Q('x2 &amp; x1', 1).</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="va">setRemoveContradictions</span>(<span class="va">false</span>)<span class="op">;</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">Q</span>(<span class="ss">'x1 &amp; !x1'</span><span class="op">,</span> <span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="va">q</span> <span class="op">=</span> <span class="va">removeContradictions</span>(<span class="va">q</span>)<span class="op">;</span> <span class="co">% Returns the original q.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="notes-6" class="level2">
+<h2 class="anchored" data-anchor-id="notes-6">Notes</h2>
+<ul>
+<li>If <code>REMOVECONTRADICTIONS</code> is not explicitly set, contradictions are removed by default.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-wegnerTCA2024" class="csl-entry" role="listitem">
+Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2024. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2024. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Note that <code>~</code> and <code>!</code> are both notation for NOT. Matlab uses <code>~</code>, however we will use these interchangably. If <code class="matlabl">makeCondition</code> use used, either will work. However, if two condition are being combined, only <code>~</code> will work, since <code>!</code> is not defined in Matlab.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>See Section 4 in <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2024</a>)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/enweg\.github\.io\/tca-website\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../documentation/matlab/index.html" class="pagination-link" aria-label="Overview">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Overview</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../documentation/matlab/internals.html" class="pagination-link" aria-label="Internals">
+        <span class="nav-page-text">Internals</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -1,9 +1,0 @@
----
-title: TCA in Local Projections
-filters: 
-    - include-code-files
-bibliography: ../../../references.bib
-sidebar: examples
----
-
-This part of the website is still under construction. Our apologies. 

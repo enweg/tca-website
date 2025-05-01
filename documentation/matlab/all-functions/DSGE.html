@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>DSGE – Transmission Channel Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../documentation/matlab/all-functions/ExternalInstrument.html" rel="next">
+<link href="../../../documentation/matlab/all-functions/combinations.html" rel="prev">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "What would you like to know?",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../examples/matlab/dynare/index.html"> 
+<span class="menu-text">Examples</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../../documentation/julia/index.html" aria-current="page"> 
+<span class="menu-text">Documentation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../faq/index.html"> 
+<span class="menu-text">Wiki</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html#about"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../documentation/matlab/index.html">Matlab</a></li><li class="breadcrumb-item"><a href="../../../documentation/matlab/all-functions/applyAndToB.html">All</a></li><li class="breadcrumb-item"><a href="../../../documentation/matlab/all-functions/DSGE.html">DSGE</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+  <div id="quarto-announcement" data-announcement-id="d1d45beed765f3aac4870d27d9123622" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p><strong>Note</strong> - this website is still actively under construction.</p>
+</div></div>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Julia</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/advanced.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Advanced Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Internals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">All</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/@show_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">@show_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/AbstractIdentificationMethod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AbstractIdentificationMethod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/aic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">aic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/bic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">bic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/coeffs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">coeffs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/cov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">cov</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/ExternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ExternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/fit_and_select!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fit_and_select!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/fit!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fit!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/fitted.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fitted</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/get_dependent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_dependent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/get_independent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_independent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/get_input_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_input_data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/get_variable_names.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">get_variable_names</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/hqc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">hqc</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/identify.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">identify</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/identify!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">identify!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/InternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">InternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/IRF.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IRF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/is_fitted.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_fitted</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/is_stable.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_stable</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/is_structural.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">is_structural</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/LP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/make_B.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_B</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/make_companion_matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_companion_matrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/make_condition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_condition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/make_Omega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_Omega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/make_systems_form.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">make_systems_form</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/map_x_to_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">map_x_to_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/map_y_to_x.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">map_y_to_x</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/Model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/nobs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">nobs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/not_through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">not_through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/Recursive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/residuals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">residuals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/set_remove_contradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">set_remove_contradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/show_y.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">show_y</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/sic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">sic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/simulate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">simulate</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/simulate!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">simulate!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/spectral_radius.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">spectral_radius</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/SVAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SVAR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/to_transmission_irfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">to_transmission_irfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/transmission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmission</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/julia/all-functions/VAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VAR</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Matlab</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/advanced.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Advanced Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Internals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">All</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/applyAndToB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">applyAndToB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/applyNotToB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">applyNotToB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/calculateQAndOnly.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">calculateQAndOnly</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/checkContradiction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">checkContradiction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/collectTerms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">collectTerms</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/combinations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">combinations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/DSGE.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">DSGE</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/ExternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ExternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/findVariableIndex.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">findVariableIndex</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/getVarNumsAndMultiplier.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">getVarNumsAndMultiplier</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/IdentificationMethod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IdentificationMethod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/InternalInstrument.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">InternalInstrument</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/IRFContainer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">IRFContainer</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/logdet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">logdet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/LP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/makeB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeB</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/makeCondition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeCondition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/makeConditionY.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeConditionY</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/makeLagMatrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeLagMatrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/makeLeadMatrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeLeadMatrix</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/makeOmega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeOmega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/makeSystemsForm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">makeSystemsForm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/Model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/notThrough.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">notThrough</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/Q.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Q</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/Recursive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recursive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/removeContradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">removeContradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/setRemoveContradictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">setRemoveContradictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/slideIn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">slideIn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/SVAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SVAR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/through.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/toTransmissionIrfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">toTransmissionIrfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/transmission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmission</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/transmissionBOmega.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmissionBOmega</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/transmissionIrfs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">transmissionIrfs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../documentation/matlab/all-functions/VAR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VAR</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../documentation/matlab/index.html">Matlab</a></li><li class="breadcrumb-item"><a href="../../../documentation/matlab/all-functions/applyAndToB.html">All</a></li><li class="breadcrumb-item"><a href="../../../documentation/matlab/all-functions/DSGE.html">DSGE</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><p>DSGE</p></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+DSGE
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>DSGE</code> Dynamic Stochastic General Equilibrium (DSGE) model.</p>
+<p>This class specifies a DSGE model structure. The model must be previously computed using Dynare. It provides access to the Dynare output structures.</p>
+<section id="properties" class="level2">
+<h2 class="anchored" data-anchor-id="properties">Properties</h2>
+<ul>
+<li><code>M_</code> (struct): Model structure returned by Dynare.</li>
+<li><code>options_</code> (struct): Options structure from Dynare.</li>
+<li><code>oo_</code> (struct): Output structure with results from Dynare.</li>
+</ul>
+</section>
+<section id="notes" class="level2">
+<h2 class="anchored" data-anchor-id="notes">Notes</h2>
+<ul>
+<li>The model must have already been solved in Dynare.</li>
+<li>This class serves as a wrapper to interface with Dynare output.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+getShockNames
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>getShockNames</code> returns a vector of shock names.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+getShockSize_
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>getShockSize_</code> Obtain the standard deviation of a specified shock.</p>
+<p><code>shockSize = getShockSize_(shockName, M_)</code> computes the standard deviation (size) of a specified shock in a DSGE model estimated using Dynare.</p>
+<section id="arguments" class="level2">
+<h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
+<ul>
+<li><code>shockName</code> (string): The name of the shock whose size and index are required.</li>
+<li><code>M_</code> (struct): Returned by Dynare.</li>
+</ul>
+</section>
+<section id="returns" class="level2">
+<h2 class="anchored" data-anchor-id="returns">Returns</h2>
+<ul>
+<li><code>shockSize</code> (double): The standard deviation of the specified shock.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+transmission
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>transmission</code> Compute transmission effects in a DSGE model.</p>
+<p><code>effects = transmission(obj, shock, condition, order, maxHorizon)</code> computes the transmission effects for a <code>shock</code> under a <code>condition</code> based on <code>order</code>, up to <code>maxHorizon</code>.</p>
+<section id="arguments-1" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-1">Arguments</h2>
+<ul>
+<li><code>obj</code> (DSGE): DSGE model object.</li>
+<li><code>shock</code> (char or int): Shock name or index.</li>
+<li><code>condition</code> (Q): Transmission condition object.</li>
+<li><code>order</code> (cell array or vector): Variable ordering.</li>
+<li><code>maxHorizon</code> (integer): Maximum forecast horizon.</li>
+</ul>
+</section>
+<section id="returns-1" class="level2">
+<h2 class="anchored" data-anchor-id="returns-1">Returns</h2>
+<ul>
+<li><code>effects</code> (3D array): Transmission effects over horizons:</li>
+<li>First dimension: Endogenous variables.</li>
+<li>Second dimension: Selected shock.</li>
+<li>Third dimension: Horizon.</li>
+</ul>
+</section>
+<section id="notes-1" class="level2">
+<h2 class="anchored" data-anchor-id="notes-1">Notes</h2>
+<ul>
+<li><code>shock</code> and <code>order</code> can be provided by name or index.</li>
+</ul>
+<p>See also <code>DSGE.through</code>, <code>DSGE.notThrough</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+checkDynare_
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>checkDynare_</code> Ensure Dynare is properly loaded and available.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+varmaIrfs_
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>varmaIrfs_</code> Compute structural impulse response functions (IRFs) for a VARMA model.</p>
+<p><code>irfs = varmaIrfs_(Phi0, As, Psis, horizon)</code> computes the structural impulse response functions (IRFs) of a VARMA model, given the structural shock impact matrix, autoregressive (AR) coefficients, and moving average (MA) coefficients.</p>
+<section id="model-specification" class="level2">
+<h2 class="anchored" data-anchor-id="model-specification">Model Specification</h2>
+<p>The VARMA model is defined as: <span class="math display">\[
+y_t = \sum_{i=1}^{p} A_i y_{t-i} + \sum_{j=1}^{q} \Psi_j u_{t-j} + u_t,
+\]</span> where: - <span class="math inline">\(u_t = \Phi_0 \varepsilon_t\)</span>, with <span class="math inline">\(\varepsilon_t\)</span> being structural shocks.</p>
+</section>
+<section id="arguments-2" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-2">Arguments</h2>
+<ul>
+<li><code>Phi0</code> (matrix): Impact matrix linking structural shocks to reduced-form errors.</li>
+<li><code>As</code> (cell array): AR coefficient matrices <code>{A_1, A_2, ..., A_p}</code>.</li>
+<li><code>Psis</code> (cell array): MA coefficient matrices <code>{Psi_1, Psi_2, ..., Psi_q}</code>.</li>
+<li><code>horizon</code> (integer): Number of periods for which IRFs are computed. <code>horizon=0</code> means only contemporaneous impulses are computed which are the same as <code>Phi0</code>.</li>
+</ul>
+</section>
+<section id="returns-2" class="level2">
+<h2 class="anchored" data-anchor-id="returns-2">Returns</h2>
+<ul>
+<li><code>irfs</code> (3D array): Structural IRFs of size <code>(n, m, horizon+1)</code>, where <code>n</code> is the number of endogenous variables, <code>m</code> is the number of shocks, assumed to satisfy <code>m=n</code>. The IRFs capture the dynamic response of each variable to a unit shock over the specified horizon.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+defineOrder_
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>defineOrder_</code> Determine the ordering of observed variables.</p>
+<p><code>defineOrder_(vars, options_)</code> returns an ordering vector <code>order</code> that maps the variables in <code>vars</code> to their corresponding positions in the list of observed variables of a DSGE model estimated using Dynare. It defines the transmission matrix and can be used in <code>makeB</code>, <code>makeOmega</code>, <code>makeSystemsForm</code>, <code>makeConditionY</code>, <code>notThrough</code>, <code>through</code>, and <code>transmission</code>.</p>
+<section id="arguments-3" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-3">Arguments</h2>
+<ul>
+<li><code>vars</code> (vector): A list of observed variable names.</li>
+<li><code>options_</code> (struct): Options structure returned by Dynare.</li>
+</ul>
+</section>
+<section id="returns-3" class="level2">
+<h2 class="anchored" data-anchor-id="returns-3">Returns</h2>
+<ul>
+<li><code>order</code> (vector): Indices of <code>vars</code> in the original observed variable list.</li>
+</ul>
+<p>See also <code>transmission</code>, <code>through</code>, <code>notThrough</code>, <code>makeSystemsForm</code>.</p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+getShockSize
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>getShockSize</code> Get size (standard deviation) of a structural shock.</p>
+<p><code>shockSize = getShockSize(obj, shockname)</code> returns the standard deviation of the specified structural shock.</p>
+<section id="arguments-4" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-4">Arguments</h2>
+<ul>
+<li><code>obj</code> (DSGE): DSGE model object.</li>
+<li><code>shockname</code> (char): Name of the structural shock.</li>
+</ul>
+</section>
+<section id="returns-4" class="level2">
+<h2 class="anchored" data-anchor-id="returns-4">Returns</h2>
+<ul>
+<li><code>shockSize</code> (number): Standard deviation of the shock.</li>
+</ul>
+<p>See also <code>getVariableIdx</code>, <code>getShockIdx</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+getVariableIdx
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>getVariableIdx</code> Get index of an observed variable in DSGE model.</p>
+<p><code>idx = getVariableIdx(obj, varname)</code> returns the index of <code>varname</code> in the list of observed variables of a DSGE model.</p>
+<section id="arguments-5" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-5">Arguments</h2>
+<ul>
+<li><code>obj</code> (DSGE): DSGE model object.</li>
+<li><code>varname</code> (char): Name of the observed variable.</li>
+</ul>
+</section>
+<section id="returns-5" class="level2">
+<h2 class="anchored" data-anchor-id="returns-5">Returns</h2>
+<ul>
+<li><code>idx</code> (integer): Index of the observed variable.</li>
+</ul>
+<p>See also <code>getShockIdx</code>, <code>getShockSize</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+dynareToVarma_
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>dynareToVarma_</code> Transform a DSGE model into VARMA representation.</p>
+<p><code>[Phi0, As, Psis, p, q] = dynareToVarma_(M_, oo_, options_, maxKappa)</code> converts a linearized DSGE model estimated using Dynare into a VARMA form, following the method of Morris (2016).</p>
+<section id="arguments-6" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-6">Arguments</h2>
+<ul>
+<li><code>M_</code> (struct): Model structure returned by Dynare.</li>
+<li><code>oo_</code> (struct): Output structure returned by Dynare.</li>
+<li><code>options_</code> (struct): Options structure returned by Dynare.</li>
+<li><code>maxKappa</code> (integer, optional): Tuning parameter related to maximum AR order via <code>maxArOrder = maxKappa + 1</code>. Defaults to 20.</li>
+</ul>
+</section>
+<section id="returns-6" class="level2">
+<h2 class="anchored" data-anchor-id="returns-6">Returns</h2>
+<ul>
+<li><code>Phi0</code> (matrix): Impact matrix linking shocks to reduced-form errors.</li>
+<li><code>As</code> (cell array): AR coefficient matrices <code>{A_1, ..., A_p}</code>.</li>
+<li><code>Psis</code> (cell array): MA coefficient matrices <code>{Psi_1, ..., Psi_q}</code>.</li>
+<li><code>p</code> (integer): Determined autoregressive order.</li>
+<li><code>q</code> (integer): Determined moving average order.</li>
+</ul>
+</section>
+<section id="methodology" class="level2">
+<h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
+<p>The function follows the approach outlined in Morris (2016) and returns a VARMA of the form: <span class="math display">\[
+y_t = \sum_{i=1}^{p} A_i y_{t-i} + \sum_{j=1}^{q} \Psi_j u_{t-j} + u_t,
+\]</span> where: - <span class="math inline">\(u_t = \Phi_0 \varepsilon_t\)</span>, with <span class="math inline">\(\varepsilon_t\)</span> being structural shocks.</p>
+</section>
+<section id="reference" class="level2">
+<h2 class="anchored" data-anchor-id="reference">Reference</h2>
+<ul>
+<li>Morris, S. D. (2016). “VARMA representation of DSGE models.” <em>Economics Letters</em>, 138, 30–33. <a href="https://doi.org/10.1016/j.econlet.2015.11.027">https://doi.org/10.1016/j.econlet.2015.11.027</a></li>
+</ul>
+<p>See also <code>getABCD_</code>, <code>varmaIrfs_</code>.</p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+getShockIdx
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>getShockIdx</code> Get index of a structural shock in DSGE model.</p>
+<p><code>idx = getShockIdx(obj, shockname)</code> returns the index of <code>shockname</code> in the list of shocks of a DSGE model.</p>
+<section id="arguments-7" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-7">Arguments</h2>
+<ul>
+<li><code>obj</code> (DSGE): DSGE model object.</li>
+<li><code>shockname</code> (char): Name of the structural shock.</li>
+</ul>
+</section>
+<section id="returns-7" class="level2">
+<h2 class="anchored" data-anchor-id="returns-7">Returns</h2>
+<ul>
+<li><code>idx</code> (integer): Index of the structural shock.</li>
+</ul>
+<p>See also <code>getVariableIdx</code>, <code>getShockSize</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+coeffs
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>coeffs</code> Return VARMA coefficients from the DSGE model.</p>
+<p><code>[Phi0, As, Psis] = coeffs(obj)</code> computes and returns the VARMA coefficients of the DSGE model.</p>
+<section id="returns-8" class="level2">
+<h2 class="anchored" data-anchor-id="returns-8">Returns</h2>
+<ul>
+<li><code>Phi0</code> (matrix): Contemporaneous impact effects of structural shocks.</li>
+<li><code>As</code> (cell array): Reduced-form AR coefficient matrices.</li>
+<li><code>Psis</code> (cell array): Reduced-form MA coefficient matrices.</li>
+</ul>
+</section>
+<section id="notes-2" class="level2">
+<h2 class="anchored" data-anchor-id="notes-2">Notes</h2>
+<ul>
+<li>Internally calls <code>dynareToVarma_</code> to extract VARMA form.</li>
+<li>The method follows Morris (2016) for VARMA approximation.</li>
+</ul>
+<p>See also <code>DSGE.dynareToVarma_</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+getABCD_
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>getABCD_</code> Obtain the ABCD state-space representation of a DSGE model.</p>
+<code>[A, B, C, D] = getABCD_(M_, oo_, options_)</code> computes the state-space representation $$
+<span class="math display">\[\begin{split}
+x_t &amp;= Ax_{t-1} + B\varepsilon_t \\
+y_t &amp;= Cx_{t-1} + D\varepsilon_t
+\end{split}\]</span>
+<p>of a DSGE model estimated using Dynare. Only the minimal state representation is returned.</p>
+<section id="arguments-8" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-8">Arguments</h2>
+<ul>
+<li><code>M_</code> (struct): Returned by Dynare.</li>
+<li><code>oo_</code> (struct): Returned by Dynare.</li>
+<li><code>options_</code> (struct): Returned by Dynare.</li>
+</ul>
+</section>
+<section id="returns-9" class="level2">
+<h2 class="anchored" data-anchor-id="returns-9">Returns</h2>
+<ul>
+<li><code>A</code> (matrix): State transition matrix. See above equation.</li>
+<li><code>B</code> (matrix): Control input matrix capturing exogenous shocks. See above equation.</li>
+<li><code>C</code> (matrix): Observation matrix mapping state variables to observed variables. See above equation.</li>
+<li><code>D</code> (matrix): Observation noise matrix. See above equation.</li>
+</ul>
+</section>
+<section id="notes-3" class="level2">
+<h2 class="anchored" data-anchor-id="notes-3">Notes</h2>
+<ul>
+<li>Requires MATLAB’s Control System Toolbox.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div>
+<div class="doc-box">
+<div class="callout callout-style-simple callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+IRF
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>IRF</code> Compute impulse response functions for DSGE model.</p>
+<p><code>irfObj = IRF(obj, maxHorizon)</code> computes IRFs of the DSGE model up to horizon <code>maxHorizon</code>.</p>
+<section id="arguments-9" class="level2">
+<h2 class="anchored" data-anchor-id="arguments-9">Arguments</h2>
+<ul>
+<li><code>obj</code> (DSGE): DSGE model object.</li>
+<li><code>maxHorizon</code> (integer): Maximum forecast horizon.</li>
+</ul>
+</section>
+<section id="returns-10" class="level2">
+<h2 class="anchored" data-anchor-id="returns-10">Returns</h2>
+<ul>
+<li><code>irfObj</code> (IRFContainer): Container with computed IRFs.</li>
+</ul>
+</section>
+<section id="notes-4" class="level2">
+<h2 class="anchored" data-anchor-id="notes-4">Notes</h2>
+<ul>
+<li>Uses VARMA representation for IRF computation.</li>
+</ul>
+<p>See also <code>coeffs</code>, <code>dynareToVarma_</code>, <code>varmaIrfs_</code></p>
+</section>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/enweg\.github\.io\/tca-website\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../documentation/matlab/all-functions/combinations.html" class="pagination-link" aria-label="combinations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">combinations</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../../documentation/matlab/all-functions/ExternalInstrument.html" class="pagination-link" aria-label="ExternalInstrument">
+        <span class="nav-page-text">ExternalInstrument</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
