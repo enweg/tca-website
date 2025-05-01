@@ -1,4 +1,4 @@
---- 
+  --- 
 title: | 
   set_remove_contradictions
 sidebar: doc

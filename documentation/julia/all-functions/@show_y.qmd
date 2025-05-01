@@ -1,4 +1,4 @@
---- 
+  --- 
 title: | 
   \@show_y
 sidebar: doc

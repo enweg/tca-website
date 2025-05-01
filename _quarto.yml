@@ -34,9 +34,11 @@ website:
         contents: 
           - text: Overview
             href: "documentation/julia/index.qmd"
+          - text: Advanced Tools
+            href: "documentation/julia/advanced.qmd"
           - text: Internals
             href: "documentation/julia/internals.qmd"
-          - section: Functions
+          - section: All
             contents: documentation/julia/all-functions/*
       - section: Matlab
         # href: "documentation/matlab/index.qmd"

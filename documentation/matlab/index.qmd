@@ -411,7 +411,7 @@ method = ExternalInstrument('Y1', data_instruments);
 model.fit(method);
 ```
 
-After estimation, extract the results for each method (note the differing dimensions) via:
+After estimation, extract the results (note the differing dimensions) via:
 
 - `coeffs`: (response variable × regressors × horizons)
 - `fitted`, `residuals`: (observations × variables × horizons)
@@ -785,7 +785,7 @@ q = model.notThrough('Y1', 0:20, transmissionOrder);
 q = ~q;
 ```
 
-By combining through and notThrough with logical operators, you can flexibly construct any complex transmission channel you require. 
+By combining `through` and `notThrough` with logical operators, you can flexibly construct any complex transmission channel you require. 
 
 ## 5. Obtaining transimssion effects. 
 

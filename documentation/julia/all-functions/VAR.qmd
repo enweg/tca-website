@@ -1,6 +1,6 @@
   --- 
 title: | 
-  map_x_to_y
+  VAR
 sidebar: doc
 engine: julia
 ---
@@ -17,6 +17,6 @@ using TransmissionChannelAnalysis
 #| echo: false
 #| output: asis
 
-include_quarto_callout_doc(TransmissionChannelAnalysis, Symbol("map_x_to_y"))
+include_quarto_callout_doc(TransmissionChannelAnalysis, Symbol("VAR"))
 ```
     

@@ -1,4 +1,4 @@
---- 
+  --- 
 title: | 
   map_y_to_x
 sidebar: doc
