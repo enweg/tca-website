@@ -25,6 +25,11 @@ classes = load_from_json("matlab-documentation-classes.json")
 class_methods = load_from_json("matlab-documentation-class-methods.json")
 ```
 
+::: {.action-read-paper}
+<a href="https://github.com/enweg/tca-matlab-toolbox">Get the Toolbox</a>
+:::
+<span style="margin-bottom:2em"></span>
+
 The **MATLAB Toolbox for Transmission Channel Analysis** provides a suite of functions for conducting transmission channel analysis (TCA) in MATLAB. It includes both standard methods—which are sufficient for most users—and more advanced, customisable techniques.
 
 This overview focuses on the standard methods. Advanced options are described in the [Advanced Section](./advanced.qmd), and implementation details can be found in the [Internals Section](./internals.qmd). For practical demonstrations, see the [Examples](../../examples/matlab/dynare/index.qmd).

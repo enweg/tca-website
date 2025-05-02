@@ -15,6 +15,11 @@ using TransmissionChannelAnalysis
 using DataFrames
 ```
 
+::: {.action-read-paper}
+<a href="https://github.com/enweg/TransmissionChannelAnalysis.jl">Get the Package</a>
+:::
+<span style="margin-bottom:2em"></span>
+
 `TransmissionChannelAnalysis.jl` provides a suite of functions for conducting transmission channel analysis (TCA) in Julia. It includes both standard methods—which are sufficient for most users—and more advanced, customisable techniques.
 
 This overview focuses on the standard methods. Advanced options are described in the [Advanced Section](./advanced.qmd), and implementation details can be found in the [Internals Section](./internals.qmd). 

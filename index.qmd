@@ -88,9 +88,11 @@ The best way to learn about about TCA is to check out the Wiki or the tutorials.
 
 We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (as part of the Matlab package). See the documentation or the tutorials for each of them to learn more
 
-**Documentation**
+**Packages:**<span style="margin-right:3.7em"></span>
+<a href="https://github.com/enweg/TransmissionChannelAnalysis.jl" class="overview-btn">Julia</a>
+<a href="https://github.com/enweg/tca-matlab-toolbox" class="overview-btn">Matlab</a>
 
-
+**Documentation:** <span style="margin-right:1em"></span>
 <a href="/documentation/julia/index.qmd" class="overview-btn">Julia</a>
 <a href="/documentation/matlab/index.qmd" class="overview-btn">Matlab</a>
 
