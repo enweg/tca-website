@@ -204,6 +204,9 @@ If you use TCA or any of the packages in your research, we would appreciate if y
 ### Questions or Comments?
 
 - For questions or comments regarding any of the content on this website, please use the **GitHub issue functionality**. 
+
+<a href="https://github.com/enweg/tca-website/issues" class="overview-btn" style="display:block;margin:auto;width:fit-content;">Open an Issue</a>
+
 - For questions or comments related to the paper, please get in contact with **Enrico Wegner via e.wegner@maastrichtuniversity.nl**
 
 ### License
