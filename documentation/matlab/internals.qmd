@@ -106,7 +106,7 @@ include_callout_block_matlab("setRemoveContradictions", functions)
 
 ## Combining two conditions using OR (`|`{.matlab})
 
-Let `q1`{.matlab} and `q2`{.matlab} be again two transmission conditions. Suppose their internal Boolean conditions are given by $b$ and $b'$ respectively, with both satisfying [Assumption @nte-assumption1-internal-julia]. The [rules for manipulating transmission conditions](/faq/topics/algebra.qmd) then imply
+Let `q1`{.matlab} and `q2`{.matlab} be again two transmission conditions. Suppose their internal Boolean conditions are given by $b$ and $b'$ respectively, with both satisfying [Assumption @nte-assumption1-internal-julia]. The rules for manipulating transmission conditions then imply
 $$
 Q(b \lor b') = Q(b) + Q(b') - Q(b \land b').
 $$
@@ -122,7 +122,7 @@ include_callout_block_matlab("Q", "or", class_methods)
 
 ## Negating a condition using NOT (`~`{.matlab})
 
-Suppose a transmission condition is given by `q`{.matlab} which internally represents the Boolean condition $b$. By the [rules for manipulating transmission conditions](/faq/topics/algebra.qmd) we then know that 
+Suppose a transmission condition is given by `q`{.matlab} which internally represents the Boolean condition $b$. By the rules for manipulating transmission conditions we then know that 
 $$
 Q(\neg b) = Q(T) - Q(b),
 $$

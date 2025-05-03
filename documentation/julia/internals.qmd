@@ -101,7 +101,7 @@ As stated in the [overview]("./index.qmd") of the documentation, removal of cont
 
 ## Combining two conditions using OR (`|`{.julia})
 
-Let `q1::Q`{.julia} and `q2::Q`{.julia} be again two transmission conditions. Suppose their internal Boolean conditions are given by $b$ and $b'$ respectively, with both satisfying [Assumption @nte-assumption1-internal-julia]. The [rules for manipulating transmission conditions](/faq/topics/algebra.qmd) then imply
+Let `q1::Q`{.julia} and `q2::Q`{.julia} be again two transmission conditions. Suppose their internal Boolean conditions are given by $b$ and $b'$ respectively, with both satisfying [Assumption @nte-assumption1-internal-julia]. The rules for manipulating transmission conditions then imply
 $$
 Q(b \lor b') = Q(b) + Q(b') - Q(b \land b').
 $$
@@ -118,7 +118,7 @@ println(DocUtils.create_quarto_callout(docs, "|")[1])
 
 ## Negating a condition using NOT (`!`{.julia})
 
-Suppose a transmission condition is given by `q::Q`{.julia} which internally represents the Boolean condition $b$. By the [rules for manipulating transmission conditions](/faq/topics/algebra.qmd) we then know that 
+Suppose a transmission condition is given by `q::Q`{.julia} which internally represents the Boolean condition $b$. By the rules for manipulating transmission conditions we then know that 
 $$
 Q(\neg b) = Q(T) - Q(b),
 $$

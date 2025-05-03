@@ -42,7 +42,7 @@ include_quarto_callout_doc(through)
 include_quarto_callout_doc(not_through)
 ```
 
-Both `through`{.julia} and `not_through`{.julia} return a transmission condition `Q`, which is simply an internal representation of the provided transmission channel (represented as [Boolean statements](/learn/boolean-conditions.qmd)). To double check whether the condition represents the desired channel, simply run `Q`{.julia} in the REPL, which will display the internal representation using the [systems form](/learn/systems-form.qmd) and thus using the variable notation $x$. Alternatively, `show_y`{.julia} or `@show_y`{.julia} can be used to display the internal representation in the [dynamic form](/learn/dynamic-form.qmd) and thus using the variable notation $y$. 
+Both `through`{.julia} and `not_through`{.julia} return a transmission condition `Q`, which is simply an internal representation of the provided transmission channel (represented as [Boolean statements](/faq/topics/boolean-conditions.qmd)). To double check whether the condition represents the desired channel, simply run `Q`{.julia} in the REPL, which will display the internal representation using the [systems form](/faq/topics/systems-form.qmd) and thus using the variable notation $x$. Alternatively, `show_y`{.julia} or `@show_y`{.julia} can be used to display the internal representation in the [dynamic form](/faq/topics/dynamic-form.qmd) and thus using the variable notation $y$. 
 
 ```{julia}
 #| echo: false
@@ -65,7 +65,7 @@ q4 = (q1 | q2) & !q3
 q5 = q4 | q1
 ```
 
-This functionality allows definitions of transmission channels that are not easily defined using `through`{.julia} and `not_through`{.julia}. For example, if we were interested in the transmission channel that goes through $y_{1,0}$ OR through $y_{1,1}$, then neither of the helper functions can be used, since neither can handle OR statements. However, we can use [Boolean logic](/learn/boolean-conditions.qmd) and the [rules for the manipulation of transmission conditions](/learn/algebra.qmd) to define this transmission channel using our helper functions. 
+This functionality allows definitions of transmission channels that are not easily defined using `through`{.julia} and `not_through`{.julia}. For example, if we were interested in the transmission channel that goes through $y_{1,0}$ OR through $y_{1,1}$, then neither of the helper functions can be used, since neither can handle OR statements. However, we can use [Boolean logic](/faq/topics/boolean-conditions.qmd) and the rules for the manipulation of transmission conditions to define this transmission channel using our helper functions. 
 
 In most cases, the easiest step is to negate the original condition. The above condition can be succintly be represented as 
 $$
@@ -95,11 +95,11 @@ original_condition = !q
 
 ## Defining Complex Transmission Channels
 
-Although `through`{.julia} and `not_through`{.julia} are sufficient for many situations, it is still sometimes more convenient to directly define the transmission channel as a [Boolean condition](/learn/boolean-conditions.qmd) withough having to refer back to `though`{.julia} and `not_through`{.julia}. 
+Although `through`{.julia} and `not_through`{.julia} are sufficient for many situations, it is still sometimes more convenient to directly define the transmission channel as a [Boolean condition](/faq/topics/boolean-conditions.qmd) withough having to refer back to `though`{.julia} and `not_through`{.julia}. 
 
 Say, for example, we are again interested in the transmission channel going through `y_{1,0}` OR `y_{1,1}`. Instead of using the approach of first negating the statement, then using `not_through`{.julia}, just to negate this statement again, we may as well just define the condition directly using the more advanced functionality of `TransmissionChannelAnalysis.jl`. 
 
-The advanced functionality simply takes a `String` that defines the transmission channel as a Boolean condition. The string can either be defined using the variables of the [dynamic form](/learn/dynamic-form.qmd) $y$ or the variables using the [systems form](/learn/systems-form.qmd) $x$. In the former case, the ordering defined by the transmission matrix must also be defined. In either case, `make_condition`{.julia} is used. 
+The advanced functionality simply takes a `String` that defines the transmission channel as a Boolean condition. The string can either be defined using the variables of the [dynamic form](/faq/topics/dynamic-form.qmd) $y$ or the variables using the [systems form](/faq/topics/systems-form.qmd) $x$. In the former case, the ordering defined by the transmission matrix must also be defined. In either case, `make_condition`{.julia} is used. 
 
 ```{julia}
 #| echo: false
@@ -124,13 +124,13 @@ q = make_condition("x1 | x5")
 
 ## Computing Transmission Effects
 
-Transmission effects, i.e. the effect through the transmission channel, can be computed in one of two ways in `TransmissionChannelAnalysis.jl`. The first way is to use the [systems form](/learn/systems-form.qmd) to compute the transmission effect. The second way exploits the sufficiency of impulse response functions (IRFs)[^1] and uses these to compute the effects. The following sections describe both methods. 
+Transmission effects, i.e. the effect through the transmission channel, can be computed in one of two ways in `TransmissionChannelAnalysis.jl`. The first way is to use the [systems form](/faq/topics/systems-form.qmd) to compute the transmission effect. The second way exploits the sufficiency of impulse response functions (IRFs)[^1] and uses these to compute the effects. The following sections describe both methods. 
 
 [^1]: See Section 4 in @wegnerTCA2024.
 
 ### Preparing the Systems Form
 
-The [systems form](/learn/systems-form.qmd) can be used whenever a SVAR(MA) was estimated and the AR and MA coefficients are available. The first step then consists of transforming the [dynamic form](/learn/dynamic-form.qmd) of the SVAR(MA) into the systems form. We provide the utility function `make_systems_form`{.julia} for this purpose. 
+The [systems form](/faq/topics/systems-form.qmd) can be used whenever a SVAR(MA) was estimated and the AR and MA coefficients are available. The first step then consists of transforming the [dynamic form](/faq/topics/dynamic-form.qmd) of the SVAR(MA) into the systems form. We provide the utility function `make_systems_form`{.julia} for this purpose. 
 
 ```{julia}
 #| echo: false
@@ -141,7 +141,7 @@ include_quarto_callout_doc(make_systems_form)
 
 The returned systems form can then be used in `transmission`{.julia} to compute the trasnmission effect. 
 
-Besides `make_systems_form`{.julia} we also offer the two separate functions `make_B`{.julia} and `make_Omega`{.julia} which respectively create $B$ and $\Omega$ of the [systems form](/learn/systems-form.qmd). Use of these two functions should most of the time not be required. However, for users that might want to research of TCA, having access to these two methods seperately can be helpful. 
+Besides `make_systems_form`{.julia} we also offer the two separate functions `make_B`{.julia} and `make_Omega`{.julia} which respectively create $B$ and $\Omega$ of the [systems form](/faq/topics/systems-form.qmd). Use of these two functions should most of the time not be required. However, for users that might want to research of TCA, having access to these two methods seperately can be helpful. 
 
 ```{julia}
 #| echo: false
