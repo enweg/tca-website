@@ -1049,7 +1049,7 @@ setRemoveContradictions
 </section>
 <section id="combining-two-conditions-using-or" class="level2">
 <h2 class="anchored" data-anchor-id="combining-two-conditions-using-or">Combining two conditions using OR (<code class="sourceCode matlab"><span class="op">|</span></code>)</h2>
-<p>Let <code class="sourceCode matlab"><span class="va">q1</span></code> and <code class="sourceCode matlab"><span class="va">q2</span></code> be again two transmission conditions. Suppose their internal Boolean conditions are given by <span class="math inline">\(b\)</span> and <span class="math inline">\(b'\)</span> respectively, with both satisfying <a href="#nte-assumption1-internal-julia" class="quarto-xref">Assumption&nbsp;1</a>. The <a href="../../faq/topics/algebra.qmd">rules for manipulating transmission conditions</a> then imply <span class="math display">\[
+<p>Let <code class="sourceCode matlab"><span class="va">q1</span></code> and <code class="sourceCode matlab"><span class="va">q2</span></code> be again two transmission conditions. Suppose their internal Boolean conditions are given by <span class="math inline">\(b\)</span> and <span class="math inline">\(b'\)</span> respectively, with both satisfying <a href="#nte-assumption1-internal-julia" class="quarto-xref">Assumption&nbsp;1</a>. The rules for manipulating transmission conditions then imply <span class="math display">\[
 Q(b \lor b') = Q(b) + Q(b') - Q(b \land b').
 \]</span> Implementation of OR (<code class="sourceCode matlab"><span class="op">|</span></code>) therefore simply uses AND and the ability for <code class="sourceCode matlab"><span class="va">Q</span></code> to represent multiple terms with different multipliers. The precise implementation of OR can be found in the following function.</p>
 <div class="doc-box">
@@ -1094,7 +1094,7 @@ Q.or
 </section>
 <section id="negating-a-condition-using-not" class="level2">
 <h2 class="anchored" data-anchor-id="negating-a-condition-using-not">Negating a condition using NOT (<code class="sourceCode matlab"><span class="op">~</span></code>)</h2>
-<p>Suppose a transmission condition is given by <code class="sourceCode matlab"><span class="va">q</span></code> which internally represents the Boolean condition <span class="math inline">\(b\)</span>. By the <a href="../../faq/topics/algebra.qmd">rules for manipulating transmission conditions</a> we then know that <span class="math display">\[
+<p>Suppose a transmission condition is given by <code class="sourceCode matlab"><span class="va">q</span></code> which internally represents the Boolean condition <span class="math inline">\(b\)</span>. By the rules for manipulating transmission conditions we then know that <span class="math display">\[
 Q(\neg b) = Q(T) - Q(b),
 \]</span> where <span class="math inline">\(T\)</span> represents the Boolean condition that is always true. This can easily be represented using <code class="sourceCode matlab"><span class="va">Q</span></code> through its ability to represent multiple terms and multipliers. Specifically, we simply replace the original transmission condition with a new one that consists of one additional term, representing true, and switch the sign of all original terms of the condition. The following function implements this behaviour.</p>
 <div class="doc-box">
