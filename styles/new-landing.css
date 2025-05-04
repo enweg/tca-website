@@ -269,3 +269,52 @@ h2::after {
         grid-column: 1;
     }
 }
+
+@media screen and (max-width: 500px) {
+    body {
+        font-size: 16px;
+    }
+    .columns-6 {
+        display: block;
+    }
+    .columns-4 {
+        display: block;
+    }
+    section {
+        padding: 0 40px !important;
+    }
+    h2 {
+        font-size: 2rem;
+        margin-top: 1em;
+    }
+
+    #hero h1 {
+        font-size: 3rem;
+    }
+    #hero h3 {
+        font-size: 1.5rem;
+    }
+
+
+    #software {
+        padding-top: 2em !important; 
+        padding-bottom: 2em !important;
+        margin-top: 2em !important;
+    }
+    #software-download {
+        margin-top: 2em !important;
+    }
+    #example > div{
+        display: block;
+        margin-top: 2em;
+    }
+
+    #about {
+        display: flex; 
+        flex-direction: column;
+    }
+    #about-collaborators-license {
+        order: 2;
+    }
+     
+}
