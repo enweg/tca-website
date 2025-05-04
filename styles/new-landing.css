@@ -1,0 +1,106 @@
+.columns-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+.columns-4-left {
+    grid-column: 1 / 3;
+}
+.columns-4-right {
+    grid-column: 3 / 5;
+}
+.columns-4-1to3 {
+    grid-column: 1 / 4;
+}
+.columns-4-last {
+    grid-column: 4;
+}
+.columns-4-all {
+    grid-column: 1 / 5;
+}
+.list-horizontal {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+.btn {
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: var(--bs-gray-200) !important;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.btn:hover,
+.btn:focus {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15),
+        0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+.btn:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.07);
+    transform: translateY(0);
+}
+.btn.bg-blue {
+    background-color: var(--bs-blue) !important;
+    color: #ffffff !important;
+}
+.bold-text {
+    font-weight: 900 !important;
+}
+.highlight-text {
+    background-color: var(--bs-primary-bg-subtle);
+    padding: 0 0.2rem; 
+    border-radius: 0.4rem;
+}
+.section-divider {
+    grid-column: 2 / 4;
+    display: block;
+    height: 2px;
+    width: 50%;
+    background: var(--bs-gray-400);
+    margin: 5em auto;
+}
+li a {
+    color: #000000;
+}
+li a.blue {
+    color: var(--bs-blue);
+}
+
+#container-landingpage {
+    font-family: 'Source Sans Pro';
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+#hero {
+    margin-top: 4em;
+    /*margin-bottom: 7em;*/
+    grid-column: 1 / 4;
+}
+
+#hero h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    margin-bottom: 0 !important;
+}
+
+#hero h3 {
+    font-weight: 400;
+    margin-top: 0.5em !important;
+    margin-bottom: 1em !important;
+    font-size: 2rem;
+}
+
+#intro-text h5 {
+    font-weight: 900;
+    font-size: 1.2rem !important;
+}

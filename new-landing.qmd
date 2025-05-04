@@ -1,0 +1,117 @@
+---
+toc: false
+page-layout: custom
+navbar: false
+css: 
+    - /styles/new-landing.css
+include-before-body:
+    - text: |
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
+---
+
+```{=html}
+<div id="container-landingpage" class="columns-4">
+    <section id="hero">
+        <h1>Transmission Channel Analysis</h1>
+        <h3>Decompose your impulse response functions and gain insights not gained before.</h3>
+        <ul class="list-horizontal">
+            <li><a href="#" class="btn">Software</a></li>
+            <li><a href="#" class="btn">About</a></li>
+            <li><a href="#" class="btn bg-blue">Paper</a></li>
+        </ul>
+    </section>
+
+    <span class="section-divider"></span>
+
+    <section id="intro-text" class="columns-4 columns-4-all">
+        <div class="columns-4-left">
+            <p>
+                Impulse response functions only measure the total effect of a shock or policy. What if we wanted to know how this total effect comes to be, i.e. what if we wanted to understand how the shock or policy work? <span class="highlight-text">Transmission Channel Analysis allows for the decomposition of impulse response functions into the effects along channels.</span> Each channel corresponds to one mechanism behind the shock or the policy.
+            </p>
+        </div>
+        <div class="columns-4-right">
+            <h5>Want to learn more?</h5>
+            <p>
+                The best way to learn about about TCA is to check out the Wiki or the Examples. The Wiki covers the basics of TCA, while the Examples show hands-on how to use TCA in practice. Theoretical details are given in the paper.
+            </p>
+            <ul class="list-horizontal">
+                <li><a href="#">Wiki</a></li>
+                <li><a href="#">Examples</a></li>
+                <li><a href="#" class="blue">Paper</a></li>
+            </ul>
+        </div>
+    </section>
+    
+    <section id="software" class="columns-4 columns-4-all">
+        <div id="software-intro" class="columns-4-1to3">
+            <h2>Software</h2>
+            <p>
+                We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (as part of the Matlab package). See the documentation or the examples for each of them to learn more.
+            </p>
+            <ul class="list-horizontal">
+                <li><a href="#" class="btn bg-blue">Documentation</a></li>
+                <li><a href="#">Documentation</a></li>
+            </ul>
+        </div>
+        <div id="software-download" class="columns-4-last">
+            <h3 id="download-prompt">Download</h3>
+            <ul class="list-vertical">
+                <li><a href="#" class="a-decor">Julia</a></li>
+                <li><a href="#" class="a-decor">Matlab</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="example" class="columns-4 columns-4-all">
+        <h2>Example</h2>
+        <div class="img-container columns-4-left"></div>
+        <div class="columns-4-right">
+            <p>
+                Wegner et al (2024) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They are able to quantify the wage channel within a theoretical model and show that wages play a key role in the transmission of monetary policy.
+            </p>
+            <p>
+                Since TCA decomposes the impulse response function, Wegner et al (2024) are able to produce a decomposition plot, showing their results graphically.
+            </p>
+            <p>
+                Learn how to to do a similar analysis by reading the examples.
+            </p>
+            <p>
+                <a href="#" class="btn bg-blue">Examples</a>
+            </p>
+        </div>
+    </section>
+
+    <span class="section-divider"></span>
+
+    <section id="about" class="columns-4 columns-4-all">
+        <h2>About</h2>
+        <div id="about-collaborators">
+            <div class="collaborator">
+                <div class="img-collaborator"></div>
+                <p class="collaborator-name">Enrico Wegner</p>
+                <p class="collaborator-affiliation">Department of Quantitative Economics, School of Business and Economics Maastricht<p>
+            </div>
+            <div class="collaborator">
+                <div class="img-collaborator"></div>
+                <p class="collaborator-name">Enrico Wegner</p>
+                <p class="collaborator-affiliation">Department of Quantitative Economics, School of Business and Economics Maastricht<p>
+            </div>
+            <div class="collaborator">
+                <div class="img-collaborator"></div>
+                <p class="collaborator-name">Enrico Wegner</p>
+                <p class="collaborator-affiliation">Department of Quantitative Economics, School of Business and Economics Maastricht<p>
+            </div>
+            <div class="collaborator">
+                <div class="img-collaborator"></div>
+                <p class="collaborator-name">Enrico Wegner</p>
+                <p class="collaborator-affiliation">Department of Quantitative Economics, School of Business and Economics Maastricht<p>
+            </div>
+        </div>
+        <div id="about-cite"></div>
+        <div id="about-questions"></div>
+        <div id="about-license"></div>
+    </section>
+</div>
+```
