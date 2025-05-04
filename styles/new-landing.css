@@ -1,3 +1,24 @@
+.columns-6 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+}
+.columns-6-left {
+    grid-column: 2 / 5;
+}
+.columns-6-right {
+    grid-column: 4 / 6;
+}
+.columns-6-long {
+    grid-column: 2 / 5;
+}
+.columns-6-last {
+    grid-column: 5;
+}
+.columns-6-all {
+    grid-column: 2 / 6;
+}
+
 .columns-4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -9,7 +30,7 @@
 .columns-4-right {
     grid-column: 3 / 5;
 }
-.columns-4-1to3 {
+.columns-4-long {
     grid-column: 1 / 4;
 }
 .columns-4-last {
@@ -18,6 +39,7 @@
 .columns-4-all {
     grid-column: 1 / 5;
 }
+
 .list-horizontal {
     list-style: none;
     margin: 0;
@@ -58,7 +80,7 @@
     border-radius: 0.4rem;
 }
 .section-divider {
-    grid-column: 2 / 4;
+    grid-column: 3 / 5;
     display: block;
     height: 2px;
     width: 50%;
@@ -71,19 +93,24 @@ li a {
 li a.blue {
     color: var(--bs-blue);
 }
+h2 {
+    border-bottom: none !important;
+    margin-top: 2em;
+}
 
 #container-landingpage {
     font-family: 'Source Sans Pro';
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 16px;
+    /*max-width: 960px;*/
+    width: 100%;
+    /*margin: 0 auto;*/
+    padding: 0;
     box-sizing: border-box;
 }
 
 #hero {
     margin-top: 4em;
     /*margin-bottom: 7em;*/
-    grid-column: 1 / 4;
+    /*grid-column: 1 / 4;*/
 }
 
 #hero h1 {
@@ -103,4 +130,42 @@ li a.blue {
 #intro-text h5 {
     font-weight: 900;
     font-size: 1.2rem !important;
+}
+
+#software {
+    background-color: var(--bs-orange);
+    grid-column: 1 / 7;
+    padding: 5em 0em;
+}
+#software-intro h2 {
+    border-bottom: none !important;
+    margin-top: 0;
+}
+
+#software-download {
+    background-color: #000000;
+    color: var(--bs-orange);
+    padding: 1.5em; 
+    width: 100%;
+    border-radius: 0.5em; 
+}
+#software-download h4 {
+    font-weight: 900;
+    font-size: 1.3rem;
+    padding-top: 0;
+    margin-top: 0;
+}
+#software-download p {
+    font-weight: 100;
+}
+#software-download ul {
+    justify-content: center;
+    gap: 2rem;
+}
+#software-download a {
+    color: var(--bs-orange);
+}
+
+#example img {
+    max-width: 100%;
 }

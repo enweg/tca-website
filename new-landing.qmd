@@ -12,8 +12,8 @@ include-before-body:
 ---
 
 ```{=html}
-<div id="container-landingpage" class="columns-4">
-    <section id="hero">
+<div id="container-landingpage" class="columns-6">
+    <section id="hero" class="columns-6-long">
         <h1>Transmission Channel Analysis</h1>
         <h3>Decompose your impulse response functions and gain insights not gained before.</h3>
         <ul class="list-horizontal">
@@ -25,7 +25,7 @@ include-before-body:
 
     <span class="section-divider"></span>
 
-    <section id="intro-text" class="columns-4 columns-4-all">
+    <section id="intro-text" class="columns-4 columns-6-all">
         <div class="columns-4-left">
             <p>
                 Impulse response functions only measure the total effect of a shock or policy. What if we wanted to know how this total effect comes to be, i.e. what if we wanted to understand how the shock or policy work? <span class="highlight-text">Transmission Channel Analysis allows for the decomposition of impulse response functions into the effects along channels.</span> Each channel corresponds to one mechanism behind the shock or the policy.
@@ -44,29 +44,31 @@ include-before-body:
         </div>
     </section>
     
-    <section id="software" class="columns-4 columns-4-all">
-        <div id="software-intro" class="columns-4-1to3">
+    <section id="software" class="columns-6">
+        <div id="software-intro" class="columns-6-long">
             <h2>Software</h2>
             <p>
                 We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (as part of the Matlab package). See the documentation or the examples for each of them to learn more.
             </p>
             <ul class="list-horizontal">
                 <li><a href="#" class="btn bg-blue">Documentation</a></li>
-                <li><a href="#">Documentation</a></li>
+                <li><a href="#">Examples</a></li>
             </ul>
         </div>
-        <div id="software-download" class="columns-4-last">
-            <h3 id="download-prompt">Download</h3>
-            <ul class="list-vertical">
+        <div id="software-download" class="columns-6-last">
+            <h4>Get the TCA Packages</h4>
+            <p>Choose your preferred language and start analysing in minutes.</p>
+            <ul class="list-horizontal">
                 <li><a href="#" class="a-decor">Julia</a></li>
                 <li><a href="#" class="a-decor">Matlab</a></li>
             </ul>
         </div>
     </section>
 
-    <section id="example" class="columns-4 columns-4-all">
+    <section id="example" class="columns-4 columns-6-all">
         <h2>Example</h2>
-        <div class="img-container columns-4-left"></div>
+        <!--<div class="img-container columns-4-left"></div>-->
+        <img src="/assets/landing-example-fig-alt.png" class="columns-4-left" />
         <div class="columns-4-right">
             <p>
                 Wegner et al (2024) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They are able to quantify the wage channel within a theoretical model and show that wages play a key role in the transmission of monetary policy.
