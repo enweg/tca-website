@@ -1,6 +1,13 @@
 .columns-6 {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    /*grid-template-columns: repeat(6, 1fr);*/
+    grid-template-columns: 
+        1fr 
+        minmax(0, 250px)
+        minmax(0, 250px)
+        minmax(0, 250px)
+        minmax(0, 250px)
+        1fr;
     gap: 20px;
 }
 
@@ -26,7 +33,8 @@
 
 .columns-4 {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    /*grid-template-columns: repeat(4, 1fr);*/
+    grid-template-columns: 1fr minmax(0, 500px) minmax(0, 500px) 1fr;
     gap: 20px;
 }
 
@@ -240,7 +248,7 @@ h2::after {
     font-size: calc(0.9 * var(--bs-body-font-size));
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 900px) {
     .columns-6 {
         display: grid;
         grid-template-columns: 30px repeat(4, 1fr) 30px;
@@ -270,7 +278,7 @@ h2::after {
     }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 660px) {
     body {
         font-size: 16px;
     }
