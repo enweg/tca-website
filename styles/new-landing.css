@@ -170,6 +170,7 @@ h2::after {
     background-color: var(--bs-orange);
     grid-column: 1 / 7;
     padding: 5em 0em;
+    margin-top: 3em;
 }
 
 #software-intro h2 {
