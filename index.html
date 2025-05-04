@@ -64,8 +64,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -101,70 +99,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-faq-listings .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-faq-listings'] = new List('listing-faq-listings', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="./styles/landing.css">
-<link rel="stylesheet" href="./styles/faq.css">
+<link rel="stylesheet" href="./styles/new-landing.css">
 </head>
 
 <body class="fullcontent">
@@ -180,7 +119,6 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
 <!-- main -->
-<script type="text/javascript">document.getElementById("quarto-search").remove();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
@@ -188,263 +126,146 @@ window.Quarto = {
 
 
 
-<div id="hero">
-<section id="transmission-channel-analysis" class="level1">
-<h1>Transmission Channel Analysis</h1>
-<p>Decompose your impulse response functions, and gain insights not gained before.</p>
-<div id="quarto-search">
+<div id="container-landingpage" class="columns-6">
+    <section id="hero" class="columns-6-long">
+        <h1>Transmission Channel Analysis</h1>
+        <h3>Decompose your impulse response functions and gain insights not gained before.</h3>
+        <ul class="list-horizontal">
+            <li><a href="#software" class="btn">Software</a></li>
+            <li><a href="#about" class="btn">About</a></li>
+            <li><a href="https://arxiv.org/abs/2405.18987" class="btn bg-blue">Paper</a></li>
+        </ul>
+    </section>
 
-</div>
-<ul id="hero-nav">
-<li>
-<a href="./examples/matlab/dynare/index.html">Examples</a>
-</li>
-<li>
-<a href="./documentation/julia/index.html">Documentation</a>
-</li>
-<li>
-<a href="#faq">Wiki</a>
-</li>
-<li>
-<a href="#about">About</a>
-</li>
-<li id="hero-nav-paper">
-<a href="https://arxiv.org/abs/2405.18987">Paper</a>
-</li>
-</ul>
-</section>
-</div>
-<div id="learn-more">
-<p><span id="learn-more-text">Learn more</span> <span id="learn-more-arrow">↓</span></p>
-</div>
-<!--START OF OVERVIEW-->
-<div id="overview">
-<div id="overview-box">
-<div id="overview-title">
-<h1>
-Overview
-</h1>
-</div>
-<div id="overview-col2">
-<p>Impulse response functions only measure the total effect of a shock or policy. What if we wanted to know how this total effect comes to be, i.e.&nbsp;what if we wanted to understand how the shock or policy work? <strong>Transmission Channel Analysis allows for the decomposition of impulse response functions into the effects along channels.</strong> Each channel corresponds to one mechanism behind the shock or the policy.</p>
-<div id="overview-example">
-<div id="overview-example-text">
-<section id="example" class="level3">
-<h3 data-anchor-id="example">Example</h3>
-<p>Wegner et al (2024) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They are able to quantify the wage channel within a theoretical model and show that wages play a key role in the transmission of monetary policy.</p>
-<p>Since TCA decomposes the impulse response function, Wegner et al (2024) are able to produce a decomposition plot, showing their results graphically.</p>
-<p><a href="https://arxiv.org/abs/2405.18987" class="overview-btn" style="background-color: var(--bs-orange);">Check the Paper</a></p>
-</section>
-</div>
-<div id="overview-example-figure">
-<img src="assets/landing-example-fig-alt.png" alt="Decomposition of contractionary monetary policy shock">
-</div>
-</div>
-<!--END OF EXAMPLE-->
-<!--START OF INFO-->
-<div id="overview-info">
-<div id="overview-info-learn">
-<section id="learn-more-about-tca" class="level3">
-<h3 data-anchor-id="learn-more-about-tca">Learn more about TCA</h3>
-<p>The best way to learn about about TCA is to check out the Wiki or the tutorials. The Wiki covers the basics of TCA, while the tutorials give hands-on examples on how to use TCA in practice.</p>
-<p><a href="./index.html#faq" class="overview-btn">Wiki</a> <a href="./examples/matlab/dynare/index.html" class="overview-btn">Examples</a></p>
-</section>
-</div>
-<div id="overview-info-software">
-<section id="software" class="level3">
-<h3 data-anchor-id="software">Software</h3>
-<p>We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (as part of the Matlab package). See the documentation or the tutorials for each of them to learn more</p>
-<p><strong>Packages:</strong><span style="margin-right:3.7em"></span> <a href="https://github.com/enweg/TransmissionChannelAnalysis.jl" class="overview-btn">Julia</a> <a href="https://github.com/enweg/tca-matlab-toolbox" class="overview-btn">Matlab</a></p>
-<p><strong>Documentation:</strong> <span style="margin-right:1em"></span> <a href="./documentation/julia/index.html" class="overview-btn">Julia</a> <a href="./documentation/matlab/index.html" class="overview-btn">Matlab</a></p>
-</section>
-</div>
-</div>
-<!--END OF INFO-->
-</div>
-<!--END OF COLUMN 2-->
-</div>
-</div>
-<!--END OF OVERVIEW-->
-<!--START OF FAQ-->
-<div id="faq">
-<div id="faq-box">
-<!--START OF FAQ TITLE-->
-<div id="faq-title">
-<h1>
-Wiki
-</h1>
-</div>
-<!--END OF FAQ TITLE-->
-<div id="listing-faq-listings" class="quarto-listing quarto-listing-container-grid">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1738002830376" data-listing-reading-time-sort="3" data-listing-word-count-sort="471">
-<a href="./faq/topics/what-is-tca.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-What is Transmission Channel Analysis (TCA)?
-</h5>
-<div class="card-text listing-description">
-<p>In this article we describe (intuitively) what TCA is and what it does.</p>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1746266447876" data-listing-reading-time-sort="1" data-listing-word-count-sort="191">
-<a href="./faq/topics/how-to-implement.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-How can I implement TCA?
-</h5>
-<div class="card-text listing-description">
-<p>In this article we outline various ways to implement TCA, including software for Julia, Matlab, and Dynare.</p>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-listing-file-modified-sort="1738002854654" data-listing-reading-time-sort="1" data-listing-word-count-sort="153">
-<a href="./faq/topics/dynamic-form.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-What is the Dynamic Form?
-</h5>
-<div class="card-text listing-description">
-<p>TCA makes use of two forms (1) the dynamic form and (2) the systems form. In this article we describe what the dynamic form is.</p>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="3" data-listing-file-modified-sort="1738002864571" data-listing-reading-time-sort="2" data-listing-word-count-sort="286">
-<a href="./faq/topics/systems-form.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-What is the Systems Form?
-</h5>
-<div class="card-text listing-description">
-<p>TCA makes use of two forms (1) the dynamic form and (2) the systems form. In this article we describe what the systems form is.</p>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="4" data-listing-file-modified-sort="1738002881221" data-listing-reading-time-sort="8" data-listing-word-count-sort="1588">
-<a href="./faq/topics/graphical-form.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-What is the Associated Graph?
-</h5>
-<div class="card-text listing-description">
-<p>Transmission channels are best thought of as paths through the graph associted with the model. In this article we describe was the associated graph is.</p>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="5" data-listing-file-modified-sort="1746110515910" data-listing-reading-time-sort="3" data-listing-word-count-sort="584">
-<a href="./faq/topics/boolean-conditions.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-What are Boolean Conditions?
-</h5>
-<div class="card-text listing-description">
-<p>Transmission conditions are most effectively stated using Boolean conditions about which variables should and should not lie on the transmission channels.</p>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div>
-</div>
-</div>
-<!--END OF FAQ-->
-<!--START OF ABOUT-->
-<div id="about">
-<div id="about-box">
-<div id="about-title">
-<h1>
-About
-</h1>
-</div>
-<!--START OF ABOUT COL 2-->
-<div id="about-col2">
-<div class="about-col2-left">
-<!--START ABOUT COLLABORATORS-->
-<section id="collaborators" class="level3">
-<h3 data-anchor-id="collaborators">Collaborators</h3>
-<div class="collaborator">
-<div class="collaborator-img">
-<p><img src="assets/enrico.jpeg"></p>
-</div>
-<div class="collaborator-info">
-<h4>
-Enrico Wegner
-</h4>
-<p>
-Department of Quantitative Economics,<br>
-School of Business and Economics Maastricht
-</p>
-</div>
-</div>
-<div class="collaborator">
-<div class="collaborator-img">
-<p><img src="assets/default-person.png"></p>
-</div>
-<div class="collaborator-info">
-<h4>
-Lenard Lieb
-</h4>
-<p>
-Department of Macro, International, and Labour Economics,<br>
-School of Business and Economics Maastricht
-</p>
-</div>
-</div>
-<div class="collaborator">
-<div class="collaborator-img">
-<p><img src="assets/stephan.jpg"></p>
-</div>
-<div class="collaborator-info">
-<h4>
-Stephan Smeekes
-</h4>
-<p>
-Department of Quantitative Economics,<br>
-School of Business and Economics Maastricht
-</p>
-</div>
-</div>
-<div class="collaborator">
-<div class="collaborator-img">
-<p><img src="assets/ines.jpeg"></p>
-</div>
-<div class="collaborator-info">
-<h4>
-Ines Wilms
-</h4>
-<p>
-Department of Quantitative Economics,<br>
-School of Business and Economics Maastricht
-</p>
-</div>
-</div>
-<!--END ABOUT COLLABORATORS-->
-</section>
-<section id="how-do-i-cite-tca" class="level3">
-<h3 data-anchor-id="how-do-i-cite-tca">How do I cite TCA?</h3>
-<p>If you use TCA or any of the packages in your research, we would appreciate if you could cite the original paper. This is currently the best way.</p>
-<div id="about-how-to-cite">
+    <span class="section-divider"></span>
+
+    <section id="intro-text" class="columns-4 columns-6-all">
+        <div class="columns-4-left">
+            <p>
+                Impulse response functions only measure the total effect of a shock or policy. What if we wanted to know how this total effect comes to be, i.e.&nbsp;what if we wanted to understand how the shock or policy work?&nbsp;<span class="highlight-text">Transmission Channel Analysis allows for the decomposition of impulse response functions into the effects along channels.</span>&nbsp;Each channel corresponds to one mechanism behind the shock or the policy.
+            </p>
+        </div>
+        <div class="columns-4-right">
+            <h5>Want to learn more?</h5>
+            <p>
+                The best way to learn about about TCA is to check out the Wiki or the Examples. The Wiki covers the basics of TCA, while the Examples show hands-on how to use TCA in practice. Theoretical details are given in the paper.
+            </p>
+            <ul class="list-horizontal">
+                <li><a href="./faq/index.html">Wiki</a></li>
+                <li><a href="./examples/matlab/dynare/index.html">Examples</a></li>
+                <li><a href="https://arxiv.org/abs/2405.18987" class="blue">Paper</a></li>
+            </ul>
+        </div>
+    </section>
+    
+    <section id="software" class="columns-6">
+        <div id="software-intro" class="columns-6-long">
+            <h2>Software</h2>
+            <p>
+                We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (as part of the Matlab package). See the documentation or the examples for each of them to learn more.
+            </p>
+            <ul class="list-horizontal">
+                <li><a href="./documentation/julia/index.html" class="btn bg-blue">Documentation</a></li>
+                <li><a href="./examples/matlab/dynare/index.html">Examples</a></li>
+            </ul>
+        </div>
+        <div id="software-download" class="columns-6-last">
+            <h4>Get the TCA Packages</h4>
+            <p>Choose your preferred language and start analysing in minutes.</p>
+            <ul class="list-horizontal">
+                <li><a href="https://github.com/enweg/TransmissionChannelAnalysis.jl" class="a-decor">Julia</a></li>
+                <li><a href="https://github.com/enweg/tca-matlab-toolbox" class="a-decor">Matlab</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="example" class="columns-4 columns-6-all">
+        <h2>Example</h2>
+        <!--<div class="img-container columns-4-left"></div>-->
+        <img src="./assets/landing-example-fig-alt.png" class="columns-4-left">
+        <div class="columns-4-right">
+            <p>
+                Wegner et al (2024) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They are able to quantify the wage channel within a theoretical model and show that wages play a key role in the transmission of monetary policy.
+            </p>
+            <p>
+                Since TCA decomposes the impulse response function, Wegner et al (2024) are able to produce a decomposition plot, showing their results graphically.
+            </p>
+            <p>
+                Learn how to to do a similar analysis by reading the examples.
+            </p>
+            <p>
+                <a href="./examples/matlab/dynare/index.html" class="btn bg-blue">Examples</a>
+            </p>
+        </div>
+    </section>
+
+    <span class="section-divider"></span>
+
+    <section id="about" class="columns-4 columns-6-all">
+        <h2>About</h2>
+        <div id="about-collaborators-license" class="columns-4-left">
+            <h3>Collaborators</h3>
+            <div class="collaborator">
+                <div class="collaborator-img">
+                    <img src="assets/enrico.jpeg">
+                </div>
+                <div class="collaborator-info">
+                    <h4>Enrico Wegner</h4>
+                    <p>
+                    Department of Quantitative Economics,  
+                    School of Business and Economics Maastricht
+                    </p>
+                </div>
+            </div>
+            <div class="collaborator">
+                <div class="collaborator-img">
+                    <img src="assets/default-person.png">
+                </div>
+                <div class="collaborator-info">
+                    <h4>Lenard Lieb</h4>
+                    <p>
+                        Department of Macro, International, and Labour Economics,  
+                        School of Business and Economics Maastricht
+                    </p>
+                </div>
+            </div>
+            <div class="collaborator">
+                <div class="collaborator-img">
+                    <img src="assets/stephan.jpg">
+                </div>
+                <div class="collaborator-info">
+                    <h4>Stephan Smeekes</h4>
+                    <p>
+                        Department of Quantitative Economics,  
+                        School of Business and Economics Maastricht
+                    </p>
+                </div>
+            </div>
+            <div class="collaborator">
+                <div class="collaborator-img">
+                    <img src="assets/ines.jpeg">
+                </div>
+                <div class="collaborator-info">
+                    <h4>Ines Wilms</h4>
+                    <p>
+                        Department of Quantitative Economics,  
+                        School of Business and Economics Maastricht
+                    </p>
+                </div>
+            </div>
+            <h3>License</h3>
+            <p>Unless otherwise stated, all code on this website is published under the <a href="https://github.com/enweg/tca-website/blob/main/LICENSE">MIT License</a></p> 
+        </div>
+        <div id="about-questions-cite" class="columns-4-right">
+            <h3>Questions or comments?</h3>
+            <p>
+                For questions are comments regarding any of the content on this website, please open a <span class="bold-text">GitHub issue</span>. For questions or comments related to the paper, please get in contact with <span class="bold-text">Enrico Wegner</span> via <span class="bold-text">e.wegner@maastrichtuniversity.nl</span>
+            </p>
+            <a href="https://github.com/enweg/tca-website/issues" class="btn bg-blue">Open an Issue</a>
+            <h3>Cite</h3>
+            <p>
+                If you use TCA or any of the packages in your research, we would appreciate if you would cite the original paper. This is currently the best way.
+            </p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode tex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>@misc{wegner2024transmissionchannelanalysisdynamic,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  title={Transmission Channel Analysis in Dynamic Models}, </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  author={Enrico Wegner and Lenard Lieb and Stephan Smeekes and Ines Wilms},</span>
@@ -454,37 +275,9 @@ School of Business and Economics Maastricht
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  primaryClass={econ.EM},</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  url={https://arxiv.org/abs/2405.18987</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>} </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+        </div>
+    </section>
 </div>
-</section>
-</div>
-<div class="about-col2-right">
-<section id="questions-or-comments" class="level3">
-<h3 data-anchor-id="questions-or-comments">Questions or Comments?</h3>
-<ul>
-<li>For questions or comments regarding any of the content on this website, please use the <strong>GitHub issue functionality</strong>.</li>
-</ul>
-<p><a href="https://github.com/enweg/tca-website/issues" class="overview-btn" style="display:block;margin:auto;width:fit-content;">Open an Issue</a></p>
-<ul>
-<li>For questions or comments related to the paper, please get in contact with <strong>Enrico Wegner via e.wegner@maastrichtuniversity.nl</strong></li>
-</ul>
-</section>
-<section id="license" class="level3">
-<h3 data-anchor-id="license">License</h3>
-<p>Unless otherwise stated, all code on this website is published under the MIT License</p>
-<div style="font-size:0.7rem">
-<p>Copyright (c) 2025 Lenard Lieb, Stephan Smeekes, Ines Wilms, Enrico Wegner</p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-</div>
-</section>
-</div>
-</div>
-<!--END OF ABOUT COL 2-->
-</div>
-</div>
-<!--END OF ABOUT-->
-
 
 
 
