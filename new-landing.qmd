@@ -17,9 +17,9 @@ include-before-body:
         <h1>Transmission Channel Analysis</h1>
         <h3>Decompose your impulse response functions and gain insights not gained before.</h3>
         <ul class="list-horizontal">
-            <li><a href="#" class="btn">Software</a></li>
-            <li><a href="#" class="btn">About</a></li>
-            <li><a href="#" class="btn bg-blue">Paper</a></li>
+            <li><a href="#software" class="btn">Software</a></li>
+            <li><a href="#about" class="btn">About</a></li>
+            <li><a href="https://arxiv.org/abs/2405.18987" class="btn bg-blue">Paper</a></li>
         </ul>
     </section>
 
@@ -37,9 +37,9 @@ include-before-body:
                 The best way to learn about about TCA is to check out the Wiki or the Examples. The Wiki covers the basics of TCA, while the Examples show hands-on how to use TCA in practice. Theoretical details are given in the paper.
             </p>
             <ul class="list-horizontal">
-                <li><a href="#">Wiki</a></li>
-                <li><a href="#">Examples</a></li>
-                <li><a href="#" class="blue">Paper</a></li>
+                <li><a href="./faq/index.html">Wiki</a></li>
+                <li><a href="./examples/matlab/dynare/index.html">Examples</a></li>
+                <li><a href="https://arxiv.org/abs/2405.18987" class="blue">Paper</a></li>
             </ul>
         </div>
     </section>
@@ -51,16 +51,16 @@ include-before-body:
                 We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (as part of the Matlab package). See the documentation or the examples for each of them to learn more.
             </p>
             <ul class="list-horizontal">
-                <li><a href="#" class="btn bg-blue">Documentation</a></li>
-                <li><a href="#">Examples</a></li>
+                <li><a href="./documentation/julia/index.qmd" class="btn bg-blue">Documentation</a></li>
+                <li><a href="./examples/matlab/dynare/index.html">Examples</a></li>
             </ul>
         </div>
         <div id="software-download" class="columns-6-last">
             <h4>Get the TCA Packages</h4>
             <p>Choose your preferred language and start analysing in minutes.</p>
             <ul class="list-horizontal">
-                <li><a href="#" class="a-decor">Julia</a></li>
-                <li><a href="#" class="a-decor">Matlab</a></li>
+                <li><a href="https://github.com/enweg/TransmissionChannelAnalysis.jl" class="a-decor">Julia</a></li>
+                <li><a href="https://github.com/enweg/tca-matlab-toolbox" class="a-decor">Matlab</a></li>
             </ul>
         </div>
     </section>
@@ -80,7 +80,7 @@ include-before-body:
                 Learn how to to do a similar analysis by reading the examples.
             </p>
             <p>
-                <a href="#" class="btn bg-blue">Examples</a>
+                <a href="./examples/matlab/dynare/index.html" class="btn bg-blue">Examples</a>
             </p>
         </div>
     </section>
@@ -140,14 +140,14 @@ include-before-body:
                 </div>
             </div>
             <h3>License</h3>
-            <p>Unless otherwise stated, all code on this website is published under the <a href="#">MIT License</a></p> 
+            <p>Unless otherwise stated, all code on this website is published under the <a href="https://github.com/enweg/tca-website/blob/main/LICENSE">MIT License</a></p> 
         </div>
         <div id="about-questions-cite" class="columns-4-right">
             <h3>Questions or comments?</h3>
             <p>
                 For questions are comments regarding any of the content on this website, please open a <span class="bold-text">GitHub issue</span>. For questions or comments related to the paper, please get in contact with <span class="bold-text">Enrico Wegner</span> via <span class="bold-text">e.wegner@maastrichtuniversity.nl</span>
             </p>
-            <a href="#" class="btn bg-blue">Open an Issue</a>
+            <a href="https://github.com/enweg/tca-website/issues" class="btn bg-blue">Open an Issue</a>
             <h3>Cite</h3>
             <p>
                 If you use TCA or any of the packages in your research, we would appreciate if you would cite the original paper. This is currently the best way.
