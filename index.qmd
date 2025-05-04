@@ -183,7 +183,7 @@ School of Business and Economics Maastricht</p>
 
 ### How do I cite TCA?
 
-If you use TCA or any of the packages in your research, we would appreciate if you could cite the original paper. This is currently the best way.
+If you use TCA or any of the packages in your research, we would appreciate if you would cite the original paper. This is currently the best way.
 
 ::: {#about-how-to-cite}
 ```{.tex}

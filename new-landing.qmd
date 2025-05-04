@@ -87,33 +87,87 @@ include-before-body:
 
     <span class="section-divider"></span>
 
-    <section id="about" class="columns-4 columns-4-all">
+    <section id="about" class="columns-4 columns-6-all">
         <h2>About</h2>
-        <div id="about-collaborators">
+        <div id="about-collaborators-license" class="columns-4-left">
+            <h3>Collaborators</h3>
             <div class="collaborator">
-                <div class="img-collaborator"></div>
-                <p class="collaborator-name">Enrico Wegner</p>
-                <p class="collaborator-affiliation">Department of Quantitative Economics, School of Business and Economics Maastricht<p>
+                <div class="collaborator-img">
+                    <img src="assets/enrico.jpeg">
+                </div>
+                <div class="collaborator-info">
+                    <h4>Enrico Wegner</h4>
+                    <p>
+                    Department of Quantitative Economics,  
+                    School of Business and Economics Maastricht
+                    </p>
+                </div>
             </div>
             <div class="collaborator">
-                <div class="img-collaborator"></div>
-                <p class="collaborator-name">Enrico Wegner</p>
-                <p class="collaborator-affiliation">Department of Quantitative Economics, School of Business and Economics Maastricht<p>
+                <div class="collaborator-img">
+                    <img src="assets/default-person.png">
+                </div>
+                <div class="collaborator-info">
+                    <h4>Lenard Lieb</h4>
+                    <p>
+                        Department of Macro, International, and Labour Economics,  
+                        School of Business and Economics Maastricht
+                    </p>
+                </div>
             </div>
             <div class="collaborator">
-                <div class="img-collaborator"></div>
-                <p class="collaborator-name">Enrico Wegner</p>
-                <p class="collaborator-affiliation">Department of Quantitative Economics, School of Business and Economics Maastricht<p>
+                <div class="collaborator-img">
+                    <img src="assets/stephan.jpg">
+                </div>
+                <div class="collaborator-info">
+                    <h4>Stephan Smeekes</h4>
+                    <p>
+                        Department of Quantitative Economics,  
+                        School of Business and Economics Maastricht
+                    </p>
+                </div>
             </div>
             <div class="collaborator">
-                <div class="img-collaborator"></div>
-                <p class="collaborator-name">Enrico Wegner</p>
-                <p class="collaborator-affiliation">Department of Quantitative Economics, School of Business and Economics Maastricht<p>
+                <div class="collaborator-img">
+                    <img src="assets/ines.jpeg">
+                </div>
+                <div class="collaborator-info">
+                    <h4>Ines Wilms</h4>
+                    <p>
+                        Department of Quantitative Economics,  
+                        School of Business and Economics Maastricht
+                    </p>
+                </div>
             </div>
+            <h3>License</h3>
+            <p>Unless otherwise stated, all code on this website is published under the <a href="#">MIT License</a></p> 
         </div>
-        <div id="about-cite"></div>
-        <div id="about-questions"></div>
-        <div id="about-license"></div>
+        <div id="about-questions-cite" class="columns-4-right">
+            <h3>Questions or comments?</h3>
+            <p>
+                For questions are comments regarding any of the content on this website, please open a <span class="bold-text">GitHub issue</span>. For questions or comments related to the paper, please get in contact with <span class="bold-text">Enrico Wegner</span> via <span class="bold-text">e.wegner@maastrichtuniversity.nl</span>
+            </p>
+            <a href="#" class="btn bg-blue">Open an Issue</a>
+            <h3>Cite</h3>
+            <p>
+                If you use TCA or any of the packages in your research, we would appreciate if you would cite the original paper. This is currently the best way.
+            </p>
+```
+
+```{.tex}
+@misc{wegner2024transmissionchannelanalysisdynamic,
+  title={Transmission Channel Analysis in Dynamic Models}, 
+  author={Enrico Wegner and Lenard Lieb and Stephan Smeekes and Ines Wilms},
+  year={2024},
+  eprint={2405.18987},
+  archivePrefix={arXiv},
+  primaryClass={econ.EM},
+  url={https://arxiv.org/abs/2405.18987
+} 
+```
+
+```{=html}
+        </div>
     </section>
 </div>
 ```
