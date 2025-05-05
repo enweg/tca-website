@@ -84,7 +84,7 @@ website:
             href: "examples/matlab/svar/index.qmd"
           - text: TCA in LPs
             href: "examples/matlab/lp/index.qmd"
-          - text: TCA in Dynare
+          - text: TCA in DSGEs
             href: "examples/matlab/dynare/index.qmd"
 
 format:

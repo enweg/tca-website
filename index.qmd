@@ -15,11 +15,11 @@ include-before-body:
 <div id="container-landingpage" class="columns-6">
     <section id="hero" class="columns-6-long">
         <h1>Transmission Channel Analysis</h1>
-        <h3>Decompose your impulse response functions and gain insights not gained before.</h3>
+        <h3>Decompose impulse responses to better understand the underlying economic mechanisms.</h3>
         <ul class="list-horizontal">
             <li><a href="#software" class="btn">Software</a></li>
             <li><a href="#about" class="btn">About</a></li>
-            <li><a href="https://arxiv.org/abs/2405.18987" class="btn bg-blue">Paper</a></li>
+            <li><a target="_blank" href="https://arxiv.org/abs/2405.18987" class="btn bg-blue">Paper</a></li>
         </ul>
     </section>
 
@@ -37,9 +37,9 @@ include-before-body:
                 The best way to learn about about TCA is to check out the Wiki or the Examples. The Wiki covers the basics of TCA, while the Examples show hands-on how to use TCA in practice. Theoretical details are given in the paper.
             </p>
             <ul class="list-horizontal">
-                <li><a href="./faq/index.html">Wiki</a></li>
-                <li><a href="./examples/matlab/dynare/index.html">Examples</a></li>
-                <li><a href="https://arxiv.org/abs/2405.18987" class="blue">Paper</a></li>
+                <li><a target="_blank" href="./faq/index.html">Wiki</a></li>
+                <li><a target="_blank" href="./examples/matlab/dynare/index.html">Examples</a></li>
+                <li><a target="_blank" href="https://arxiv.org/abs/2405.18987" class="blue">Paper</a></li>
             </ul>
         </div>
     </section>
@@ -51,16 +51,16 @@ include-before-body:
                 We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (as part of the Matlab package). See the documentation or the examples for each of them to learn more.
             </p>
             <ul class="list-horizontal">
-                <li><a href="./documentation/julia/index.qmd" class="btn bg-blue">Documentation</a></li>
-                <li><a href="./examples/matlab/dynare/index.html">Examples</a></li>
+                <li><a target="_blank" href="./documentation/julia/index.qmd" class="btn bg-blue">Documentation</a></li>
+                <li><a target="_blank" href="./examples/matlab/dynare/index.html">Examples</a></li>
             </ul>
         </div>
         <div id="software-download" class="columns-6-last">
             <h4>Get the TCA Packages</h4>
-            <p>Choose your preferred language and start analysing in minutes.</p>
+            <p>Choose your preferred language and start analysing transmission channels.</p>
             <ul class="list-horizontal">
-                <li><a href="https://github.com/enweg/TransmissionChannelAnalysis.jl" class="a-decor">Julia</a></li>
-                <li><a href="https://github.com/enweg/tca-matlab-toolbox" class="a-decor">Matlab</a></li>
+                <li><a target="_blank" href="https://github.com/enweg/TransmissionChannelAnalysis.jl" class="a-decor">Julia</a></li>
+                <li><a target="_blank" href="https://github.com/enweg/tca-matlab-toolbox" class="a-decor">Matlab</a></li>
             </ul>
         </div>
     </section>
@@ -71,16 +71,16 @@ include-before-body:
         <img src="/assets/landing-example-fig-alt.png" class="columns-4-left" />
         <div class="columns-4-right">
             <p>
-                Wegner et al (2024) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They are able to quantify the wage channel within a theoretical model and show that wages play a key role in the transmission of monetary policy.
+                Wegner et al (2025) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They quantify the wage channel within a theoretical model and show that wages play a key role in the transmission of monetary policy.
             </p>
             <p>
-                Since TCA decomposes the impulse response function, Wegner et al (2024) are able to produce a decomposition plot, showing their results graphically.
+                Wegner et al (2025) produce a decomposition plot (shown to the left) that graphically illustrates the decomposition of the impulse response function.
             </p>
             <p>
-                Learn how to to do a similar analysis by reading the examples.
+                Learn how to do a similar analysis by reading the examples.
             </p>
             <p>
-                <a href="./examples/matlab/dynare/index.html" class="btn bg-blue">Examples</a>
+                <a target="_blank" href="./examples/matlab/dynare/index.html" class="btn bg-blue">Examples</a>
             </p>
         </div>
     </section>
@@ -140,14 +140,14 @@ include-before-body:
                 </div>
             </div>
             <h3>License</h3>
-            <p>Unless otherwise stated, all code on this website is published under the <a href="https://github.com/enweg/tca-website/blob/main/LICENSE">MIT License</a></p> 
+            <p>Unless otherwise stated, all code on this website is published under the <a target="_blank" href="https://github.com/enweg/tca-website/blob/main/LICENSE">MIT License</a></p> 
         </div>
         <div id="about-questions-cite" class="columns-4-right">
             <h3>Questions or comments?</h3>
             <p>
-                For questions are comments regarding any of the content on this website, please open a <span class="bold-text">GitHub issue</span>. For questions or comments related to the paper, please get in contact with <span class="bold-text">Enrico Wegner</span> via <span class="bold-text">e.wegner@maastrichtuniversity.nl</span>
+                For questions or comments regarding any of the content on this website, please open a <span class="bold-text">GitHub issue</span>. For questions or comments related to the paper, please get in contact with <span class="bold-text">Enrico Wegner</span> via <span class="bold-text">e.wegner@maastrichtuniversity.nl</span>
             </p>
-            <a href="https://github.com/enweg/tca-website/issues" class="btn bg-blue">Open an Issue</a>
+            <a target="_blank" href="https://github.com/enweg/tca-website/issues" class="btn bg-blue">Open an Issue</a>
             <h3>Cite</h3>
             <p>
                 If you use TCA or any of the packages in your research, we would appreciate if you would cite the original paper. This is currently the best way.
@@ -155,10 +155,10 @@ include-before-body:
 ```
 
 ```{.tex}
-@misc{wegner2024transmissionchannelanalysisdynamic,
+@misc{wegner2025transmissionchannelanalysisdynamic,
   title={Transmission Channel Analysis in Dynamic Models}, 
   author={Enrico Wegner and Lenard Lieb and Stephan Smeekes and Ines Wilms},
-  year={2024},
+  year={2025},
   eprint={2405.18987},
   archivePrefix={arXiv},
   primaryClass={econ.EM},
