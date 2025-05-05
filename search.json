@@ -16,11 +16,11 @@
     "href": "examples/matlab/dynare/index.html",
     "title": "TCA in DSGEs using Dynare",
     "section": "",
-    "text": "In this example, we replicate the results from Section 5.3 of Wegner et al. (2024). Before we begin, download both the code and the Dynare model. Make sure to unzip the Dynare model, and place both the sw2007.m script and the SW2007 folder into the same directory.\nTo ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:",
+    "text": "In this example, we replicate the results from Section 5.3 of Wegner et al. (2025). Before we begin, download both the code and the Dynare model. Make sure to unzip the Dynare model, and place both the sw2007.m script and the SW2007 folder into the same directory.\nTo ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:",
     "crumbs": [
       "Home",
       "Matlab",
-      "TCA in Dynare"
+      "TCA in DSGEs"
     ]
   },
   {
@@ -28,11 +28,11 @@
     "href": "examples/matlab/dynare/index.html#computing-the-linearised-dsge-using-dynare",
     "title": "TCA in DSGEs using Dynare",
     "section": "Computing the Linearised DSGE using Dynare",
-    "text": "Computing the Linearised DSGE using Dynare\nSection 5.3 of Wegner et al. (2024) studies the wage channel of a contractionary monetary policy shock using the DSGE model of Smets and Wouters (2007). To analyse this channel, we first obtain the model’s first-order approximation using Dynare. Follow Dynare’s official installation instructions if necessary.\nTo use Dynare and the TCA Toolbox, we first add both to the Matlab path. You will likely need to adjust the file paths in the quotation marks:\naddpath(\"~/Documents/repos/tca-matlab-toolbox/\")\naddpath(\"~/Documents/repos/tca-matlab-toolbox/models/\")\naddpath(\"~/Documents/repos/tca-matlab-toolbox/plotting/\")\naddpath(\"/Applications/Dynare/6.3-arm64/matlab/\")\nAssuming the SW2007 folder is in the current directory, we can now generate the first-order approximation:\ncd SW2007;\ndynare SW2007;\ncd ..;\nclc;",
+    "text": "Computing the Linearised DSGE using Dynare\nSection 5.3 of Wegner et al. (2025) studies the wage channel of a contractionary monetary policy shock using the DSGE model of Smets and Wouters (2007). To analyse this channel, we first obtain the model’s first-order approximation using Dynare. Follow Dynare’s official installation instructions if necessary.\nTo use Dynare and the TCA Toolbox, we first add both to the Matlab path. You will likely need to adjust the file paths in the quotation marks:\naddpath(\"~/Documents/repos/tca-matlab-toolbox/\")\naddpath(\"~/Documents/repos/tca-matlab-toolbox/models/\")\naddpath(\"~/Documents/repos/tca-matlab-toolbox/plotting/\")\naddpath(\"/Applications/Dynare/6.3-arm64/matlab/\")\nAssuming the SW2007 folder is in the current directory, we can now generate the first-order approximation:\ncd SW2007;\ndynare SW2007;\ncd ..;\nclc;",
     "crumbs": [
       "Home",
       "Matlab",
-      "TCA in Dynare"
+      "TCA in DSGEs"
     ]
   },
   {
@@ -44,7 +44,7 @@
     "crumbs": [
       "Home",
       "Matlab",
-      "TCA in Dynare"
+      "TCA in DSGEs"
     ]
   },
   {
@@ -52,11 +52,11 @@
     "href": "examples/matlab/dynare/index.html#defining-transmission-channels",
     "title": "TCA in DSGEs using Dynare",
     "section": "Defining Transmission Channels",
-    "text": "Defining Transmission Channels\nAt this stage, we have the DSGE’s first-order solution and the IRFs. We can now define the transmission channels of interest.\nFirst, define the transmission matrix. Following Wegner et al. (2024), we order variables so that interest rates (robs) come first, wages (dw) second, and inflation (pinfobs) last. The ordering of variables between wages and inflation does not matter1:\norder = {'robs', 'dw', 'labobs', 'dc', 'dinve', 'dy', 'pinfobs'};\nNext, we define the transmission channels. The demand channel is defined as the effect that does not pass through wages (dw) during any period from 0 to 20. We define this channel using the notThrough function:\nchannelDemand = model.notThrough('dw', 0:maxHorizon, order);\nThe wage channel, capturing any effect through wages in at least one period, is the complement:\nchannelWage = ~channelDemand;",
+    "text": "Defining Transmission Channels\nAt this stage, we have the DSGE’s first-order solution and the IRFs. We can now define the transmission channels of interest.\nFirst, define the transmission matrix. Following Wegner et al. (2025), we order variables so that interest rates (robs) come first, wages (dw) second, and inflation (pinfobs) last. The ordering of variables between wages and inflation does not matter1:\norder = {'robs', 'dw', 'labobs', 'dc', 'dinve', 'dy', 'pinfobs'};\nNext, we define the transmission channels. The demand channel is defined as the effect that does not pass through wages (dw) during any period from 0 to 20. We define this channel using the notThrough function:\nchannelDemand = model.notThrough('dw', 0:maxHorizon, order);\nThe wage channel, capturing any effect through wages in at least one period, is the complement:\nchannelWage = ~channelDemand;",
     "crumbs": [
       "Home",
       "Matlab",
-      "TCA in Dynare"
+      "TCA in DSGEs"
     ]
   },
   {
@@ -68,7 +68,7 @@
     "crumbs": [
       "Home",
       "Matlab",
-      "TCA in Dynare"
+      "TCA in DSGEs"
     ]
   },
   {
@@ -80,7 +80,7 @@
     "crumbs": [
       "Home",
       "Matlab",
-      "TCA in Dynare"
+      "TCA in DSGEs"
     ]
   },
   {
@@ -88,11 +88,11 @@
     "href": "examples/matlab/dynare/index.html#using-an-alternative-transmission-matrix",
     "title": "TCA in DSGEs using Dynare",
     "section": "Using an Alternative Transmission Matrix",
-    "text": "Using an Alternative Transmission Matrix\nWegner et al. (2024) also explore an alternative ordering, where wages are placed second to last. We define the new ordering as:\norder = {'robs', 'labobs', 'dc', 'dinve', 'dy', 'dw', 'pinfobs'};\nTransmission channels and effects are then redefined and recomputed:\n% Defining the channel again.\nchannelDemandAlt = model.notThrough('dw', 0:maxHorizon, order);\nchannelWageAlt = ~channelDemandAlt;\n% Computing the alternative effects\neffectDemandAlt = model.transmission('em', channelDemandAlt, order, maxHorizon);\neffectWageAlt = model.transmission('em', channelWageAlt, order, maxHorizon);\nThe decomposition plot for the alternative ordering can be created as follows:\nchannelNames = [\"Demand Channel\", \"Wage Channel\"];\nidxInflation = model.getVariableIdx(\"pinfobs\");\nidxShock = model.getShockIdx('em');\ncellChannelEffectsAlt = {effectDemandAlt, effectWageAlt};\nfig = plotDecomposition(idxInflation, irfs(:, idxShock, :), cellChannelEffectsAlt, channelNames);\nThe resulting plot mirrors the previous setup, with the only difference being the transmission matrix. The black scatter-line and the blue and red bars retain the same meaning as in the previous plot: the black scatter-line shows the total effect, the blue bars represent the demand channel, and the red bars represent the wage channel.\n\n\n\n\n\n\nFigure 2: Alternative decomposition of the effect of a contractionary monetary policy shock on inflation into the effect through a demand and a wage channel using the alternative transmission matrix.",
+    "text": "Using an Alternative Transmission Matrix\nWegner et al. (2025) also explore an alternative ordering, where wages are placed second to last. We define the new ordering as:\norder = {'robs', 'labobs', 'dc', 'dinve', 'dy', 'dw', 'pinfobs'};\nTransmission channels and effects are then redefined and recomputed:\n% Defining the channel again.\nchannelDemandAlt = model.notThrough('dw', 0:maxHorizon, order);\nchannelWageAlt = ~channelDemandAlt;\n% Computing the alternative effects\neffectDemandAlt = model.transmission('em', channelDemandAlt, order, maxHorizon);\neffectWageAlt = model.transmission('em', channelWageAlt, order, maxHorizon);\nThe decomposition plot for the alternative ordering can be created as follows:\nchannelNames = [\"Demand Channel\", \"Wage Channel\"];\nidxInflation = model.getVariableIdx(\"pinfobs\");\nidxShock = model.getShockIdx('em');\ncellChannelEffectsAlt = {effectDemandAlt, effectWageAlt};\nfig = plotDecomposition(idxInflation, irfs(:, idxShock, :), cellChannelEffectsAlt, channelNames);\nThe resulting plot mirrors the previous setup, with the only difference being the transmission matrix. The black scatter-line and the blue and red bars retain the same meaning as in the previous plot: the black scatter-line shows the total effect, the blue bars represent the demand channel, and the red bars represent the wage channel.\n\n\n\n\n\n\nFigure 2: Alternative decomposition of the effect of a contractionary monetary policy shock on inflation into the effect through a demand and a wage channel using the alternative transmission matrix.",
     "crumbs": [
       "Home",
       "Matlab",
-      "TCA in Dynare"
+      "TCA in DSGEs"
     ]
   },
   {
@@ -104,7 +104,7 @@
     "crumbs": [
       "Home",
       "Matlab",
-      "TCA in Dynare"
+      "TCA in DSGEs"
     ]
   },
   {
@@ -112,11 +112,11 @@
     "href": "examples/matlab/dynare/index.html#footnotes",
     "title": "TCA in DSGEs using Dynare",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nSee Wegner et al. (2024) for the theoretical justification.↩︎",
+    "text": "Footnotes\n\n\nSee Wegner et al. (2025) for the theoretical justification.↩︎",
     "crumbs": [
       "Home",
       "Matlab",
-      "TCA in Dynare"
+      "TCA in DSGEs"
     ]
   },
   {
@@ -148,7 +148,7 @@
     "href": "faq/topics/what-is-tca.html#what-does-tca-do-intuitively",
     "title": "What is Transmission Channel Analysis (TCA)?",
     "section": "What does TCA do (intuitively)?",
-    "text": "What does TCA do (intuitively)?\nThink about what happens after a contractionary monetary policy shock. The shock will increase the policy rate. Because the policy rate indirectly determines other rates, corporate bond rates will increase. Higher corporate bond rates, on the other hand, increase the funding costs of firms, but also increases the incentive to invest in corporate bonds. The former will most likely lead to lower capital investments, while the latter will lead to an increase in savings. Either of these effects will decrease aggregate demand and will thus lead to downward pressure on prices.\nRather than describing the shocks propagation in words, we could have also used a graphical representation like the following.\n\n\n\n\n\n\nflowchart LR\n  A[Monetary policy shock] --&gt; B[Policy rate]\n  B --&gt; C[Corporate bond rates]\n  C --&gt; D[Funding cost of firms]\n  C --&gt; E[Incentive to save]\n  D --&gt; F[Capital investments]\n  E --&gt; G[Savings]\n  F --&gt; H[Aggregate demand]\n  G --&gt; H\n  H --&gt; I[Prices]\n\n\n\n\n\n\n\n\nThis graphical representation is often more intuitive since it directly shows the various paths that the shock can take to arrive at prices. Each of these paths represents one transmission channel – or machanism – behind the shock’s total effect on prices.\nTransmission Channel Analysis uses the fact that graphs are often more intuitive and defines dynamic models in terms of graphs2, similar to the one above, but now including the time dimension. Channels – descriptions of how a shock propagates through the system to a specific variable – are then defined as paths through the graph. By tracing the effect along a subcollection of paths, i.e. by tracing the effect of the shock but ignoring some of the paths, various new insights can be gained. Moreover, by keeping track of the effects when moving from one node to another, TCA can quantify the effect along all transmission channels and can thus fully decompose the total effect.\n\n\n\n\n\n\nWant to know more?\n\n\n\nMore information about what TCA is, including small examples, can be found in Sections 1 and 2 of Wegner et al. (2024).\n\n\n\nRead the Paper",
+    "text": "What does TCA do (intuitively)?\nThink about what happens after a contractionary monetary policy shock. The shock will increase the policy rate. Because the policy rate indirectly determines other rates, corporate bond rates will increase. Higher corporate bond rates, on the other hand, increase the funding costs of firms, but also increases the incentive to invest in corporate bonds. The former will most likely lead to lower capital investments, while the latter will lead to an increase in savings. Either of these effects will decrease aggregate demand and will thus lead to downward pressure on prices.\nRather than describing the shocks propagation in words, we could have also used a graphical representation like the following.\n\n\n\n\n\n\nflowchart LR\n  A[Monetary policy shock] --&gt; B[Policy rate]\n  B --&gt; C[Corporate bond rates]\n  C --&gt; D[Funding cost of firms]\n  C --&gt; E[Incentive to save]\n  D --&gt; F[Capital investments]\n  E --&gt; G[Savings]\n  F --&gt; H[Aggregate demand]\n  G --&gt; H\n  H --&gt; I[Prices]\n\n\n\n\n\n\n\n\nThis graphical representation is often more intuitive since it directly shows the various paths that the shock can take to arrive at prices. Each of these paths represents one transmission channel – or machanism – behind the shock’s total effect on prices.\nTransmission Channel Analysis uses the fact that graphs are often more intuitive and defines dynamic models in terms of graphs2, similar to the one above, but now including the time dimension. Channels – descriptions of how a shock propagates through the system to a specific variable – are then defined as paths through the graph. By tracing the effect along a subcollection of paths, i.e. by tracing the effect of the shock but ignoring some of the paths, various new insights can be gained. Moreover, by keeping track of the effects when moving from one node to another, TCA can quantify the effect along all transmission channels and can thus fully decompose the total effect.\n\n\n\n\n\n\nWant to know more?\n\n\n\nMore information about what TCA is, including small examples, can be found in Sections 1 and 2 of Wegner et al. (2025).\n\n\n\nRead the Paper",
     "crumbs": [
       "Home",
       "Wiki",
@@ -160,7 +160,7 @@
     "href": "faq/topics/what-is-tca.html#footnotes",
     "title": "What is Transmission Channel Analysis (TCA)?",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nWe will use shock and policy interchangeably throughout the rest.↩︎\nWegner et al. (2024) refer to this graph as the associated graph.↩︎",
+    "text": "Footnotes\n\n\nWe will use shock and policy interchangeably throughout the rest.↩︎\nWegner et al. (2025) refer to this graph as the associated graph.↩︎",
     "crumbs": [
       "Home",
       "Wiki",
@@ -172,7 +172,7 @@
     "href": "faq/topics/how-to-implement.html",
     "title": "How can I implement TCA?",
     "section": "",
-    "text": "We provide various packages to make the implementation of TCA easier. Currently, a Julia and Matlab (including Dynare) package exist. These packages all work similarly, with the Julia version being the most general. We also provide various tutorials that help in getting started.\nIf none of these packages are satisfactory for an application, then the only remaining option is to implement TCA from scratch. In most cases this will entail rewriting the transmission condition into a form that can be used to compute the transmission effect from either the systems form or directly from impulse response functions (IRFs). The Julia version could assist in the rewriting process – check the make_condition function for this. Once rewritten into an amendable form, transmission effects can be calculated along the way outlined in the appendix of Wegner et al. (2024).\n\n\n\n\n\n\nIf indeed none of the packages are able to compute the desired transmission effect, please get in contact with us. We try to make these libraries as general as we can, so finding a query that cannot be computed would provide us with key information on how to improve these packages.\n\n\n\n\nRead the Paper\n\n\n\n\n\nReferences\n\nWegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2024. “Transmission Channel Analysis in Dynamic Models.” 2024. https://doi.org/10.48550/arxiv.2405.18987.",
+    "text": "We provide various packages to make the implementation of TCA easier. Currently, a Julia and Matlab (including Dynare) package exist. These packages all work similarly, with the Julia version being the most general. We also provide various tutorials that help in getting started.\nIf none of these packages are satisfactory for an application, then the only remaining option is to implement TCA from scratch. In most cases this will entail rewriting the transmission condition into a form that can be used to compute the transmission effect from either the systems form or directly from impulse response functions (IRFs). The Julia version could assist in the rewriting process – check the make_condition function for this. Once rewritten into an amendable form, transmission effects can be calculated along the way outlined in the appendix of Wegner et al. (2025).\n\n\n\n\n\n\nIf indeed none of the packages are able to compute the desired transmission effect, please get in contact with us. We try to make these libraries as general as we can, so finding a query that cannot be computed would provide us with key information on how to improve these packages.\n\n\n\n\nRead the Paper\n\n\n\n\n\nReferences\n\nWegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. “Transmission Channel Analysis in Dynamic Models.” 2025. https://doi.org/10.48550/arxiv.2405.18987.",
     "crumbs": [
       "Home",
       "Wiki",
@@ -184,7 +184,7 @@
     "href": "faq/topics/boolean-conditions.html",
     "title": "What are Boolean Conditions?",
     "section": "",
-    "text": "Transmission channels are a subset of the paths connecting a shock to an outcome variable in the associated graph. Since a channel is a subset, there must exist a Boolean condition that, when applied to all paths, will only be true for those of the transmission channel. In other words, there must exist some logical statement about which variables should and should not be on the paths, such that the collection of all paths can effectively filtered down to only those making up the transmission channel. Because of this relationship, transmission channels are most effectively defined using Boolean conditions.\nBoolean conditions and algebra, however, are not a standard tool in the economists toolbox. The above may thus sound a bit daunting, maybe even a bit intimidating, but it truly does not need to. Take, for example, the simple transmission channel having to go through \\(x_1\\) – note we will use the systems form throughout this article. Futher suppose that all available paths in the graph are the ones given below.\n\\[\n\\begin{array}{r}\n\\varepsilon_1 \\to x_1 \\to x_2 \\to x_3 \\\\\n\\varepsilon_1 \\to x_1 \\to x_3 \\\\\n\\varepsilon_1 \\to x_2 \\to x_3 \\\\\n\\varepsilon_1 \\to x_3 \\\\\n\\end{array}\n\\]\nThe paths corresponding to the transmission channel are then simply those paths in the first two rows. As a Boolean condition, we would have written this simply as \\(b=x_1\\), which denotes the same as saying that \\(x_1\\) must be on all paths. Note that if we were to check each path on whether it includes \\(x_1\\), we would obtain true, true, false, false for the four paths in the four rows respectively. Thus, the Boolean condition \\(b=x_1\\) indeed is only true for the paths making up the transmission channel.\nWhat if we wanted a transmission channel that either goes through \\(x_1\\) or \\(x_2\\). In that case, the paths corresponding to the transmission channel would be those of the first three rows. Using Booleans, we would use \\(\\lor\\) (for math) or | (for code) to denote the OR in our condition. Thus \\(b=x_1 \\lor x_2\\) is the corresponding Boolean condition. Note that checking each path on whether it satisfies this condition would now result in true, true, true, false and thus only the paths of the transmission channel are selected.\nAnd what if \\(x_2\\) should not be on any of the paths (we don’t care if \\(x_1\\) is on the path)? Then the paths corresponding to the transmission channel would be those in rows two and four. Using Booleans, we would use \\(\\neg\\) (for math) or ! (for code) to denote the NOT in our condition. The Boolean condition would thus read \\(b = \\neg x_2\\). Checking again all paths for this condition results in false, true, false, true and thus the correct paths are selected.\nLastly, what if we wanted both \\(x_1\\) and \\(x_2\\) to be on the paths? In that case only the first row would be in our transmission channel. The corresponding Boolean condition would be \\(b=x_1 \\land x_2\\) where \\(\\land\\) (in math) and & (in code) denotes the AND in our condition.\nAND, NOT, and OR can be combined in various ways to form complex conditions and thus complex transmission channels. Moreover, parentheses can be used to make these statements even more complicated. Since these complicated statements go far beyond the scope of this little Wiki, we invite the reader to read the Appendix of Wegner et al. (2024) and the references therein.\n\n\n\n\n\n\nWhere can I find more information?\n\n\n\nMore information can be found in the Appendix of Wegner et al. (2024) and the references therein.\n\n\n\nRead the Paper\n\n\n\n\n\nReferences\n\nWegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2024. “Transmission Channel Analysis in Dynamic Models.” 2024. https://doi.org/10.48550/arxiv.2405.18987.",
+    "text": "Transmission channels are a subset of the paths connecting a shock to an outcome variable in the associated graph. Since a channel is a subset, there must exist a Boolean condition that, when applied to all paths, will only be true for those of the transmission channel. In other words, there must exist some logical statement about which variables should and should not be on the paths, such that the collection of all paths can effectively filtered down to only those making up the transmission channel. Because of this relationship, transmission channels are most effectively defined using Boolean conditions.\nBoolean conditions and algebra, however, are not a standard tool in the economists toolbox. The above may thus sound a bit daunting, maybe even a bit intimidating, but it truly does not need to. Take, for example, the simple transmission channel having to go through \\(x_1\\) – note we will use the systems form throughout this article. Futher suppose that all available paths in the graph are the ones given below.\n\\[\n\\begin{array}{r}\n\\varepsilon_1 \\to x_1 \\to x_2 \\to x_3 \\\\\n\\varepsilon_1 \\to x_1 \\to x_3 \\\\\n\\varepsilon_1 \\to x_2 \\to x_3 \\\\\n\\varepsilon_1 \\to x_3 \\\\\n\\end{array}\n\\]\nThe paths corresponding to the transmission channel are then simply those paths in the first two rows. As a Boolean condition, we would have written this simply as \\(b=x_1\\), which denotes the same as saying that \\(x_1\\) must be on all paths. Note that if we were to check each path on whether it includes \\(x_1\\), we would obtain true, true, false, false for the four paths in the four rows respectively. Thus, the Boolean condition \\(b=x_1\\) indeed is only true for the paths making up the transmission channel.\nWhat if we wanted a transmission channel that either goes through \\(x_1\\) or \\(x_2\\). In that case, the paths corresponding to the transmission channel would be those of the first three rows. Using Booleans, we would use \\(\\lor\\) (for math) or | (for code) to denote the OR in our condition. Thus \\(b=x_1 \\lor x_2\\) is the corresponding Boolean condition. Note that checking each path on whether it satisfies this condition would now result in true, true, true, false and thus only the paths of the transmission channel are selected.\nAnd what if \\(x_2\\) should not be on any of the paths (we don’t care if \\(x_1\\) is on the path)? Then the paths corresponding to the transmission channel would be those in rows two and four. Using Booleans, we would use \\(\\neg\\) (for math) or ! (for code) to denote the NOT in our condition. The Boolean condition would thus read \\(b = \\neg x_2\\). Checking again all paths for this condition results in false, true, false, true and thus the correct paths are selected.\nLastly, what if we wanted both \\(x_1\\) and \\(x_2\\) to be on the paths? In that case only the first row would be in our transmission channel. The corresponding Boolean condition would be \\(b=x_1 \\land x_2\\) where \\(\\land\\) (in math) and & (in code) denotes the AND in our condition.\nAND, NOT, and OR can be combined in various ways to form complex conditions and thus complex transmission channels. Moreover, parentheses can be used to make these statements even more complicated. Since these complicated statements go far beyond the scope of this little Wiki, we invite the reader to read the Appendix of Wegner et al. (2025) and the references therein.\n\n\n\n\n\n\nWhere can I find more information?\n\n\n\nMore information can be found in the Appendix of Wegner et al. (2025) and the references therein.\n\n\n\nRead the Paper\n\n\n\n\n\nReferences\n\nWegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. “Transmission Channel Analysis in Dynamic Models.” 2025. https://doi.org/10.48550/arxiv.2405.18987.",
     "crumbs": [
       "Home",
       "Wiki",
@@ -1217,7 +1217,7 @@
     "href": "documentation/julia/advanced.html#footnotes",
     "title": "TransmissionChannelAnalysis.jl",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nSee Section 4 in Wegner et al. (2024).↩︎",
+    "text": "Footnotes\n\n\nSee Section 4 in Wegner et al. (2025).↩︎",
     "crumbs": [
       "Home",
       "Julia",
@@ -5476,7 +5476,7 @@
     "href": "documentation/matlab/advanced.html#footnotes",
     "title": "Matlab Toolbox for Transmission Channel Analysis – Advanced",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nNote that ~ and ! are both notation for NOT. Matlab uses ~, however we will use these interchangably. If makeCondition use used, either will work. However, if two condition are being combined, only ~ will work, since ! is not defined in Matlab.↩︎\nSee Section 4 in Wegner et al. (2024).↩︎",
+    "text": "Footnotes\n\n\nNote that ~ and ! are both notation for NOT. Matlab uses ~, however we will use these interchangably. If makeCondition use used, either will work. However, if two condition are being combined, only ~ will work, since ! is not defined in Matlab.↩︎\nSee Section 4 in Wegner et al. (2025).↩︎",
     "crumbs": [
       "Home",
       "Matlab",
@@ -7894,7 +7894,7 @@
     "href": "faq/topics/dynamic-form.html",
     "title": "What is the Dynamic Form?",
     "section": "",
-    "text": "Wegner et al. (2024) refer to the following structural VARMA form as the dynamic form, \\[\n\\begin{equation}\n    \\mathbf{A}_0\\mathbf{y}_t = \\sum_{i=1}^{\\ell}\\mathbf{A}_i\\mathbf{y}_{t-i} + \\sum_{j=1}^{q}\\boldsymbol{\\Psi}_{j}\\boldsymbol{\\varepsilon}_{t-j} + \\boldsymbol{\\varepsilon}_t ,\n    \\label{eq:general-model}\n\\end{equation}\n\\] where \\(\\{\\mathbf{A}_i\\}_{i=1}^{\\ell}\\) and \\(\\{\\boldsymbol{\\Psi}_j\\}_{j=1}^{q}\\) are \\(K\\times K\\) coefficient matrices which are statistically identified using any common scheme such as the echelon form, \\(\\mathbf{A}_0\\) is a contemporaneous coefficient matrix assumed to be (partially) identified using some economic identification scheme, and \\(\\boldsymbol{\\varepsilon}_t\\) is a \\(K\\times 1\\) vector of white noise.\nAdditionally, two assumptions are made\n\n\n\n\n\n\nAssumption 1\n\n\n\nThe white noise vector \\(\\boldsymbol{\\varepsilon}_t\\) consists of \\(K\\) structural shocks satisfying \\(\\mathbb{E}[\\boldsymbol{\\varepsilon}_{t}]=\\mathbf{0}_K\\), \\(\\mathbb{E}[\\boldsymbol{\\varepsilon}_{t}\\boldsymbol{\\varepsilon}_{t}']=\\mathbf{I}_K\\) and \\(\\mathbb{E}[\\boldsymbol{\\varepsilon}_t\\boldsymbol{\\varepsilon}_{t-r}']=\\mathbf{O}_K\\) for all \\(r\\geq 1\\).\n\n\n\n\n\n\n\n\nAssumption 2\n\n\n\n\\(\\mathbf{A}_0\\) is non-singular.\n\n\nThe first step towards a definition of transmission channel is then the transformation of the dynamic form to the systems form.\n\n\n\n\n\n\nWhere can I find more information?\n\n\n\nMore information can be found in Section 3 of Wegner et al. (2024).\n\n\n\nRead the Paper\n\n\n\n\n\nReferences\n\nWegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2024. “Transmission Channel Analysis in Dynamic Models.” 2024. https://doi.org/10.48550/arxiv.2405.18987.",
+    "text": "Wegner et al. (2025) refer to the following structural VARMA form as the dynamic form, \\[\n\\begin{equation}\n    \\mathbf{A}_0\\mathbf{y}_t = \\sum_{i=1}^{\\ell}\\mathbf{A}_i\\mathbf{y}_{t-i} + \\sum_{j=1}^{q}\\boldsymbol{\\Psi}_{j}\\boldsymbol{\\varepsilon}_{t-j} + \\boldsymbol{\\varepsilon}_t ,\n    \\label{eq:general-model}\n\\end{equation}\n\\] where \\(\\{\\mathbf{A}_i\\}_{i=1}^{\\ell}\\) and \\(\\{\\boldsymbol{\\Psi}_j\\}_{j=1}^{q}\\) are \\(K\\times K\\) coefficient matrices which are statistically identified using any common scheme such as the echelon form, \\(\\mathbf{A}_0\\) is a contemporaneous coefficient matrix assumed to be (partially) identified using some economic identification scheme, and \\(\\boldsymbol{\\varepsilon}_t\\) is a \\(K\\times 1\\) vector of white noise.\nAdditionally, two assumptions are made\n\n\n\n\n\n\nAssumption 1\n\n\n\nThe white noise vector \\(\\boldsymbol{\\varepsilon}_t\\) consists of \\(K\\) structural shocks satisfying \\(\\mathbb{E}[\\boldsymbol{\\varepsilon}_{t}]=\\mathbf{0}_K\\), \\(\\mathbb{E}[\\boldsymbol{\\varepsilon}_{t}\\boldsymbol{\\varepsilon}_{t}']=\\mathbf{I}_K\\) and \\(\\mathbb{E}[\\boldsymbol{\\varepsilon}_t\\boldsymbol{\\varepsilon}_{t-r}']=\\mathbf{O}_K\\) for all \\(r\\geq 1\\).\n\n\n\n\n\n\n\n\nAssumption 2\n\n\n\n\\(\\mathbf{A}_0\\) is non-singular.\n\n\nThe first step towards a definition of transmission channel is then the transformation of the dynamic form to the systems form.\n\n\n\n\n\n\nWhere can I find more information?\n\n\n\nMore information can be found in Section 3 of Wegner et al. (2025).\n\n\n\nRead the Paper\n\n\n\n\n\nReferences\n\nWegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. “Transmission Channel Analysis in Dynamic Models.” 2025. https://doi.org/10.48550/arxiv.2405.18987.",
     "crumbs": [
       "Home",
       "Wiki",
@@ -7906,7 +7906,7 @@
     "href": "faq/topics/graphical-form.html",
     "title": "What is the Associated Graph?",
     "section": "",
-    "text": "While transmission channels could be defined using potential outcomes and the systems form, graphs are often much more intuitive. Wegner et al. (2024) therefore introduce the associated graph \\(\\mathcal{G}(\\mathbf{B}, \\boldsymbol{\\Omega})\\) to the systems form. As the notation hints at, the graph depends on the two matrices \\(\\mathbf{B}\\) and \\(\\boldsymbol{\\Omega}\\)1 which, in turn, depend on the dynamic form.\nThe associated graph \\(\\mathcal{G}(\\mathbf{B}, \\boldsymbol{\\Omega})\\) has three components:\nExample: VAR(1)\nSuppose the dynamic form corresponds to a Vector Autoregression of order 1 – a VAR(1). For \\(h=1\\), the associated graph then has the following form.\nExample: VARMA(1,1)\nNow suppose instead that the dynamic form corresponds to a VARMA(1, 1). For \\(h=1\\) the associated graph looks as follows. Note, compared to the VAR(1) graph, edges from shocks can skip time periods, which is indicated by the edges skipping one column of variable-nodes – each column corresponds to one time period.",
+    "text": "While transmission channels could be defined using potential outcomes and the systems form, graphs are often much more intuitive. Wegner et al. (2025) therefore introduce the associated graph \\(\\mathcal{G}(\\mathbf{B}, \\boldsymbol{\\Omega})\\) to the systems form. As the notation hints at, the graph depends on the two matrices \\(\\mathbf{B}\\) and \\(\\boldsymbol{\\Omega}\\)1 which, in turn, depend on the dynamic form.\nThe associated graph \\(\\mathcal{G}(\\mathbf{B}, \\boldsymbol{\\Omega})\\) has three components:\nExample: VAR(1)\nSuppose the dynamic form corresponds to a Vector Autoregression of order 1 – a VAR(1). For \\(h=1\\), the associated graph then has the following form.\nExample: VARMA(1,1)\nNow suppose instead that the dynamic form corresponds to a VARMA(1, 1). For \\(h=1\\) the associated graph looks as follows. Note, compared to the VAR(1) graph, edges from shocks can skip time periods, which is indicated by the edges skipping one column of variable-nodes – each column corresponds to one time period.",
     "crumbs": [
       "Home",
       "Wiki",
@@ -7918,7 +7918,7 @@
     "href": "faq/topics/graphical-form.html#footnotes",
     "title": "What is the Associated Graph?",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nFor a refresher on these two matrices, check the systems form article or Section 3 of Wegner et al. (2024).↩︎",
+    "text": "Footnotes\n\n\nFor a refresher on these two matrices, check the systems form article or Section 3 of Wegner et al. (2025).↩︎",
     "crumbs": [
       "Home",
       "Wiki",
@@ -7930,7 +7930,7 @@
     "href": "faq/topics/systems-form.html",
     "title": "What is the Systems Form?",
     "section": "",
-    "text": "Fixing a finite horizon \\(h\\) and defining \\(\\mathbf{x}=(\\mathbf{y}_t^{*'}, \\dots, \\mathbf{y}_{t+h}^{*'})'\\) and \\(\\boldsymbol{\\varepsilon}=(\\boldsymbol{\\varepsilon}_t', \\dots, \\boldsymbol{\\varepsilon}_{t+h}')'\\), Wegner et al. (2024) show that the dynamic form can be written into the following systems form \\[\n\\mathbf{x}= \\mathbf{B}\\mathbf{x}+ \\boldsymbol{\\Omega}\\boldsymbol{\\varepsilon},\n\\] where \\(\\mathbf{B}\\) is lower-triangular with zeros on the diagonal, \\(\\boldsymbol{\\Omega}\\) is lower-block-triangular, and both are respectively given by1 \\[\n\\begin{array}{ccc}\n         \\mathbf{B}= \\begin{bmatrix}\n        \\mathbf{I}- \\mathbf{D}\\mathbf{L}& \\mathbf{O}& \\dots & \\mathbf{O}\\\\\n        \\mathbf{D}\\mathbf{Q}'\\mathbf{A}^*_1 & \\mathbf{I}-\\mathbf{D}\\mathbf{L}& \\dots & \\mathbf{O}\\\\\n        \\vdots & \\ddots & \\ddots & \\vdots \\\\\n        \\mathbf{D}\\mathbf{Q}'\\mathbf{A}^*_h & \\dots & \\mathbf{D}\\mathbf{Q}'\\mathbf{A}^*_1 & \\mathbf{I}- \\mathbf{D}\\mathbf{L}\n    \\end{bmatrix}, & \\quad &\n    \\boldsymbol{\\Omega}= \\begin{bmatrix}\n        \\mathbf{D}\\mathbf{Q}' & \\mathbf{O}& \\dots & \\mathbf{O}\\\\\n        \\mathbf{D}\\mathbf{Q}'\\boldsymbol{\\Psi}_1 & \\mathbf{D}\\mathbf{Q}' & \\dots & \\mathbf{O}\\\\\n        \\vdots & \\ddots & \\ddots & \\vdots \\\\\n        \\mathbf{D}\\mathbf{Q}'\\boldsymbol{\\Psi}_h & \\dots & \\mathbf{D}\\mathbf{Q}'\\boldsymbol{\\Psi}_1 & \\mathbf{D}\\mathbf{Q}'\n   \\end{bmatrix},\n\\end{array}\n\\]\nThis system form can either be used together with potential outcomes to define transmission channels, or can be used to build an associated graph in which transmission channels are much more intuitively defined.",
+    "text": "Fixing a finite horizon \\(h\\) and defining \\(\\mathbf{x}=(\\mathbf{y}_t^{*'}, \\dots, \\mathbf{y}_{t+h}^{*'})'\\) and \\(\\boldsymbol{\\varepsilon}=(\\boldsymbol{\\varepsilon}_t', \\dots, \\boldsymbol{\\varepsilon}_{t+h}')'\\), Wegner et al. (2025) show that the dynamic form can be written into the following systems form \\[\n\\mathbf{x}= \\mathbf{B}\\mathbf{x}+ \\boldsymbol{\\Omega}\\boldsymbol{\\varepsilon},\n\\] where \\(\\mathbf{B}\\) is lower-triangular with zeros on the diagonal, \\(\\boldsymbol{\\Omega}\\) is lower-block-triangular, and both are respectively given by1 \\[\n\\begin{array}{ccc}\n         \\mathbf{B}= \\begin{bmatrix}\n        \\mathbf{I}- \\mathbf{D}\\mathbf{L}& \\mathbf{O}& \\dots & \\mathbf{O}\\\\\n        \\mathbf{D}\\mathbf{Q}'\\mathbf{A}^*_1 & \\mathbf{I}-\\mathbf{D}\\mathbf{L}& \\dots & \\mathbf{O}\\\\\n        \\vdots & \\ddots & \\ddots & \\vdots \\\\\n        \\mathbf{D}\\mathbf{Q}'\\mathbf{A}^*_h & \\dots & \\mathbf{D}\\mathbf{Q}'\\mathbf{A}^*_1 & \\mathbf{I}- \\mathbf{D}\\mathbf{L}\n    \\end{bmatrix}, & \\quad &\n    \\boldsymbol{\\Omega}= \\begin{bmatrix}\n        \\mathbf{D}\\mathbf{Q}' & \\mathbf{O}& \\dots & \\mathbf{O}\\\\\n        \\mathbf{D}\\mathbf{Q}'\\boldsymbol{\\Psi}_1 & \\mathbf{D}\\mathbf{Q}' & \\dots & \\mathbf{O}\\\\\n        \\vdots & \\ddots & \\ddots & \\vdots \\\\\n        \\mathbf{D}\\mathbf{Q}'\\boldsymbol{\\Psi}_h & \\dots & \\mathbf{D}\\mathbf{Q}'\\boldsymbol{\\Psi}_1 & \\mathbf{D}\\mathbf{Q}'\n   \\end{bmatrix},\n\\end{array}\n\\]\nThis system form can either be used together with potential outcomes to define transmission channels, or can be used to build an associated graph in which transmission channels are much more intuitively defined.",
     "crumbs": [
       "Home",
       "Wiki",

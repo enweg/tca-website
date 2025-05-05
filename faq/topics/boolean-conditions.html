@@ -312,7 +312,7 @@ window.Quarto = {
 <p>What if we wanted a transmission channel that either goes through <span class="math inline">\(x_1\)</span> or <span class="math inline">\(x_2\)</span>. In that case, the paths corresponding to the transmission channel would be those of the first three rows. Using Booleans, we would use <span class="math inline">\(\lor\)</span> (for math) or <code class="sourceCode julia"><span class="op">|</span></code> (for code) to denote the OR in our condition. Thus <span class="math inline">\(b=x_1 \lor x_2\)</span> is the corresponding Boolean condition. Note that checking each path on whether it satisfies this condition would now result in <code class="sourceCode julia"><span class="cn">true</span>, <span class="cn">true</span>, <span class="cn">true</span>, <span class="cn">false</span></code> and thus only the paths of the transmission channel are selected.</p>
 <p>And what if <span class="math inline">\(x_2\)</span> should not be on any of the paths (we don’t care if <span class="math inline">\(x_1\)</span> is on the path)? Then the paths corresponding to the transmission channel would be those in rows two and four. Using Booleans, we would use <span class="math inline">\(\neg\)</span> (for math) or <code class="sourceCode julia">!</code> (for code) to denote the NOT in our condition. The Boolean condition would thus read <span class="math inline">\(b = \neg x_2\)</span>. Checking again all paths for this condition results in <code class="sourceCode julia"><span class="cn">false</span>, <span class="cn">true</span>, <span class="cn">false</span>, <span class="cn">true</span></code> and thus the correct paths are selected.</p>
 <p>Lastly, what if we wanted both <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> to be on the paths? In that case only the first row would be in our transmission channel. The corresponding Boolean condition would be <span class="math inline">\(b=x_1 \land x_2\)</span> where <span class="math inline">\(\land\)</span> (in math) and <code class="sourceCode julia"><span class="op">&amp;</span></code> (in code) denotes the AND in our condition.</p>
-<p>AND, NOT, and OR can be combined in various ways to form complex conditions and thus complex transmission channels. Moreover, parentheses can be used to make these statements even more complicated. Since these complicated statements go far beyond the scope of this little Wiki, we invite the reader to read the Appendix of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2024</a>)</span> and the references therein.</p>
+<p>AND, NOT, and OR can be combined in various ways to form complex conditions and thus complex transmission channels. Moreover, parentheses can be used to make these statements even more complicated. Since these complicated statements go far beyond the scope of this little Wiki, we invite the reader to read the Appendix of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> and the references therein.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -323,7 +323,7 @@ Where can I find more information?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>More information can be found in the Appendix of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2024</a>)</span> and the references therein.</p>
+<p>More information can be found in the Appendix of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> and the references therein.</p>
 </div>
 </div>
 <div class="action-read-paper">
@@ -335,7 +335,7 @@ Where can I find more information?
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-wegnerTCA2024" class="csl-entry" role="listitem">
-Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2024. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2024. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
+Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2025. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

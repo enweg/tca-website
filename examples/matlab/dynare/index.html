@@ -171,7 +171,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../examples/matlab/svar/index.html">Matlab</a></li><li class="breadcrumb-item"><a href="../../../examples/matlab/dynare/index.html">TCA in Dynare</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../examples/matlab/svar/index.html">Matlab</a></li><li class="breadcrumb-item"><a href="../../../examples/matlab/dynare/index.html">TCA in DSGEs</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -233,7 +233,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../../examples/matlab/dynare/index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">TCA in Dynare</span></a>
+ <span class="menu-text">TCA in DSGEs</span></a>
   </div>
 </li>
       </ul>
@@ -261,7 +261,7 @@ div.csl-indent {
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../examples/matlab/svar/index.html">Matlab</a></li><li class="breadcrumb-item"><a href="../../../examples/matlab/dynare/index.html">TCA in Dynare</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../examples/matlab/svar/index.html">Matlab</a></li><li class="breadcrumb-item"><a href="../../../examples/matlab/dynare/index.html">TCA in DSGEs</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">TCA in DSGEs using Dynare</h1>
 </div>
@@ -280,13 +280,13 @@ div.csl-indent {
 </header>
 
 
-<p>In this example, we replicate the results from Section 5.3 of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2024</a>)</span>. Before we begin, download both the <a href="./sw2007.m">code</a> and the <a href="./SW2007.zip">Dynare model</a>. Make sure to unzip the Dynare model, and place both the <em>sw2007.m</em> script and the <em>SW2007</em> folder into the same directory.</p>
+<p>In this example, we replicate the results from Section 5.3 of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span>. Before we begin, download both the <a href="./sw2007.m">code</a> and the <a href="./SW2007.zip">Dynare model</a>. Make sure to unzip the Dynare model, and place both the <em>sw2007.m</em> script and the <em>SW2007</em> folder into the same directory.</p>
 <p>To ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:</p>
 <div class="sourceCode" id="cb1" data-startfrom="2"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 1;"><span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">clear</span><span class="op">;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">clc</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="computing-the-linearised-dsge-using-dynare" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="computing-the-linearised-dsge-using-dynare">Computing the Linearised DSGE using Dynare</h2>
-<div class="page-columns page-full"><p>Section 5.3 of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2024</a>)</span> studies the wage channel of a contractionary monetary policy shock using the DSGE model of <span class="citation" data-cites="smetsShocksFrictionsUS2007">Smets and Wouters (<a href="#ref-smetsShocksFrictionsUS2007" role="doc-biblioref">2007</a>)</span>. To analyse this channel, we first obtain the model’s first-order approximation using <a href="https://www.dynare.org">Dynare</a>. </p><div class="no-row-height column-margin column-container"><span class="margin-aside">Follow Dynare’s official <a href="https://www.dynare.org/manual/installation-and-configuration.html">installation instructions</a> if necessary.</span></div></div>
+<div class="page-columns page-full"><p>Section 5.3 of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> studies the wage channel of a contractionary monetary policy shock using the DSGE model of <span class="citation" data-cites="smetsShocksFrictionsUS2007">Smets and Wouters (<a href="#ref-smetsShocksFrictionsUS2007" role="doc-biblioref">2007</a>)</span>. To analyse this channel, we first obtain the model’s first-order approximation using <a href="https://www.dynare.org">Dynare</a>. </p><div class="no-row-height column-margin column-container"><span class="margin-aside">Follow Dynare’s official <a href="https://www.dynare.org/manual/installation-and-configuration.html">installation instructions</a> if necessary.</span></div></div>
 <p>To use Dynare and the TCA Toolbox, we first add both to the Matlab path. You will likely need to adjust the file paths in the quotation marks:</p>
 <div class="sourceCode" id="cb2" data-startfrom="6"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 5;"><span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="va">addpath</span>(<span class="st">"~/Documents/repos/tca-matlab-toolbox/"</span>)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="va">addpath</span>(<span class="st">"~/Documents/repos/tca-matlab-toolbox/models/"</span>)</span>
@@ -310,7 +310,7 @@ div.csl-indent {
 <section id="defining-transmission-channels" class="level2">
 <h2 class="anchored" data-anchor-id="defining-transmission-channels">Defining Transmission Channels</h2>
 <p>At this stage, we have the DSGE’s first-order solution and the IRFs. We can now define the transmission channels of interest.</p>
-<p>First, define the transmission matrix. Following <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2024</a>)</span>, we order variables so that interest rates (<em>robs</em>) come first, wages (<em>dw</em>) second, and inflation (<em>pinfobs</em>) last. The ordering of variables between wages and inflation does not matter<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<p>First, define the transmission matrix. Following <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span>, we order variables so that interest rates (<em>robs</em>) come first, wages (<em>dw</em>) second, and inflation (<em>pinfobs</em>) last. The ordering of variables between wages and inflation does not matter<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <div class="sourceCode" id="cb6" data-startfrom="38"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 37;"><span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="va">order</span> <span class="op">=</span> {<span class="ss">'robs'</span><span class="op">,</span> <span class="ss">'dw'</span><span class="op">,</span> <span class="ss">'labobs'</span><span class="op">,</span> <span class="ss">'dc'</span><span class="op">,</span> <span class="ss">'dinve'</span><span class="op">,</span> <span class="ss">'dy'</span><span class="op">,</span> <span class="ss">'pinfobs'</span>}<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Next, we define the transmission channels. The demand channel is defined as the effect that does not pass through wages (<em>dw</em>) during any period from 0 to 20. We define this channel using the <code>notThrough</code> function:</p>
 <div class="sourceCode" id="cb7" data-startfrom="40"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 39;"><span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="va">channelDemand</span> <span class="op">=</span> <span class="va">model</span>.<span class="va">notThrough</span>(<span class="ss">'dw'</span><span class="op">,</span> <span class="fl">0</span><span class="op">:</span><span class="va">maxHorizon</span><span class="op">,</span> <span class="va">order</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -354,7 +354,7 @@ Figure&nbsp;1: Decomposition of the effect of a contractionary monetary policy s
 </section>
 <section id="using-an-alternative-transmission-matrix" class="level2">
 <h2 class="anchored" data-anchor-id="using-an-alternative-transmission-matrix">Using an Alternative Transmission Matrix</h2>
-<p><span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2024</a>)</span> also explore an alternative ordering, where wages are placed second to last. We define the new ordering as:</p>
+<p><span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> also explore an alternative ordering, where wages are placed second to last. We define the new ordering as:</p>
 <div class="sourceCode" id="cb14" data-startfrom="66"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 65;"><span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a><span class="va">order</span> <span class="op">=</span> {<span class="ss">'robs'</span><span class="op">,</span> <span class="ss">'labobs'</span><span class="op">,</span> <span class="ss">'dc'</span><span class="op">,</span> <span class="ss">'dinve'</span><span class="op">,</span> <span class="ss">'dy'</span><span class="op">,</span> <span class="ss">'dw'</span><span class="op">,</span> <span class="ss">'pinfobs'</span>}<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Transmission channels and effects are then redefined and recomputed:</p>
 <div class="sourceCode" id="cb15" data-startfrom="68"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 67;"><span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a><span class="co">% Defining the channel again.</span></span>
@@ -442,12 +442,12 @@ Figure&nbsp;4: Comparing the decompositions of a contractionary monetary policy 
 Smets, Frank, and Rafael Wouters. 2007. <span>“Shocks and Frictions in <span>US</span> Business Cycles: A <span>B</span>ayesian <span>DSGE</span> Approach.”</span> <em>American Economic Review</em> 97 (3): 586–606. <a href="https://doi.org/10.1257/aer.97.3.586">https://doi.org/10.1257/aer.97.3.586</a>.
 </div>
 <div id="ref-wegnerTCA2024" class="csl-entry" role="listitem">
-Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2024. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2024. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
+Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2025. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
 </div>
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>See <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2024</a>)</span> for the theoretical justification.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>See <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> for the theoretical justification.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
