@@ -6,4 +6,147 @@ bibliography: ../../../references.bib
 sidebar: examples
 ---
 
-This part of the website is still under construction. Our apologies. 
+In this example, we replicate the results from Section 5.1 of @wegnerTCA2024. Before we begin, download both the [code](./wegner2025-section-5-1.m.m) and the [replication data](./data.csv). Make sure to put the data and the code into the same folder.
+
+To ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=1 end-line=2}
+```
+
+Next, add the TCA Toolbox to the Matlab path. You will likely have to adjust the file paths in the quotation marks: 
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=4 end-line=6}
+```
+
+Finally, before coming to the analysis, load the replication data into a table: 
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=8 end-line=8}
+```
+
+- write what the goal of the analysis in the section is
+- writ that this analysis can be split into two parts: GK and RR
+- write that you use both as internal instruments
+
+## Gertler Karadi
+
+- write about the instrument 
+- filter the data
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=14 end-line=15}
+```
+
+### 1. Defining the model
+
+- Define the VAR and estimate it using OLS
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=18 end-line=19}
+```
+
+### 2. Obtaining IRFs
+
+- write about internal instruments 
+- define identification method
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=22 end-line=22}
+```
+
+- compute the IRFs
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=24 end-line=25}
+```
+
+- we want to have a 25bp shock
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=26 end-line=26}
+```
+
+### 3. Defining the transmission matrix
+
+- write about the order: truly only matters what we order before and after ffr
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=28 end-line=28}
+```
+
+### 4. Defining transmission channels
+
+- write about the definition of the non-contemporanoues channel
+- such effects could be due to forward guidance and other unconventional monetary policy, e.g. information effects
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=33 end-line=33}
+```
+
+- write about that contemporanoues effects is simply effect through ffr contemporaneously
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=34 end-line=34}
+```
+
+### 5. Computing transmission effects
+
+- can compute transmission effects using internal instrument
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=36 end-line=37}
+```
+
+- if everything went well, decomposition should be perfect
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=39 end-line=39}
+```
+
+### 6. Visualising decomposition
+
+- We can visualise the decomposition
+- Since we use a single transmission matrix, `plotDecomposition` is the correct function
+- Must first define channel names and create the cell array
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=41 end-line=42}
+```
+
+- ffr is second variable; plot decomposition for ffr
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=44 end-line=44}
+```
+
+- inflation is fourth variable; plot decomposition for inflation
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=46 end-line=46}
+```
+
+## Romer and Romer
+
+- Most of the analysis above remains the same
+- focus on steps that are different (although we do not write the above steps again, the code needs to be run again. See the code file that we provide)
+    - step 2 is same as above
+    - channels are same as above so step 4 is same 
+    - step 5 is the same
+    - step 6 is the same
+- data changes 
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=52 end-line=53}
+```
+
+### 1. Defining the model 
+
+- Because data changed, model definition changes slightly 
+- only the dataset name changes
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=56 end-line=57}
+```
+
+### 3. Defining transmission matrix
+
+- changes because instrument changes
+
+```{.matlab include="wegner2025-section-5-1.m" start-line=66 end-line=66}
+```
+
+### 6. Visualising effects
+
+- while code remains the same, the graphs obviously change 
+
+::: {.callout-note} 
+Minor differences between the decompositions here and the ones in the paper 
+are due to how we obtain the orthogonal IRFs. In the paper we estimate 
+orthogonal IRFs using a VAR excluding the internal instrument. Here we 
+include the internal instrument. At this point we have no preference for one 
+method over the other. The differences are minor anyways. 
+:::
