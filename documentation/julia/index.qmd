@@ -30,8 +30,7 @@ Before performing any transmission analysis, add `TransmissionChannelAnalysis.jl
 ```{julia}
 #| eval: false
 using Pkg; 
-# Currently only available on GitHub
-Pkg.add(url="https://github.com/enweg/TransmissionChannelAnalysis.jl")
+Pkg.add("TransmissionChannelAnalysis")
 using TransmissionChannelAnalysis
 ```
 
