@@ -1,13 +1,8 @@
 .columns-6 {
     display: grid;
     /*grid-template-columns: repeat(6, 1fr);*/
-    grid-template-columns: 
-        1fr 
-        minmax(0, 250px)
-        minmax(0, 250px)
-        minmax(0, 250px)
-        minmax(0, 250px)
-        1fr;
+    grid-template-columns:
+        1fr minmax(0, 250px) minmax(0, 250px) minmax(0, 250px) minmax(0, 250px) 1fr;
     gap: 20px;
 }
 
@@ -167,7 +162,7 @@ h2::after {
 }
 
 #software {
-    background-color: var(--bs-orange);
+    background-color: var(--bs-primary-bg-subtle);
     grid-column: 1 / 7;
     padding: 5em 0em;
     margin-top: 3em;
@@ -179,11 +174,12 @@ h2::after {
 }
 
 #software-download {
-    background-color: #000000;
-    color: var(--bs-orange);
+    background-color: var(--bs-blue);
+    color: #ffffff;
     padding: 1.5em;
     width: 100%;
     border-radius: 0.5em;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 #software-download h4 {
@@ -203,7 +199,7 @@ h2::after {
 }
 
 #software-download a {
-    color: var(--bs-orange);
+    color: #ffffff;
 }
 
 #example img {
@@ -259,22 +255,27 @@ h2::after {
     #example img {
         grid-column: 1 / 5 !important;
     }
-    #example > div{
+
+    #example>div {
         grid-column: 1 / 5 !important;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
     }
-    #example > div > p:nth-child(1) {
+
+    #example>div>p:nth-child(1) {
         grid-column: 1;
     }
-    #example > div > p:nth-child(2) {
+
+    #example>div>p:nth-child(2) {
         grid-column: 2;
     }
-    #example > div > p:nth-child(3) {
+
+    #example>div>p:nth-child(3) {
         grid-column: 1;
     }
-    #example > div > p:nth-child(4) {
+
+    #example>div>p:nth-child(4) {
         grid-column: 1;
     }
 }
@@ -283,15 +284,19 @@ h2::after {
     body {
         font-size: 16px;
     }
+
     .columns-6 {
         display: block;
     }
+
     .columns-4 {
         display: block;
     }
+
     section {
         padding: 0 40px !important;
     }
+
     h2 {
         font-size: 2rem;
         margin-top: 1em;
@@ -300,30 +305,34 @@ h2::after {
     #hero h1 {
         font-size: 3rem;
     }
+
     #hero h3 {
         font-size: 1.5rem;
     }
 
 
     #software {
-        padding-top: 2em !important; 
+        padding-top: 2em !important;
         padding-bottom: 2em !important;
         margin-top: 2em !important;
     }
+
     #software-download {
         margin-top: 2em !important;
     }
-    #example > div{
+
+    #example>div {
         display: block;
         margin-top: 2em;
     }
 
     #about {
-        display: flex; 
+        display: flex;
         flex-direction: column;
     }
+
     #about-collaborators-license {
         order: 2;
     }
-     
+
 }
