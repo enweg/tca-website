@@ -71,10 +71,10 @@ include-before-body:
         <img src="/assets/landing-example-fig-alt.png" class="columns-4-left" />
         <div class="columns-4-right">
             <p>
-                Wegner et al (2025) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They quantify the wage channel within a theoretical model and show that wages play a key role in the transmission of monetary policy.
+                Wegner et al. (2025) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They quantify the wage channel within a theoretical model and show that wages play a key role in the transmission of monetary policy.
             </p>
             <p>
-                Wegner et al (2025) produce a decomposition plot (shown to the left) that graphically illustrates the decomposition of the impulse response function.
+                Wegner et al. (2025) produce a decomposition plot (shown to the left) that graphically illustrates the decomposition of the impulse response function.
             </p>
             <p>
                 Learn how to do a similar analysis by reading the examples.
