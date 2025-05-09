@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Transmission conditions are most effectively stated using Boolean conditions about which variables should and should not lie on the transmission channels.">
 
-<title>What are Boolean Conditions? – Transmission Channel Analysis</title>
+<title>Examples – Transmission Channel Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,80 +20,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../faq/topics/graphical-form.html" rel="prev">
-<script src="../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../examples/julia/svar/index.html" rel="next">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -123,37 +68,8 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed">
@@ -169,25 +85,25 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../examples/index.html"> 
+    <a class="nav-link active" href="../examples/index.html" aria-current="page"> 
 <span class="menu-text">Examples</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../documentation/julia/index.html"> 
+    <a class="nav-link" href="../documentation/julia/index.html"> 
 <span class="menu-text">Documentation</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../faq/index.html"> 
+    <a class="nav-link" href="../faq/index.html"> 
 <span class="menu-text">Wiki</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../index.html#about"> 
+    <a class="nav-link" href="../index.html#about"> 
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
@@ -201,7 +117,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../faq/topics/what-is-tca.html">Wiki</a></li><li class="breadcrumb-item"><a href="../../faq/topics/boolean-conditions.html">What are Boolean Conditions?</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../examples/index.html">Examples</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -216,10 +132,16 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Examples</span></a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Wiki</span></a>
+ <span class="menu-text">Julia</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -227,38 +149,43 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../faq/topics/what-is-tca.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">What is Transmission Channel Analysis (TCA)?</span></a>
+  <a href="../examples/julia/svar/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TCA in SVARs</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../faq/topics/how-to-implement.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">How can I implement TCA?</span></a>
+  <a href="../examples/julia/lp/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TCA in LPs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Matlab</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/matlab/svar/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TCA in SVARs</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../faq/topics/dynamic-form.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">What is the Dynamic Form?</span></a>
+  <a href="../examples/matlab/lp/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TCA in LPs</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../faq/topics/systems-form.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">What is the Systems Form?</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../faq/topics/graphical-form.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">What is the Associated Graph?</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../faq/topics/boolean-conditions.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">What are Boolean Conditions?</span></a>
+  <a href="../examples/matlab/dynare/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TCA in DSGEs</span></a>
   </div>
 </li>
       </ul>
@@ -274,16 +201,11 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../faq/topics/what-is-tca.html">Wiki</a></li><li class="breadcrumb-item"><a href="../../faq/topics/boolean-conditions.html">What are Boolean Conditions?</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">What are Boolean Conditions?</h1>
+<h1 class="title">Examples</h1>
 </div>
 
-<div>
-  <div class="description">
-    <p>Transmission conditions are most effectively stated using Boolean conditions about which variables should and should not lie on the transmission channels.</p>
-  </div>
-</div>
 
 
 <div class="quarto-title-meta">
@@ -298,46 +220,32 @@ window.Quarto = {
 </header>
 
 
-<p>Transmission channels are a subset of the paths connecting a shock to an outcome variable in the <a href="../../faq/topics/graphical-form.html">associated graph</a>. Since a channel is a subset, there must exist a Boolean condition that, when applied to all paths, will only be true for those of the transmission channel. In other words, there must exist some logical statement about which variables should and should not be on the paths, such that the collection of all paths can effectively filtered down to only those making up the transmission channel. Because of this relationship, transmission channels are most effectively defined using Boolean conditions.</p>
-<p>Boolean conditions and algebra, however, are not a standard tool in the economists toolbox. The above may thus sound a bit daunting, maybe even a bit intimidating, but it truly does not need to. Take, for example, the simple transmission channel having to go through <span class="math inline">\(x_1\)</span> – note we will use the <a href="../../faq/topics/systems-form.html">systems form</a> throughout this article. Futher suppose that all available paths in the graph are the ones given below.</p>
-<p><span class="math display">\[
-\begin{array}{r}
-\varepsilon_1 \to x_1 \to x_2 \to x_3 \\
-\varepsilon_1 \to x_1 \to x_3 \\
-\varepsilon_1 \to x_2 \to x_3 \\
-\varepsilon_1 \to x_3 \\
-\end{array}
-\]</span></p>
-<p>The paths corresponding to the transmission channel are then simply those paths in the first two rows. As a Boolean condition, we would have written this simply as <span class="math inline">\(b=x_1\)</span>, which denotes the same as saying that <span class="math inline">\(x_1\)</span> must be on all paths. Note that if we were to check each path on whether it includes <span class="math inline">\(x_1\)</span>, we would obtain <code class="sourceCode julia"><span class="cn">true</span>, <span class="cn">true</span>, <span class="cn">false</span>, <span class="cn">false</span></code> for the four paths in the four rows respectively. Thus, the Boolean condition <span class="math inline">\(b=x_1\)</span> indeed is only true for the paths making up the transmission channel.</p>
-<p>What if we wanted a transmission channel that either goes through <span class="math inline">\(x_1\)</span> or <span class="math inline">\(x_2\)</span>. In that case, the paths corresponding to the transmission channel would be those of the first three rows. Using Booleans, we would use <span class="math inline">\(\lor\)</span> (for math) or <code class="sourceCode julia"><span class="op">|</span></code> (for code) to denote the OR in our condition. Thus <span class="math inline">\(b=x_1 \lor x_2\)</span> is the corresponding Boolean condition. Note that checking each path on whether it satisfies this condition would now result in <code class="sourceCode julia"><span class="cn">true</span>, <span class="cn">true</span>, <span class="cn">true</span>, <span class="cn">false</span></code> and thus only the paths of the transmission channel are selected.</p>
-<p>And what if <span class="math inline">\(x_2\)</span> should not be on any of the paths (we don’t care if <span class="math inline">\(x_1\)</span> is on the path)? Then the paths corresponding to the transmission channel would be those in rows two and four. Using Booleans, we would use <span class="math inline">\(\neg\)</span> (for math) or <code class="sourceCode julia">!</code> (for code) to denote the NOT in our condition. The Boolean condition would thus read <span class="math inline">\(b = \neg x_2\)</span>. Checking again all paths for this condition results in <code class="sourceCode julia"><span class="cn">false</span>, <span class="cn">true</span>, <span class="cn">false</span>, <span class="cn">true</span></code> and thus the correct paths are selected.</p>
-<p>Lastly, what if we wanted both <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> to be on the paths? In that case only the first row would be in our transmission channel. The corresponding Boolean condition would be <span class="math inline">\(b=x_1 \land x_2\)</span> where <span class="math inline">\(\land\)</span> (in math) and <code class="sourceCode julia"><span class="op">&amp;</span></code> (in code) denotes the AND in our condition.</p>
-<p>AND, NOT, and OR can be combined in various ways to form complex conditions and thus complex transmission channels. Moreover, parentheses can be used to make these statements even more complicated. Since these complicated statements go far beyond the scope of this little Wiki, we invite the reader to read the Appendix of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> and the references therein.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<p>Examples on how to implement a transmission channel analysis in Julia and Matlab can be found below. We provide examples for local projections (LP) and SVARs for both packages. DSGEs, however, are only supported by the Matlab package. Choose your preferred language below.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Where can I find more information?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>More information can be found in the Appendix of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> and the references therein.</p>
+<div class="callout-body-container">
+<p>The examples are still actively under construction and most examples do not yet exist. Please come back at a later point. Note that the <a href="../documentation/julia/index.html">documentation</a> provides details on the use of LPs, SVARs, and DSGEs.</p>
 </div>
 </div>
-<div class="action-read-paper">
-<p><a href="https://arxiv.org/abs/2405.18987">Read the Paper</a></p>
 </div>
+<p><strong>Julia</strong></p>
+<ul>
+<li><strong>SVAR</strong>: <a href="../examples/julia/svar/index.html">Forward guidance of monetary policy</a></li>
+<li><strong>LP</strong>: <a href="../examples/julia/lp/index.html">Anticipation effects of government spending</a></li>
+</ul>
+<p><strong>Matlab</strong></p>
+<ul>
+<li><strong>SVAR</strong>: <a href="../examples/matlab/svar/index.html">Forward guidance of monetary policy</a></li>
+<li><strong>LP</strong>: <a href="../examples/matlab/lp/index.html">Anticipation effects of government spending using</a></li>
+<li><strong>DSGE</strong>: <a href="../examples/matlab/dynare/index.html">The wage channel of monetary policy</a></li>
+</ul>
 
 
 
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-wegnerTCA2024" class="csl-entry" role="listitem">
-Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2025. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -757,11 +665,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../faq/topics/graphical-form.html" class="pagination-link" aria-label="What is the Associated Graph?">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">What is the Associated Graph?</span>
-      </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../examples/julia/svar/index.html" class="pagination-link" aria-label="TCA in SVARs">
+        <span class="nav-page-text">TCA in SVARs</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
@@ -769,5 +677,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
