@@ -6,7 +6,9 @@ bibliography: ../../../references.bib
 sidebar: examples
 ---
 
-In this example, we replicate the results from Section 5.1 of @wegnerTCA2024. Before we begin, download both the [code](./wegner2025-section-5-1.m.m) and the [replication data](./data.csv). Make sure to put the data and the code into the same folder.
+<!-- TODO: include graphs and improve text. -->
+
+Section 5.1 of @wegnerTCA2024 splits the effects of monetary policy into contemporaneous and non-contemporanous effects, the latter of which are linked to forward guidance and other non-conventional policies. In this example, we replicate these results. Before we begin, download both the [code](./wegner2025-section-5-1.m.m) and the [replication data](./data.csv). Make sure to put the data and the code into the same folder.
 
 To ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:
 
@@ -23,130 +25,127 @@ Finally, before coming to the analysis, load the replication data into a table:
 ```{.matlab include="wegner2025-section-5-1.m" start-line=8 end-line=8}
 ```
 
-- write what the goal of the analysis in the section is
-- writ that this analysis can be split into two parts: GK and RR
-- write that you use both as internal instruments
+@wegnerTCA2024 do the analysis for two internal instruments of monetary policy shocks: (1) the Gertler and Karadi (XXX) instrument and (2) the Romer and Romer (XXX) instrument. We split our analysis accordingly and start investigating the contemporanous and non-contemporaneous effects of monetary policy estimated using the Gertler and Karadi instrument. 
 
 ## Gertler Karadi
 
-- write about the instrument 
-- filter the data
+Gertler and Karadi (XXX) derive an instrument for monetary policy shocks by extracting the surprise component of FOMC meetings from the change in Fed Funds Futures in a tight time window around these FOMC meetings. This instrument is contained in the replication data and named XXX. Also contained in the data is the Romer and Romer (XXX) instrument (XXX) which we do not currently need. 
+
+To focus on the GK instrument, we filter the data for only the GK instrument, interest rates, output gap, commodity prices and inflation
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=14 end-line=15}
 ```
 
+With the data at hand, our transmission channel analysis follows the common six steps. 
+
 ### 1. Defining the model
 
-- Define the VAR and estimate it using OLS
+The first step to any transmission channel analysis is to define the model. @wegnerTCA2024 choose to estimate the total effects using the GK series as an internal instrument in a VAR. We must thus first define and estimate a `VAR` model: 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=18 end-line=19}
 ```
 
 ### 2. Obtaining IRFs
 
-- write about internal instruments 
-- define identification method
+Next, we obtain the total effects -- the structural IRFs -- by using the GK series as as internal instrument. We thus define our `InternalInstrument` identification method: 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=22 end-line=22}
 ```
 
-- compute the IRFs
+Structural IRFs can then be obtained by using `IRF` and providing the `identificationMethod`. 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=24 end-line=25}
 ```
 
-- we want to have a 25bp shock
+Although not strictly necessary, @wegnerTCA2024 decide to normalise the shock's size to 25bps. This can be achieved by mutiplying the structural IRFs, currently normalised to a 1pp increase, by `0.25`.
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=26 end-line=26}
 ```
 
 ### 3. Defining the transmission matrix
 
-- write about the order: truly only matters what we order before and after ffr
+The third step to any transmission channel analysis is the definition of the transmission matrix. @wegnerTCA2024 order the Fed Funds rate first, followed by all other variables. The implementation of internal instruments is slightly different here, requiring us to order the internal instrument first, followed by the Fed Funds rate, and all other variables. The transmission matrix can then be defined in the following way: 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=28 end-line=28}
 ```
 
+::: {.callout-note appearance="minimal"}
+To be more general, the implementation of internal instruments, and specifically the computation of the Cholesky-orthogonalised IRFs needed for transmission channel analysis, is slightly different here than in @wegnerTCA2024. The final results will be qualitatively the same, although quantitatively slightly different.  
+:::
+
 ### 4. Defining transmission channels
 
-- write about the definition of the non-contemporanoues channel
-- such effects could be due to forward guidance and other unconventional monetary policy, e.g. information effects
+The fourth step is to define the transmission channels. @wegnerTCA2024 focus on two channels that perfectly decompose the effect. They define the contemporanous channel of monetary policy as the effect of monetary policy going through a contemporanous adjustment in the federal funds rate. They then define the non-contemporaneous channel of monetary policy as the effect of monetary policy not going through a contemporanous adjustment in the federal funds rate -- the complement of the contemporaneous channel. Note that according the Section 4.3 of @wegnerTCA2024 the effects through these channels are invariant to any re-ordering of inflation, commodity prices, and the output gap, as long as they are ordered after the Fed Funds rate. 
+
+The non-contemporanous channel can be defined in the following way: 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=33 end-line=33}
 ```
 
-- write about that contemporanoues effects is simply effect through ffr contemporaneously
+The contemporanous channel can be defined in a similar way: 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=34 end-line=34}
 ```
 
 ### 5. Computing transmission effects
 
-- can compute transmission effects using internal instrument
+Transmission effects can now be computed using `transmission`. We must provide our `InternalInstrument` `identificationMethod`: 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=36 end-line=37}
 ```
 
-- if everything went well, decomposition should be perfect
+To double check whether everything worked, we check whether the two channels perfectly decompose the total effect. Very minor differences might exist due to numerical rounding. 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=39 end-line=39}
 ```
 
 ### 6. Visualising decomposition
 
-- We can visualise the decomposition
-- Since we use a single transmission matrix, `plotDecomposition` is the correct function
-- Must first define channel names and create the cell array
+Lastly, we visualise the decomposition using `plotDecomposition`. We must first define the channel names: 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=41 end-line=42}
 ```
 
-- ffr is second variable; plot decomposition for ffr
+The decomposition for the effects of a monetary policy shock on the federal funds rate (the second variable in the data) can then be obtained in the following way: 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=44 end-line=44}
 ```
 
-- inflation is fourth variable; plot decomposition for inflation
+Similarly, the decomposition for the effects of a monetary policy shock on inflation (the fourth variable in the data) can be obtained in the following way: 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=46 end-line=46}
 ```
 
 ## Romer and Romer
 
-- Most of the analysis above remains the same
-- focus on steps that are different (although we do not write the above steps again, the code needs to be run again. See the code file that we provide)
-    - step 2 is same as above
-    - channels are same as above so step 4 is same 
-    - step 5 is the same
-    - step 6 is the same
-- data changes 
+Most of the transmission channel analysis for the Romer and Romer (XXX) instrument follows the same steps as for the Gertler and Karadi (XXX) instrument. Below we highlight only the differences. For steps 2, 4, 5, 6, the same code as above can be used. 
+
+Before we start, we must first adjust the data and replace the GK with the RR instrument: 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=52 end-line=53}
 ```
 
 ### 1. Defining the model 
 
-- Because data changed, model definition changes slightly 
-- only the dataset name changes
+Because the data has changed, our model definition changes slightly -- the dataset name changes. 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=56 end-line=57}
 ```
 
 ### 3. Defining transmission matrix
 
-- changes because instrument changes
+The transmission matrix remains largely the same, but the name of the instrument changes. 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=66 end-line=66}
 ```
 
 ### 6. Visualising effects
 
-- while code remains the same, the graphs obviously change 
+While the code ramains the same, the graphs change. 
 
 ::: {.callout-note} 
 Minor differences between the decompositions here and the ones in the paper 
-are due to how we obtain the orthogonal IRFs. In the paper we estimate 
+are due to how we obtain the Cholesky-orthogonalised IRFs. In the paper we estimate 
 orthogonal IRFs using a VAR excluding the internal instrument. Here we 
-include the internal instrument. At this point we have no preference for one 
-method over the other. The differences are minor anyways. 
+include the internal instrument. 
 :::
