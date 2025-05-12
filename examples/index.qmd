@@ -1,0 +1,21 @@
+---
+title: Examples
+sidbar: examples
+---
+
+Examples on how to implement a transmission channel analysis in Julia and Matlab can be found below. We provide examples for local projections (LP) and SVARs for both packages. DSGEs, however, are only supported by the Matlab package. Choose your preferred language below. 
+
+::: {.callout-note appearance="minimal"}
+The examples are still actively under construction and most examples do not yet exist. Please come back at a later point. Note that the [documentation](../documentation/julia/index.qmd) provides details on the use of LPs, SVARs, and DSGEs. 
+:::
+
+**Julia**
+
+- **SVAR**: [Forward guidance of monetary policy](./julia/svar/index.qmd)
+- **LP**: [Anticipation effects of government spending](./julia/lp/index.qmd)
+
+**Matlab**
+
+- **SVAR**: [Forward guidance of monetary policy](./matlab/svar/index.qmd)
+- **LP**: [Anticipation effects of government spending using](./matlab/lp/index.qmd)
+- **DSGE**: [The wage channel of monetary policy](./matlab/dynare/index.qmd)

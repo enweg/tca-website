@@ -22,7 +22,7 @@ website:
       - text: Home
         href: index.qmd
       - text: Examples 
-        href: "examples/matlab/dynare/index.qmd"
+        href: "examples/index.qmd"
       - text: Documentation
         href: "documentation/julia/index.qmd"
       - text: Wiki
@@ -72,6 +72,7 @@ website:
     - id: examples
       title: Examples
       contents: 
+      - href: "examples/index.qmd"
       - section: Julia 
         contents: 
           - text: TCA in SVARs

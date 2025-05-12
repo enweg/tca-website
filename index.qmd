@@ -38,7 +38,7 @@ include-before-body:
             </p>
             <ul class="list-horizontal">
                 <li><a target="_blank" href="./faq/index.html">Wiki</a></li>
-                <li><a target="_blank" href="./examples/matlab/dynare/index.html">Examples</a></li>
+                <li><a target="_blank" href="./examples/index.html">Examples</a></li>
                 <li><a target="_blank" href="https://arxiv.org/abs/2405.18987" class="blue">Paper</a></li>
             </ul>
         </div>
@@ -51,8 +51,8 @@ include-before-body:
                 We provide various software packages for TCA. These allow practitioners to apply TCA to a broad range of problems. Currently, TCA packages exist in Julia, Matlab, and for Dynare (as part of the Matlab package). See the documentation or the examples for each of them to learn more.
             </p>
             <ul class="list-horizontal">
-                <li><a target="_blank" href="./documentation/julia/index.qmd" class="btn bg-blue">Documentation</a></li>
-                <li><a target="_blank" href="./examples/matlab/dynare/index.html">Examples</a></li>
+                <li><a target="_blank" href="./documentation/julia/index.html" class="btn bg-blue">Documentation</a></li>
+                <li><a target="_blank" href="./examples/index.html">Examples</a></li>
             </ul>
         </div>
         <div id="software-download" class="columns-6-last">
@@ -71,16 +71,16 @@ include-before-body:
         <img src="/assets/landing-example-fig-alt.png" class="columns-4-left" />
         <div class="columns-4-right">
             <p>
-                Wegner et al (2025) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They quantify the wage channel within a theoretical model and show that wages play a key role in the transmission of monetary policy.
+                Wegner et al. (2025) use Transmission Channel Analysis (TCA) to decompose the impulse response functions of a contractionary monetary policy shock. They quantify the wage channel within a theoretical model and show that wages play a key role in the transmission of monetary policy.
             </p>
             <p>
-                Wegner et al (2025) produce a decomposition plot (shown to the left) that graphically illustrates the decomposition of the impulse response function.
+                Wegner et al. (2025) produce a decomposition plot (shown to the left) that graphically illustrates the decomposition of the impulse response function.
             </p>
             <p>
                 Learn how to do a similar analysis by reading the examples.
             </p>
             <p>
-                <a target="_blank" href="./examples/matlab/dynare/index.html" class="btn bg-blue">Examples</a>
+                <a target="_blank" href="./examples/index.html" class="btn bg-blue">Examples</a>
             </p>
         </div>
     </section>
