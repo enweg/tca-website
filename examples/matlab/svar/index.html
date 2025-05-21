@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -196,8 +250,28 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#gertler-karadi" id="toc-gertler-karadi" class="nav-link active" data-scroll-target="#gertler-karadi">Gertler Karadi</a>
+  <ul class="collapse">
+  <li><a href="#defining-the-model" id="toc-defining-the-model" class="nav-link" data-scroll-target="#defining-the-model">1. Defining the model</a></li>
+  <li><a href="#obtaining-irfs" id="toc-obtaining-irfs" class="nav-link" data-scroll-target="#obtaining-irfs">2. Obtaining IRFs</a></li>
+  <li><a href="#defining-the-transmission-matrix" id="toc-defining-the-transmission-matrix" class="nav-link" data-scroll-target="#defining-the-transmission-matrix">3. Defining the transmission matrix</a></li>
+  <li><a href="#defining-transmission-channels" id="toc-defining-transmission-channels" class="nav-link" data-scroll-target="#defining-transmission-channels">4. Defining transmission channels</a></li>
+  <li><a href="#computing-transmission-effects" id="toc-computing-transmission-effects" class="nav-link" data-scroll-target="#computing-transmission-effects">5. Computing transmission effects</a></li>
+  <li><a href="#visualising-decomposition" id="toc-visualising-decomposition" class="nav-link" data-scroll-target="#visualising-decomposition">6. Visualising decomposition</a></li>
+  </ul></li>
+  <li><a href="#romer-and-romer" id="toc-romer-and-romer" class="nav-link" data-scroll-target="#romer-and-romer">Romer and Romer</a>
+  <ul class="collapse">
+  <li><a href="#defining-the-model-1" id="toc-defining-the-model-1" class="nav-link" data-scroll-target="#defining-the-model-1">1. Defining the model</a></li>
+  <li><a href="#defining-transmission-matrix" id="toc-defining-transmission-matrix" class="nav-link" data-scroll-target="#defining-transmission-matrix">3. Defining transmission matrix</a></li>
+  <li><a href="#visualising-effects" id="toc-visualising-effects" class="nav-link" data-scroll-target="#visualising-effects">6. Visualising effects</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -221,11 +295,173 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This part of the website is still under construction. Our apologies.</p>
+<!-- TODO: include graphs and improve text. -->
+<p>Section 5.1 of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> splits the effects of monetary policy into contemporaneous and non-contemporanous effects, the latter of which are linked to forward guidance and other non-conventional policies. In this example, we do the same. Before we begin, download both the <a href="./wegner2025-section-5-1.m.m">code</a> and the <a href="./data.csv">replication data</a>. Make sure to put the data and the code into the same folder.</p>
+<p>To ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:</p>
+<div class="sourceCode" id="cb1" data-startfrom="1"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">clear</span><span class="op">;</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">clc</span><span class="op">;</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Next, add the TCA Toolbox to the Matlab path. You will likely have to adjust the file paths in the quotation marks:</p>
+<div class="sourceCode" id="cb2" data-startfrom="4"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 3;"><span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">addpath</span>(<span class="st">"~/Documents/repos/tca-matlab-toolbox/"</span>)<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">addpath</span>(<span class="st">"~/Documents/repos/tca-matlab-toolbox/plotting"</span>)<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="va">addpath</span>(<span class="st">"~/Documents/repos/tca-matlab-toolbox/models"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, before coming to the analysis, load the replication data into a table:</p>
+<div class="sourceCode" id="cb3" data-startfrom="8"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 7;"><span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">data</span> <span class="op">=</span> <span class="va">readtable</span>(<span class="st">"./data.csv"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> do the analysis for two internal instruments of monetary policy shocks: (1) the <span class="citation" data-cites="gertlerMonetaryPolicySurprises2015">Gertler and Karadi (<a href="#ref-gertlerMonetaryPolicySurprises2015" role="doc-biblioref">2015</a>)</span> instrument and (2) the <span class="citation" data-cites="romerNewMeasureMonetary2004">Romer and Romer (<a href="#ref-romerNewMeasureMonetary2004" role="doc-biblioref">2004</a>)</span> instrument. We split our analysis accordingly and start investigating the contemporanous and non-contemporaneous effects of monetary policy estimated using the Gertler and Karadi instrument.</p>
+<section id="gertler-karadi" class="level2">
+<h2 class="anchored" data-anchor-id="gertler-karadi">Gertler Karadi</h2>
+<p><span class="citation" data-cites="gertlerMonetaryPolicySurprises2015">Gertler and Karadi (<a href="#ref-gertlerMonetaryPolicySurprises2015" role="doc-biblioref">2015</a>)</span> derive an instrument for monetary policy shocks by extracting the surprise component of FOMC meetings from the change in Fed Funds Futures in a tight time window around these FOMC meetings. This instrument is contained in the data and named <code>mp1_tc</code>. Also contained in the data is the <span class="citation" data-cites="romerNewMeasureMonetary2004">Romer and Romer (<a href="#ref-romerNewMeasureMonetary2004" role="doc-biblioref">2004</a>)</span> instrument (<code>rr_3</code>) which we do not currently need.</p>
+<p>To focus on the GK instrument, we filter the data for only the GK instrument, interest rates, output gap, commodity prices and inflation</p>
+<div class="sourceCode" id="cb4" data-startfrom="14"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 13;"><span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="va">keepCols</span> <span class="op">=</span> {<span class="ss">'mp1_tc'</span><span class="op">,</span> <span class="ss">'ffr'</span><span class="op">,</span> <span class="ss">'ygap'</span><span class="op">,</span> <span class="ss">'infl'</span><span class="op">,</span> <span class="ss">'lpcom'</span>}<span class="op">;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="va">dataGK</span> <span class="op">=</span> <span class="va">data</span>(<span class="op">:,</span> <span class="va">keepCols</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>With the data at hand, our transmission channel analysis follows the common six steps.</p>
+<section id="defining-the-model" class="level3">
+<h3 class="anchored" data-anchor-id="defining-the-model">1. Defining the model</h3>
+<p>The first step to any transmission channel analysis is to define the model. Here, we will go with a VAR model. We include the instrument in the VAR, thus effectively deciding that we identify the shock via an internal instrument.</p>
+<div class="sourceCode" id="cb5" data-startfrom="18"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 17;"><span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="va">model</span> <span class="op">=</span> <span class="va">VAR</span>(<span class="va">dataGK</span><span class="op">,</span> <span class="fl">4</span><span class="op">,</span> <span class="ss">'trendExponents'</span><span class="op">,</span> <span class="fl">0</span><span class="op">:</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="va">model</span>.<span class="va">fit</span>()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="obtaining-irfs" class="level3">
+<h3 class="anchored" data-anchor-id="obtaining-irfs">2. Obtaining IRFs</h3>
+<p>Next, we obtain the total effects – the structural IRFs – by using the GK series as as internal instrument. We thus define our <code>InternalInstrument</code> identification method:</p>
+<div class="sourceCode" id="cb6" data-startfrom="22"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 21;"><span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="va">method</span> <span class="op">=</span> <span class="va">InternalInstrument</span>(<span class="ss">'ffr'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Structural IRFs can then be obtained by using <code>IRF</code> and providing the <code>identificationMethod</code>.</p>
+<div class="sourceCode" id="cb7" data-startfrom="24"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 23;"><span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="va">irfObj</span> <span class="op">=</span> <span class="va">model</span>.<span class="va">IRF</span>(<span class="fl">40</span><span class="op">,</span> <span class="ss">'identificationMethod'</span><span class="op">,</span> <span class="va">method</span>)<span class="op">;</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="va">irfs</span> <span class="op">=</span> <span class="va">irfObj</span>.<span class="va">getIrfArray</span>()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Although not strictly necessary, we normalise the shock’s size to 25bps. This can be achieved by mutiplying the structural IRFs, currently normalised to a 1pp increase, by <code>0.25</code>.</p>
+<div class="sourceCode" id="cb8" data-startfrom="26"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 25;"><span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="va">irfs</span> <span class="op">=</span> <span class="va">irfs</span>(<span class="op">:,</span> <span class="fl">1</span><span class="op">,</span> <span class="op">:</span>) <span class="op">*</span> <span class="fl">0.25</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="defining-the-transmission-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="defining-the-transmission-matrix">3. Defining the transmission matrix</h3>
+<p>The third step to any transmission channel analysis is the definition of the transmission matrix. <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> order the Fed Funds rate first, followed by all other variables. The implementation of internal instruments is slightly different here, requiring us to order the internal instrument first, followed by the Fed Funds rate, and all other variables. The transmission matrix can then be defined in the following way:</p>
+<div class="sourceCode" id="cb9" data-startfrom="28"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 27;"><span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="va">transmissionOrder</span> <span class="op">=</span> {<span class="ss">'mp1_tc'</span><span class="op">,</span> <span class="ss">'ffr'</span><span class="op">,</span> <span class="ss">'ygap'</span><span class="op">,</span> <span class="ss">'infl'</span><span class="op">,</span> <span class="ss">'lpcom'</span>}<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>To be more general, the implementation of internal instruments, and specifically the computation of the Cholesky-orthogonalised IRFs needed for transmission channel analysis, is slightly different here than in <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span>. The final results will be qualitatively the same, although quantitatively slightly different.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="defining-transmission-channels" class="level3">
+<h3 class="anchored" data-anchor-id="defining-transmission-channels">4. Defining transmission channels</h3>
+<p>The fourth step is to define the transmission channels. <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> focus on two channels that perfectly decompose the effect. They define the contemporanous channel of monetary policy as the effect of monetary policy going through a contemporanous adjustment in the federal funds rate. They then define the non-contemporaneous channel of monetary policy as the effect of monetary policy not going through a contemporanous adjustment in the federal funds rate – the complement of the contemporaneous channel. Note that according the Section 4.3 of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> the effects through these channels are invariant to any re-ordering of inflation, commodity prices, and the output gap, as long as they are ordered after the Fed Funds rate.</p>
+<p>The non-contemporanous channel can be defined in the following way:</p>
+<div class="sourceCode" id="cb10" data-startfrom="33"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 32;"><span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="va">effectsNonContemp</span> <span class="op">=</span> <span class="va">model</span>.<span class="va">transmission</span>(<span class="fl">1</span><span class="op">,</span> <span class="va">channelNonContemp</span><span class="op">,</span> <span class="va">transmissionOrder</span><span class="op">,</span> <span class="fl">40</span><span class="op">,</span> <span class="ss">'identificationMethod'</span><span class="op">,</span> <span class="va">method</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The contemporanous channel can be defined in a similar way:</p>
+<div class="sourceCode" id="cb11" data-startfrom="34"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 33;"><span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="va">effectsContemp</span> <span class="op">=</span> <span class="va">model</span>.<span class="va">transmission</span>(<span class="fl">1</span><span class="op">,</span> <span class="va">channelContemp</span><span class="op">,</span> <span class="va">transmissionOrder</span><span class="op">,</span> <span class="fl">40</span><span class="op">,</span> <span class="ss">'identificationMethod'</span><span class="op">,</span> <span class="va">method</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="computing-transmission-effects" class="level3">
+<h3 class="anchored" data-anchor-id="computing-transmission-effects">5. Computing transmission effects</h3>
+<p>Transmission effects can now be computed using <code>transmission</code>. We must provide our <code>InternalInstrument</code> <code>identificationMethod</code>:</p>
+<div class="sourceCode" id="cb12" data-startfrom="36"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 35;"><span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a><span class="va">effectsNonContemp</span> <span class="op">=</span> <span class="va">effectsNonContemp</span> <span class="op">*</span> <span class="fl">0.25</span><span class="op">;</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a><span class="va">effectsContemp</span> <span class="op">=</span> <span class="va">effectsContemp</span> <span class="op">*</span> <span class="fl">0.25</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To double check whether everything worked, we check whether the two channels perfectly decompose the total effect. Very minor differences might exist due to numerical rounding.</p>
+<div class="sourceCode" id="cb13" data-startfrom="39"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 38;"><span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a><span class="va">max</span>(<span class="va">vec</span>(<span class="va">irfs</span> <span class="op">-</span> <span class="va">effectsContemp</span> <span class="op">-</span> <span class="va">effectsNonContemp</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="visualising-decomposition" class="level3">
+<h3 class="anchored" data-anchor-id="visualising-decomposition">6. Visualising decomposition</h3>
+<p>Lastly, we visualise the decomposition using <code>plotDecomposition</code>. We must first define the channel names:</p>
+<div class="sourceCode" id="cb14" data-startfrom="41"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 40;"><span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="va">channelNames</span> <span class="op">=</span> [<span class="st">"Contemporaneous"</span><span class="op">,</span> <span class="st">"Non-Contemporaneous"</span>]<span class="op">;</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="va">cellChannelEffects</span> <span class="op">=</span> {<span class="va">effectsContemp</span><span class="op">,</span> <span class="va">effectsNonContemp</span>}<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The decomposition for the effects of a monetary policy shock on the federal funds rate (the second variable in the data) can then be obtained in the following way:</p>
+<div class="sourceCode" id="cb15" data-startfrom="44"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 43;"><span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="va">fig</span> <span class="op">=</span> <span class="va">plotDecomposition</span>(<span class="fl">2</span><span class="op">,</span> <span class="va">irfs</span><span class="op">,</span> <span class="va">cellChannelEffects</span><span class="op">,</span> <span class="va">channelNames</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-gk-ffr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gk-ffr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="gk-ffr.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gk-ffr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Decomposition of the GK identified monetary policy shock on the federal funds rate.
+</figcaption>
+</figure>
+</div>
+<p>Similarly, the decomposition for the effects of a monetary policy shock on inflation (the fourth variable in the data) can be obtained in the following way:</p>
+<div class="sourceCode" id="cb16" data-startfrom="48"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 47;"><span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="va">fig</span> <span class="op">=</span> <span class="va">plotDecomposition</span>(<span class="fl">4</span><span class="op">,</span> <span class="va">irfs</span><span class="op">,</span> <span class="va">cellChannelEffects</span><span class="op">,</span> <span class="va">channelNames</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-gk-infl" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gk-infl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="gk-infl.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gk-infl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Decomposition of the GK identified monetary policy shock on inflation.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="romer-and-romer" class="level2">
+<h2 class="anchored" data-anchor-id="romer-and-romer">Romer and Romer</h2>
+<p>Most of the transmission channel analysis for the <span class="citation" data-cites="romerNewMeasureMonetary2004">Romer and Romer (<a href="#ref-romerNewMeasureMonetary2004" role="doc-biblioref">2004</a>)</span> instrument follows the same steps as for the <span class="citation" data-cites="gertlerMonetaryPolicySurprises2015">Gertler and Karadi (<a href="#ref-gertlerMonetaryPolicySurprises2015" role="doc-biblioref">2015</a>)</span> instrument. Below we highlight only the differences. For steps 2, 4, 5, 6, the same code as above can be used.</p>
+<p>Before we start, we must first adjust the data and replace the GK with the RR instrument:</p>
+<div class="sourceCode" id="cb17" data-startfrom="56"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 55;"><span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a><span class="va">keepCols</span> <span class="op">=</span> {<span class="ss">'rr_3'</span><span class="op">,</span> <span class="ss">'ffr'</span><span class="op">,</span> <span class="ss">'ygap'</span><span class="op">,</span> <span class="ss">'infl'</span><span class="op">,</span> <span class="ss">'lpcom'</span>}<span class="op">;</span></span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a><span class="va">dataRR</span> <span class="op">=</span> <span class="va">data</span>(<span class="op">:,</span> <span class="va">keepCols</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="defining-the-model-1" class="level3">
+<h3 class="anchored" data-anchor-id="defining-the-model-1">1. Defining the model</h3>
+<p>Because the data has changed, our model definition changes slightly – the dataset name changes.</p>
+<div class="sourceCode" id="cb18" data-startfrom="60"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 59;"><span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a><span class="va">model</span> <span class="op">=</span> <span class="va">VAR</span>(<span class="va">dataRR</span><span class="op">,</span> <span class="fl">4</span><span class="op">,</span> <span class="ss">'trendExponents'</span><span class="op">,</span> <span class="fl">0</span><span class="op">:</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a><span class="va">model</span>.<span class="va">fit</span>()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="defining-transmission-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="defining-transmission-matrix">3. Defining transmission matrix</h3>
+<p>The transmission matrix remains largely the same, but the name of the instrument changes.</p>
+<div class="sourceCode" id="cb19" data-startfrom="70"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 69;"><span id="cb19-70"><a href="#cb19-70" aria-hidden="true" tabindex="-1"></a><span class="va">transmissionOrder</span> <span class="op">=</span> {<span class="ss">'rr_3'</span><span class="op">,</span> <span class="ss">'ffr'</span><span class="op">,</span> <span class="ss">'ygap'</span><span class="op">,</span> <span class="ss">'infl'</span><span class="op">,</span> <span class="ss">'lpcom'</span>}<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="visualising-effects" class="level3">
+<h3 class="anchored" data-anchor-id="visualising-effects">6. Visualising effects</h3>
+<p>While the code ramains the same, the graphs change.</p>
+<div id="fig-rr-ffr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rr-ffr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="rr-ffr.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rr-ffr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Decomposition of the RR identified monetary policy shock on the federal funds rate.
+</figcaption>
+</figure>
+</div>
+<div id="fig-rr-infl" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rr-infl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="rr-infl.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rr-infl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Decomposition of the RR identified monetary policy shock on inflation.
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Minor differences between the decompositions here and the ones in the paper are due to how we obtain the Cholesky-orthogonalised IRFs. In the paper we estimate orthogonal IRFs using a VAR excluding the internal instrument. Here we include the internal instrument.</p>
+</div>
+</div>
 
 
 
-</main> <!-- /main -->
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-gertlerMonetaryPolicySurprises2015" class="csl-entry" role="listitem">
+Gertler, Mark, and Peter Karadi. 2015. <span>“Monetary Policy Surprises, Credit Costs, and Economic Activity.”</span> <em>American Economic Journal: Macroeconomics</em> 7 (1): 44–76.
+</div>
+<div id="ref-romerNewMeasureMonetary2004" class="csl-entry" role="listitem">
+Romer, Christina D, and David H Romer. 2004. <span>“A New Measure of Monetary Shocks: Derivation and Implications.”</span> <em>American Economic Review</em> 94 (4): 1055–84.
+</div>
+<div id="ref-wegnerTCA2024" class="csl-entry" role="listitem">
+Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2025. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
