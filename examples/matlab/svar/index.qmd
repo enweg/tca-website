@@ -8,7 +8,7 @@ sidebar: examples
 
 <!-- TODO: include graphs and improve text. -->
 
-Section 5.1 of @wegnerTCA2024 splits the effects of monetary policy into contemporaneous and non-contemporanous effects, the latter of which are linked to forward guidance and other non-conventional policies. In this example, we replicate these results. Before we begin, download both the [code](./wegner2025-section-5-1.m.m) and the [replication data](./data.csv). Make sure to put the data and the code into the same folder.
+Section 5.1 of @wegnerTCA2024 splits the effects of monetary policy into contemporaneous and non-contemporanous effects, the latter of which are linked to forward guidance and other non-conventional policies. In this example, we do the same. Before we begin, download both the [code](./wegner2025-section-5-1.m.m) and the [replication data](./data.csv). Make sure to put the data and the code into the same folder.
 
 To ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:
 
@@ -25,11 +25,11 @@ Finally, before coming to the analysis, load the replication data into a table:
 ```{.matlab include="wegner2025-section-5-1.m" start-line=8 end-line=8}
 ```
 
-@wegnerTCA2024 do the analysis for two internal instruments of monetary policy shocks: (1) the Gertler and Karadi (XXX) instrument and (2) the Romer and Romer (XXX) instrument. We split our analysis accordingly and start investigating the contemporanous and non-contemporaneous effects of monetary policy estimated using the Gertler and Karadi instrument. 
+@wegnerTCA2024 do the analysis for two internal instruments of monetary policy shocks: (1) the @gertlerMonetaryPolicySurprises2015 instrument and (2) the @romerNewMeasureMonetary2004 instrument. We split our analysis accordingly and start investigating the contemporanous and non-contemporaneous effects of monetary policy estimated using the Gertler and Karadi instrument. 
 
 ## Gertler Karadi
 
-Gertler and Karadi (XXX) derive an instrument for monetary policy shocks by extracting the surprise component of FOMC meetings from the change in Fed Funds Futures in a tight time window around these FOMC meetings. This instrument is contained in the replication data and named XXX. Also contained in the data is the Romer and Romer (XXX) instrument (XXX) which we do not currently need. 
+@gertlerMonetaryPolicySurprises2015 derive an instrument for monetary policy shocks by extracting the surprise component of FOMC meetings from the change in Fed Funds Futures in a tight time window around these FOMC meetings. This instrument is contained in the data and named `mp1_tc`. Also contained in the data is the @romerNewMeasureMonetary2004 instrument (`rr_3`) which we do not currently need. 
 
 To focus on the GK instrument, we filter the data for only the GK instrument, interest rates, output gap, commodity prices and inflation
 
@@ -40,7 +40,7 @@ With the data at hand, our transmission channel analysis follows the common six 
 
 ### 1. Defining the model
 
-The first step to any transmission channel analysis is to define the model. @wegnerTCA2024 choose to estimate the total effects using the GK series as an internal instrument in a VAR. We must thus first define and estimate a `VAR` model: 
+The first step to any transmission channel analysis is to define the model. Here, we will go with a VAR model. We include the instrument in the VAR, thus effectively deciding that we identify the shock via an internal instrument. 
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=18 end-line=19}
 ```
@@ -57,7 +57,7 @@ Structural IRFs can then be obtained by using `IRF` and providing the `identific
 ```{.matlab include="wegner2025-section-5-1.m" start-line=24 end-line=25}
 ```
 
-Although not strictly necessary, @wegnerTCA2024 decide to normalise the shock's size to 25bps. This can be achieved by mutiplying the structural IRFs, currently normalised to a 1pp increase, by `0.25`.
+Although not strictly necessary, we normalise the shock's size to 25bps. This can be achieved by mutiplying the structural IRFs, currently normalised to a 1pp increase, by `0.25`.
 
 ```{.matlab include="wegner2025-section-5-1.m" start-line=26 end-line=26}
 ```
@@ -111,37 +111,45 @@ The decomposition for the effects of a monetary policy shock on the federal fund
 ```{.matlab include="wegner2025-section-5-1.m" start-line=44 end-line=44}
 ```
 
+![Decomposition of the GK identified monetary policy shock on the federal funds rate.](gk-ffr.png){#fig-gk-ffr}
+
 Similarly, the decomposition for the effects of a monetary policy shock on inflation (the fourth variable in the data) can be obtained in the following way: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=46 end-line=46}
+```{.matlab include="wegner2025-section-5-1.m" start-line=48 end-line=48}
 ```
+
+![Decomposition of the GK identified monetary policy shock on inflation.](gk-infl.png){#fig-gk-infl}
 
 ## Romer and Romer
 
-Most of the transmission channel analysis for the Romer and Romer (XXX) instrument follows the same steps as for the Gertler and Karadi (XXX) instrument. Below we highlight only the differences. For steps 2, 4, 5, 6, the same code as above can be used. 
+Most of the transmission channel analysis for the @romerNewMeasureMonetary2004 instrument follows the same steps as for the @gertlerMonetaryPolicySurprises2015 instrument. Below we highlight only the differences. For steps 2, 4, 5, 6, the same code as above can be used. 
 
 Before we start, we must first adjust the data and replace the GK with the RR instrument: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=52 end-line=53}
+```{.matlab include="wegner2025-section-5-1.m" start-line=56 end-line=57}
 ```
 
 ### 1. Defining the model 
 
 Because the data has changed, our model definition changes slightly -- the dataset name changes. 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=56 end-line=57}
+```{.matlab include="wegner2025-section-5-1.m" start-line=60 end-line=61}
 ```
 
 ### 3. Defining transmission matrix
 
 The transmission matrix remains largely the same, but the name of the instrument changes. 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=66 end-line=66}
+```{.matlab include="wegner2025-section-5-1.m" start-line=70 end-line=70}
 ```
 
 ### 6. Visualising effects
 
 While the code ramains the same, the graphs change. 
+
+![Decomposition of the RR identified monetary policy shock on the federal funds rate.](rr-ffr.png){#fig-rr-ffr}
+
+![Decomposition of the RR identified monetary policy shock on inflation.](rr-infl.png){#fig-rr-infl}
 
 ::: {.callout-note} 
 Minor differences between the decompositions here and the ones in the paper 

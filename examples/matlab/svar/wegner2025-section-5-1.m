@@ -42,8 +42,12 @@ channelNames = ["Contemporaneous", "Non-Contemporaneous"];
 cellChannelEffects = {effectsContemp, effectsNonContemp};
 % for ffr
 fig = plotDecomposition(2, irfs, cellChannelEffects, channelNames);
+set(fig, 'Units', 'inches', 'Position', [1 1 10 5]);
+exportgraphics(fig, 'gk-ffr.png', 'Resolution', 300);
 % for inflation
 fig = plotDecomposition(4, irfs, cellChannelEffects, channelNames);
+set(fig, 'Units', 'inches', 'Position', [1 1 10 5]);
+exportgraphics(fig, 'gk-infl.png', 'Resolution', 300);
 
 %-------------------------------------------------------------------------------
 % ROMER AND ROMER
@@ -80,8 +84,12 @@ channelNames = ["Contemporaneous", "Non-Contemporaneous"];
 cellChannelEffects = {effectsContemp, effectsNonContemp};
 % for ffr
 fig = plotDecomposition(2, irfs, cellChannelEffects, channelNames);
+set(fig, 'Units', 'inches', 'Position', [1 1 10 5]);
+exportgraphics(fig, 'rr-ffr.png', 'Resolution', 300);
 % for inflation
 fig = plotDecomposition(4, irfs, cellChannelEffects, channelNames);
+set(fig, 'Units', 'inches', 'Position', [1 1 10 5]);
+exportgraphics(fig, 'rr-infl.png', 'Resolution', 300);
 
 % Minor differences between the decompositions here and the ones in the paper 
 % are due to how we obtain the orthogonal IRFs. In the paper we estimate 
