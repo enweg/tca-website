@@ -6,8 +6,6 @@ bibliography: ../../../references.bib
 sidebar: examples
 ---
 
-<!-- TODO: include graphs and improve text. -->
-
 Section 5.1 of @wegnerTCA2024 splits the effects of monetary policy into contemporaneous and non-contemporanous effects, the latter of which are linked to forward guidance and other non-conventional policies. In this example, we do the same. Before we begin, download both the [code](./wegner2025-section-5-1.m.m) and the [replication data](./data.csv). Make sure to put the data and the code into the same folder.
 
 To ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:
