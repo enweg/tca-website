@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -196,11 +250,22 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#defining-the-model" id="toc-defining-the-model" class="nav-link active" data-scroll-target="#defining-the-model">1. Defining the model</a></li>
+  <li><a href="#obtaining-total-effects" id="toc-obtaining-total-effects" class="nav-link" data-scroll-target="#obtaining-total-effects">2. Obtaining total effects</a></li>
+  <li><a href="#defning-the-transmission-matrix-order" id="toc-defning-the-transmission-matrix-order" class="nav-link" data-scroll-target="#defning-the-transmission-matrix-order">3. Defning the transmission matrix / order</a></li>
+  <li><a href="#defining-the-transmission-channels" id="toc-defining-the-transmission-channels" class="nav-link" data-scroll-target="#defining-the-transmission-channels">4. Defining the transmission channels</a></li>
+  <li><a href="#computing-transmission-effects" id="toc-computing-transmission-effects" class="nav-link" data-scroll-target="#computing-transmission-effects">5. Computing transmission effects</a></li>
+  <li><a href="#visualising-transmission-effects" id="toc-visualising-transmission-effects" class="nav-link" data-scroll-target="#visualising-transmission-effects">6. Visualising transmission effects</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../examples/matlab/svar/index.html">Matlab</a></li><li class="breadcrumb-item"><a href="../../../examples/matlab/lp/index.html">TCA in LPs</a></li></ol></nav>
 <div class="quarto-title">
@@ -221,11 +286,126 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This part of the website is still under construction. Our apologies.</p>
+<p>In this example, we examine the anticipation and implementation effects of government defense spending, closely following Section 5.2 in <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span>. Before beginning, download both the code and the replication data. Ensure that the data and code are placed in the same folder.</p>
+<p>For a clean working environment, we recommend starting a new Matlab session. Alternatively, clear the workspace and console by running:</p>
+<div class="sourceCode" id="cb1" data-startfrom="1"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">clear</span><span class="op">;</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">clc</span><span class="op">;</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Next, add the TCA Toolbox to the Matlab path. Adjust the file paths within the quotation marks as necessary:</p>
+<div class="sourceCode" id="cb2" data-startfrom="4"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 3;"><span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">addpath</span>(<span class="st">"~/Documents/repos/tca-matlab-toolbox/"</span>)<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">addpath</span>(<span class="st">"~/Documents/repos/tca-matlab-toolbox/plotting"</span>)<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="va">addpath</span>(<span class="st">"~/Documents/repos/tca-matlab-toolbox/models"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, before proceeding with the analysis, load the replication data into a table:</p>
+<div class="sourceCode" id="cb3" data-startfrom="8"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 7;"><span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">data</span> <span class="op">=</span> <span class="va">readtable</span>(<span class="st">"./data.csv"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The remainder of this example follows the standard six-step approach.</p>
+<section id="defining-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="defining-the-model">1. Defining the model</h2>
+<p>We estimate structural impulse response functions (IRFs) using local projections (LPs). An LP model can be created using <code>LP</code>, specifying the treatment variable and maximum horizon. <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> use the defense spending series from <span class="citation" data-cites="rameyDefenseNewsShocks2016">Ramey (<a href="#ref-rameyDefenseNewsShocks2016" role="doc-biblioref">2016</a>)</span> as a direct measure of the shock. Thus, the treatment is <code>newsy</code>, and the maximum horizon is set to <code>20</code> periods.</p>
+<div class="sourceCode" id="cb4" data-startfrom="11"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 10;"><span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="va">model</span> <span class="op">=</span> <span class="va">LP</span>(<span class="va">data</span><span class="op">,</span> <span class="ss">'newsy'</span><span class="op">,</span> <span class="fl">4</span><span class="op">,</span> <span class="fl">0</span><span class="op">:</span><span class="fl">20</span><span class="op">,</span> <span class="ss">'includeConstant'</span><span class="op">,</span> <span class="va">true</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The local projection can then be estimated using <code>fit</code>:</p>
+<div class="sourceCode" id="cb5" data-startfrom="12"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 11;"><span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="va">model</span>.<span class="va">fit</span>()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="obtaining-total-effects" class="level2">
+<h2 class="anchored" data-anchor-id="obtaining-total-effects">2. Obtaining total effects</h2>
+<p>Since <code>newsy</code> is treated as a direct measure of the shock, the effects of a government defense spending shock can be identified recursively by ordering the <code>newsy</code> series first. This recursive identification scheme can be defined using <code>Recursive</code>:</p>
+<div class="sourceCode" id="cb6" data-startfrom="15"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 14;"><span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="va">method</span> <span class="op">=</span> <span class="va">Recursive</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Using this <code>Recursive</code> identification scheme, structural IRFs can be obtained via <code>IRF</code>:</p>
+<div class="sourceCode" id="cb7" data-startfrom="16"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 15;"><span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="va">irfObj</span> <span class="op">=</span> <span class="va">model</span>.<span class="va">IRF</span>(<span class="fl">20</span><span class="op">,</span> <span class="ss">'identificationMethod'</span><span class="op">,</span> <span class="va">method</span>)<span class="op">;</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="va">irfs</span> <span class="op">=</span> <span class="va">irfObj</span>.<span class="va">getIrfArray</span>()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="defning-the-transmission-matrix-order" class="level2">
+<h2 class="anchored" data-anchor-id="defning-the-transmission-matrix-order">3. Defning the transmission matrix / order</h2>
+<p>The transmission matrix is defined as a cell array of <code>char</code>. <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> split the total effects into anticipation and implementation effects. They define the anticipation channel as effects that do not pass through actual government defense spending. Thus, it is logical to order <code>gdef</code> (government defense spending) as early as possible in the transmission matrix, but it must not precede the shock variable, <code>newsy</code>. The chosen transmission matrix is:</p>
+<div class="sourceCode" id="cb8" data-startfrom="25"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 24;"><span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="va">transmissionOrder</span> <span class="op">=</span> {<span class="ss">'newsy'</span><span class="op">,</span> <span class="ss">'gdef'</span><span class="op">,</span> <span class="ss">'g'</span><span class="op">,</span> <span class="ss">'y'</span>}<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Alternatively, since columns in <code>data</code> are already correctly ordered, the following simpler definition can be used:</p>
+<div class="sourceCode" id="cb9" data-startfrom="26"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 25;"><span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="va">transmissionOrder</span> <span class="op">=</span> <span class="va">model</span>.<span class="va">getVariableNames</span>()<span class="op">;</span>  <span class="co">% because order is already correct</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="defining-the-transmission-channels" class="level2">
+<h2 class="anchored" data-anchor-id="defining-the-transmission-channels">4. Defining the transmission channels</h2>
+<p><span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> define the anticipation channel as the effects of the government defense spending shock that do not pass through government defense spending at any period. This channel can be defined using <code>notThrough</code> as follows:</p>
+<div class="sourceCode" id="cb10" data-startfrom="29"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 28;"><span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="va">anticipationChannel</span> <span class="op">=</span> <span class="va">model</span>.<span class="va">notThrough</span>(<span class="ss">'gdef'</span><span class="op">,</span> <span class="fl">0</span><span class="op">:</span><span class="fl">20</span><span class="op">,</span> <span class="va">transmissionOrder</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The implementation channel, representing effects passing through government defense spending in at least one period, is then the complement of the anticipation channel:</p>
+<div class="sourceCode" id="cb11" data-startfrom="30"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 29;"><span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="va">implementationChannel</span> <span class="op">=</span> <span class="op">~</span><span class="va">anticipationChannel</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="computing-transmission-effects" class="level2">
+<h2 class="anchored" data-anchor-id="computing-transmission-effects">5. Computing transmission effects</h2>
+<p>Transmission effects are computed using <code>transmission</code> for the first <code>20</code> periods, considering the first shock, corresponding to defense spending shock. Structural IRFs required for the computations are derived using the <code>Recursive</code> identification <code>method</code> defined earlier.</p>
+<div class="sourceCode" id="cb12" data-startfrom="33"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 32;"><span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a><span class="va">anticipationEffects</span> <span class="op">=</span> <span class="va">model</span>.<span class="va">transmission</span>(<span class="fl">1</span><span class="op">,</span> <span class="va">anticipationChannel</span><span class="op">,</span> <span class="va">transmissionOrder</span><span class="op">,</span> <span class="fl">20</span><span class="op">,</span> <span class="ss">'identificationMethod'</span><span class="op">,</span> <span class="va">method</span>)<span class="op">;</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a><span class="va">implementationEffects</span> <span class="op">=</span> <span class="va">model</span>.<span class="va">transmission</span>(<span class="fl">1</span><span class="op">,</span> <span class="va">implementationChannel</span><span class="op">,</span> <span class="va">transmissionOrder</span><span class="op">,</span> <span class="fl">20</span><span class="op">,</span> <span class="ss">'identificationMethod'</span><span class="op">,</span> <span class="va">method</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="visualising-transmission-effects" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="visualising-transmission-effects">6. Visualising transmission effects</h2>
+<p>To visualise transmission effects, first define channel names and collect the effects in a cell array:</p>
+<div class="sourceCode" id="cb13" data-startfrom="37"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 36;"><span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="va">channelNames</span> <span class="op">=</span> [<span class="st">"Anticipation Channel"</span><span class="op">,</span> <span class="st">"Implementation Channel"</span>]<span class="op">;</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="va">cellChannelEffects</span> <span class="op">=</span> {<span class="va">anticipationEffects</span><span class="op">,</span> <span class="va">implementationEffects</span>}<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Figures <a href="#fig-output" class="quarto-xref">Figure&nbsp;1 (a)</a> to <a href="#fig-gdef" class="quarto-xref">Figure&nbsp;1 (c)</a> illustrate decompositions for output, total government spending, and government defense spending, respectively. These can be obtained using:</p>
+<div class="sourceCode" id="cb14" data-startfrom="39"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 38;"><span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a><span class="co">% output</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="va">fig</span> <span class="op">=</span> <span class="va">plotDecomposition</span>(<span class="fl">4</span><span class="op">,</span> <span class="va">irfs</span>(<span class="op">:,</span> <span class="fl">1</span><span class="op">,</span> <span class="op">:</span>)<span class="op">,</span> <span class="va">cellChannelEffects</span><span class="op">,</span> <span class="va">channelNames</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15" data-startfrom="43"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 42;"><span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="co">% Total government spending</span></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="va">fig</span> <span class="op">=</span> <span class="va">plotDecomposition</span>(<span class="fl">3</span><span class="op">,</span> <span class="va">irfs</span>(<span class="op">:,</span> <span class="fl">1</span><span class="op">,</span> <span class="op">:</span>)<span class="op">,</span> <span class="va">cellChannelEffects</span><span class="op">,</span> <span class="va">channelNames</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16" data-startfrom="47"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab" style="counter-reset: source-line 46;"><span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="co">% Government defense spending</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="va">fig</span> <span class="op">=</span> <span class="va">plotDecomposition</span>(<span class="fl">2</span><span class="op">,</span> <span class="va">irfs</span>(<span class="op">:,</span> <span class="fl">1</span><span class="op">,</span> <span class="op">:</span>)<span class="op">,</span> <span class="va">cellChannelEffects</span><span class="op">,</span> <span class="va">channelNames</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="page-columns page-full">
+<div id="fig-decomposition" class="quarto-layout-panel page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-decomposition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<div class="quarto-layout-row column-page">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-decomposition" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-output" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-output-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./output.png" class="img-fluid figure-img" data-ref-parent="fig-decomposition">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-output-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Output
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-decomposition" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-gov" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-gov-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./gov.png" class="img-fluid figure-img" data-ref-parent="fig-decomposition">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-gov-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Total Government Spending
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-decomposition" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-gdef" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-gdef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./gdef.png" class="img-fluid figure-img" data-ref-parent="fig-decomposition">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-gdef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) Government Defense Spending
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decomposition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Decomposition of the government defense spending shock of <span class="citation" data-cites="rameyDefenseNewsShocks2016">Ramey (<a href="#ref-rameyDefenseNewsShocks2016" role="doc-biblioref">2016</a>)</span> into the effect through an anticipation and implementation channel.
+</figcaption>
+</figure>
+</div>
+</div>
 
 
 
-</main> <!-- /main -->
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-rameyDefenseNewsShocks2016" class="csl-entry" role="listitem">
+Ramey, Valerie A. 2016. <span>“Defense News Shocks, 1889 - 2015: Estimates Based on News Sources.”</span> Manuscript. Univ. California San Diego. <a href="https://econweb.ucsd.edu/~vramey/research/Defense_News_Narrative.pdf">https://econweb.ucsd.edu/~vramey/research/Defense_News_Narrative.pdf</a>.
+</div>
+<div id="ref-wegnerTCA2024" class="csl-entry" role="listitem">
+Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2025. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

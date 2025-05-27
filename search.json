@@ -7995,7 +7995,79 @@
     "href": "examples/matlab/lp/index.html",
     "title": "TCA in Local Projections",
     "section": "",
-    "text": "This part of the website is still under construction. Our apologies.",
+    "text": "In this example, we examine the anticipation and implementation effects of government defense spending, closely following Section 5.2 in Wegner et al. (2025). Before beginning, download both the code and the replication data. Ensure that the data and code are placed in the same folder.\nFor a clean working environment, we recommend starting a new Matlab session. Alternatively, clear the workspace and console by running:\nNext, add the TCA Toolbox to the Matlab path. Adjust the file paths within the quotation marks as necessary:\nFinally, before proceeding with the analysis, load the replication data into a table:\nThe remainder of this example follows the standard six-step approach.",
+    "crumbs": [
+      "Home",
+      "Matlab",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/matlab/lp/index.html#defining-the-model",
+    "href": "examples/matlab/lp/index.html#defining-the-model",
+    "title": "TCA in Local Projections",
+    "section": "1. Defining the model",
+    "text": "1. Defining the model\nWe estimate structural impulse response functions (IRFs) using local projections (LPs). An LP model can be created using LP, specifying the treatment variable and maximum horizon. Wegner et al. (2025) use the defense spending series from Ramey (2016) as a direct measure of the shock. Thus, the treatment is newsy, and the maximum horizon is set to 20 periods.\nmodel = LP(data, 'newsy', 4, 0:20, 'includeConstant', true);\nThe local projection can then be estimated using fit:\nmodel.fit();",
+    "crumbs": [
+      "Home",
+      "Matlab",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/matlab/lp/index.html#obtaining-total-effects",
+    "href": "examples/matlab/lp/index.html#obtaining-total-effects",
+    "title": "TCA in Local Projections",
+    "section": "2. Obtaining total effects",
+    "text": "2. Obtaining total effects\nSince newsy is treated as a direct measure of the shock, the effects of a government defense spending shock can be identified recursively by ordering the newsy series first. This recursive identification scheme can be defined using Recursive:\nmethod = Recursive()\nUsing this Recursive identification scheme, structural IRFs can be obtained via IRF:\nirfObj = model.IRF(20, 'identificationMethod', method);\nirfs = irfObj.getIrfArray();",
+    "crumbs": [
+      "Home",
+      "Matlab",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/matlab/lp/index.html#defning-the-transmission-matrix-order",
+    "href": "examples/matlab/lp/index.html#defning-the-transmission-matrix-order",
+    "title": "TCA in Local Projections",
+    "section": "3. Defning the transmission matrix / order",
+    "text": "3. Defning the transmission matrix / order\nThe transmission matrix is defined as a cell array of char. Wegner et al. (2025) split the total effects into anticipation and implementation effects. They define the anticipation channel as effects that do not pass through actual government defense spending. Thus, it is logical to order gdef (government defense spending) as early as possible in the transmission matrix, but it must not precede the shock variable, newsy. The chosen transmission matrix is:\ntransmissionOrder = {'newsy', 'gdef', 'g', 'y'};\nAlternatively, since columns in data are already correctly ordered, the following simpler definition can be used:\ntransmissionOrder = model.getVariableNames();  % because order is already correct",
+    "crumbs": [
+      "Home",
+      "Matlab",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/matlab/lp/index.html#defining-the-transmission-channels",
+    "href": "examples/matlab/lp/index.html#defining-the-transmission-channels",
+    "title": "TCA in Local Projections",
+    "section": "4. Defining the transmission channels",
+    "text": "4. Defining the transmission channels\nWegner et al. (2025) define the anticipation channel as the effects of the government defense spending shock that do not pass through government defense spending at any period. This channel can be defined using notThrough as follows:\nanticipationChannel = model.notThrough('gdef', 0:20, transmissionOrder);\nThe implementation channel, representing effects passing through government defense spending in at least one period, is then the complement of the anticipation channel:\nimplementationChannel = ~anticipationChannel;",
+    "crumbs": [
+      "Home",
+      "Matlab",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/matlab/lp/index.html#computing-transmission-effects",
+    "href": "examples/matlab/lp/index.html#computing-transmission-effects",
+    "title": "TCA in Local Projections",
+    "section": "5. Computing transmission effects",
+    "text": "5. Computing transmission effects\nTransmission effects are computed using transmission for the first 20 periods, considering the first shock, corresponding to defense spending shock. Structural IRFs required for the computations are derived using the Recursive identification method defined earlier.\nanticipationEffects = model.transmission(1, anticipationChannel, transmissionOrder, 20, 'identificationMethod', method);\nimplementationEffects = model.transmission(1, implementationChannel, transmissionOrder, 20, 'identificationMethod', method);",
+    "crumbs": [
+      "Home",
+      "Matlab",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/matlab/lp/index.html#visualising-transmission-effects",
+    "href": "examples/matlab/lp/index.html#visualising-transmission-effects",
+    "title": "TCA in Local Projections",
+    "section": "6. Visualising transmission effects",
+    "text": "6. Visualising transmission effects\nTo visualise transmission effects, first define channel names and collect the effects in a cell array:\nchannelNames = [\"Anticipation Channel\", \"Implementation Channel\"];\ncellChannelEffects = {anticipationEffects, implementationEffects};\nFigures Figure 1 (a) to Figure 1 (c) illustrate decompositions for output, total government spending, and government defense spending, respectively. These can be obtained using:\n% output\nfig = plotDecomposition(4, irfs(:, 1, :), cellChannelEffects, channelNames)\n% Total government spending\nfig = plotDecomposition(3, irfs(:, 1, :), cellChannelEffects, channelNames)\n% Government defense spending\nfig = plotDecomposition(2, irfs(:, 1, :), cellChannelEffects, channelNames)\n\n\n\n\n\n\n\n\n\n\n\n\n(a) Output\n\n\n\n\n\n\n\n\n\n\n\n(b) Total Government Spending\n\n\n\n\n\n\n\n\n\n\n\n(c) Government Defense Spending\n\n\n\n\n\n\n\nFigure 1: Decomposition of the government defense spending shock of Ramey (2016) into the effect through an anticipation and implementation channel.",
     "crumbs": [
       "Home",
       "Matlab",
