@@ -6,28 +6,28 @@ bibliography: ../../../references.bib
 sidebar: examples
 ---
 
-In this example, we investigate the anticipation and implementation effects of government defense spending along the lines of Section 5.2 in @wegnerTCA2024. Before we begin, download botht the [code](./wegner2025-section-5-2.m) and the [replication data](./data.csv). Make sure to put the data and the code into the same folder. 
+In this example, we examine the anticipation and implementation effects of government defense spending, closely following Section 5.2 in @wegnerTCA2024. Before beginning, download both the code and the replication data. Ensure that the data and code are placed in the same folder.
 
-To ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:
+For a clean working environment, we recommend starting a new Matlab session. Alternatively, clear the workspace and console by running:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=1 end-line=2}
 ```
 
-Next, add the TCA Toolbox to the Matlab path. You will likely have to adjust the file paths in the quotation marks: 
+Next, add the TCA Toolbox to the Matlab path. Adjust the file paths within the quotation marks as necessary:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=4 end-line=6}
 ```
 
-Finally, before coming to the analysis, load the replication data into a table: 
+Finally, before proceeding with the analysis, load the replication data into a table:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=8 end-line=8}
 ```
 
-The remainder of the example follows the common six step approach. 
+The remainder of this example follows the standard six-step approach.
 
 ## 1. Defining the model
 
-We estimate structural IRFs using local projections (LPs). An LP model can be created using `LP`, providing the treatment and maximum horizons. @wegnerTCA2024 use the defense spending series of @rameyDefenseNewsShocks2016 as a direct measure of the shock. The treatment is thus `newsy`. We limit the maximum horizon to `20` periods. 
+We estimate structural impulse response functions (IRFs) using local projections (LPs). An LP model can be created using `LP`, specifying the treatment variable and maximum horizon. @wegnerTCA2024 use the defense spending series from @rameyDefenseNewsShocks2016 as a direct measure of the shock. Thus, the treatment is `newsy`, and the maximum horizon is set to `20` periods.
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=11 end-line=11}
 ```
@@ -39,55 +39,55 @@ The local projection can then be estimated using `fit`:
 
 ## 2. Obtaining total effects
 
-Since `newsy` is treated as a direct measure of the shock, the effects to a government defense spending shock can be identified recursively by ordering the `newsy` series first. This recursive scheme can be defined using `Recursive`: 
+Since `newsy` is treated as a direct measure of the shock, the effects of a government defense spending shock can be identified recursively by ordering the `newsy` series first. This recursive identification scheme can be defined using `Recursive`:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=15 end-line=15}
 ```
 
-Using the `Recursive` identification scheme, structural IRFs can be obtained using `IRF`: 
+Using this `Recursive` identification scheme, structural IRFs can be obtained via `IRF`:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=16 end-line=17}
 ```
 
 ## 3. Defning the transmission matrix / order
 
-The transmission matrix is defined as a cell array of `char`. @wegnerTCA2024 split the total effects into anticipation and implementation effects. They define the anticipation channel as the effect not going through actual government defense spending. It thus makes sense to order `gdef` (government defense spending) as early as possible in the transmission matrix. However, it should not be ordered before the variable associated with the shock, here `newsy`. The chosen transmission matrix is therefore: 
+The transmission matrix is defined as a cell array of `char`. @wegnerTCA2024 split the total effects into anticipation and implementation effects. They define the anticipation channel as effects that do not pass through actual government defense spending. Thus, it is logical to order `gdef` (government defense spending) as early as possible in the transmission matrix, but it must not precede the shock variable, `newsy`. The chosen transmission matrix is:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=25 end-line=25}
 ```
 
-Alternatively, since the columns in `data` are already in the correct order, the following can be used: 
+Alternatively, since columns in `data` are already correctly ordered, the following simpler definition can be used:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=26 end-line=26}
 ```
 
 ## 4. Defining the transmission channels
 
-@wegnerTCA2024 define the anticipation channel as the effect of the government defense spending shock not going through government defense spending in any period. This channel can be defined using `notThrough` in the following way: 
+@wegnerTCA2024 define the anticipation channel as the effects of the government defense spending shock that do not pass through government defense spending at any period. This channel can be defined using `notThrough` as follows:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=29 end-line=29}
 ```
 
-The implementation channel is then defined as the effect going through government defense spending in at least one period -- therefore, as the complement to the anticipation channel. 
+The implementation channel, representing effects passing through government defense spending in at least one period, is then the complement of the anticipation channel:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=30 end-line=30}
 ```
 
 ## 5. Computing transmission effects
 
-Transmission effects are computed using `transmission` for the first `20` periods, and for the first shock, corresponding to the defense spending shock. Structural IRFs needed to compute the transmission effects are computed using the `Recursive` identification `method` from above. 
+Transmission effects are computed using `transmission` for the first `20` periods, considering the first shock, corresponding to defense spending shock. Structural IRFs required for the computations are derived using the `Recursive` identification `method` defined earlier.
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=33 end-line=34}
 ```
 
 ## 6. Visualising transmission effects
 
-To visualise the transmission effects, we first define the channel names and collect the effects in a cell array: 
+To visualise transmission effects, first define channel names and collect the effects in a cell array:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=37 end-line=38}
 ```
 
-Figures @fig-output to @fig-gdef, visualising the decompositions for output, total government spending, and government defense spending, respectively, can be obtained using the following code: 
+Figures @fig-output to @fig-gdef illustrate decompositions for output, total government spending, and government defense spending, respectively. These can be obtained using:
 
 ```{.matlab include="wegner2025-section-5-2.m" start-line=39 end-line=40}
 ```
