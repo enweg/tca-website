@@ -36,10 +36,16 @@ implementationEffects = model.transmission(1, implementationChannel, transmissio
 % 6. Visualising
 channelNames = ["Anticipation Channel", "Implementation Channel"];
 cellChannelEffects = {anticipationEffects, implementationEffects};
-% Government defense spending
-fig = plotDecomposition(2, irfs(:, 1, :), cellChannelEffects, channelNames)
-% Total government spending
-fig = plotDecomposition(3, irfs(:, 1, :), cellChannelEffects, channelNames)
 % output
 fig = plotDecomposition(4, irfs(:, 1, :), cellChannelEffects, channelNames)
+set(fig, 'Units', 'inches', 'Position', [1 1 10 5]);
+exportgraphics(fig, 'output.png', 'Resolution', 300);
+% Total government spending
+fig = plotDecomposition(3, irfs(:, 1, :), cellChannelEffects, channelNames)
+set(fig, 'Units', 'inches', 'Position', [1 1 10 5]);
+exportgraphics(fig, 'gov.png', 'Resolution', 300);
+% Government defense spending
+fig = plotDecomposition(2, irfs(:, 1, :), cellChannelEffects, channelNames)
+set(fig, 'Units', 'inches', 'Position', [1 1 10 5]);
+exportgraphics(fig, 'gdef.png', 'Resolution', 300);
 
