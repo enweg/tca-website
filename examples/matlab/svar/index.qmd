@@ -79,19 +79,19 @@ The fourth step is to define the transmission channels. @wegnerTCA2024 focus on 
 
 The non-contemporanous channel can be defined in the following way: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=33 end-line=33}
+```{.matlab include="wegner2025-section-5-1.m" start-line=30 end-line=30}
 ```
 
 The contemporanous channel can be defined in a similar way: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=34 end-line=34}
+```{.matlab include="wegner2025-section-5-1.m" start-line=31 end-line=31}
 ```
 
 ### 5. Computing transmission effects
 
 Transmission effects can now be computed using `transmission`. We must provide our `InternalInstrument` `identificationMethod`: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=36 end-line=37}
+```{.matlab include="wegner2025-section-5-1.m" start-line=33 end-line=37}
 ```
 
 To double check whether everything worked, we check whether the two channels perfectly decompose the total effect. Very minor differences might exist due to numerical rounding. 
