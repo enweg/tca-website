@@ -1,5 +1,6 @@
 using TransmissionChannelAnalysis
 using DataFrames, CSV
+using CairoMakie, Makie
 
 data = DataFrame(CSV.File("./data.csv"))
 
@@ -27,7 +28,7 @@ transmission_order = [:mp1_tc, :ffr, :ygap, :infl, :lpcom]
 
 # Defining the transmission channels
 channel_noncontemp = not_through(model, :ffr, 0:0, transmission_order)
-channel_contemp = through(model, :ffr, 0:0, transmission_order)
+channel_contemp = !channel_noncontemp
 
 # Computing transmission effects
 effects_noncontemp = transmission(model, method, 1, channel_noncontemp, transmission_order, 40)
@@ -37,6 +38,17 @@ effects_noncontemp .*= 0.25
 effects_contemp .*= 0.25
 # The effects should perfectly decompose the total effects
 isapprox(irfs, effects_noncontemp + effects_contemp; atol=sqrt(eps()))
+
+# Plotting the decomposition
+teffects = [effects_contemp, effects_noncontemp]
+channel_names = ["Contemporaneous", "Non-contemporaneous"]
+fig = Figure(;size=(1000, 300));
+ax = Axis(fig[1, 1]; title="Inflation")
+plot_decomposition!(ax, 2, irfs[:, 1:1, :], teffects, channel_names);
+ax2 = Axis(fig[1, 2]; title="Inflation");
+plot_decomposition!(ax2, 4, irfs[:, 1:1, :], teffects, channel_names);
+add_decomposition_legend!(fig[2, :], channel_names)
+fig
 
 #-------------------------------------------------------------------------------
 # ROMER AND ROMER
@@ -72,3 +84,15 @@ effects_noncontemp .*= 0.25
 effects_contemp .*= 0.25
 # The effects should perfectly decompose the total effects
 isapprox(irfs, effects_noncontemp + effects_contemp; atol=sqrt(eps()))
+
+# Plotting the decomposition
+teffects = [effects_contemp, effects_noncontemp]
+channel_names = ["Contemporaneous", "Non-contemporaneous"]
+# fig, ax = plot_decomposition(2, irfs[:, 1:1, :], teffects, channel_names; title="FFR", legend=false);
+fig = Figure(;size=(1000, 300));
+ax = Axis(fig[1, 1]; title="Inflation")
+plot_decomposition!(ax, 2, irfs[:, 1:1, :], teffects, channel_names);
+ax2 = Axis(fig[1, 2]; title="Inflation");
+plot_decomposition!(ax2, 4, irfs[:, 1:1, :], teffects, channel_names);
+add_decomposition_legend!(fig[2, :], channel_names)
+fig
