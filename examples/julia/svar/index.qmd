@@ -4,23 +4,28 @@ filters:
     - include-code-files
 bibliography: ../../../references.bib
 sidebar: examples
+engine: julia
 ---
 
-Section 5.1 of @wegnerTCA2024 splits the effects of monetary policy into contemporaneous and non-contemporanous effects, the latter of which are linked to forward guidance and other non-conventional policies. In this example, we do the same. Before we begin, download both the [code](./wegner2025-section-5-1.m.m) and the [replication data](./data.csv). Make sure to put the data and the code into the same folder.
+Section 5.1 of @wegnerTCA2024 splits the effects of monetary policy into contemporaneous and non-contemporanous effects, the latter of which are linked to forward guidance and other non-conventional policies. In this example, we do the same. Before we begin, download both the [code](./wegner2025-section-5-1.jl) and the [replication data](./data.csv). Make sure to put the data and the code into the same folder.
 
-To ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:
+To ensure a clean environment, we recommend starting a new Julia session. 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=1 end-line=2}
+Next, add add the required packages to the environment. The following steps can be skipped if the packages already exist in the enrivonment. 
+
+```{julia}
+#| eval: false
+] add TransmissionChannelAnalysis, DataFrames, CSV, CairoMakie, Makie
 ```
 
-Next, add the TCA Toolbox to the Matlab path. You will likely have to adjust the file paths in the quotation marks: 
+After adding the packages to the environment, load them: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=4 end-line=6}
+```{.julia include="wegner2025-section-5-1.jl" start-line=1 end-line=3}
 ```
 
-Finally, before coming to the analysis, load the replication data into a table: 
+Finally, before coming to the analysis, load the replication data into a `DataFrame`: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=8 end-line=8}
+```{.julia include="wegner2025-section-5-1.jl" start-line=5 end-line=5}
 ```
 
 @wegnerTCA2024 do the analysis for two internal instruments of monetary policy shocks: (1) the @gertlerMonetaryPolicySurprises2015 instrument and (2) the @romerNewMeasureMonetary2004 instrument. We split our analysis accordingly and start investigating the contemporanous and non-contemporaneous effects of monetary policy estimated using the Gertler and Karadi instrument. 
@@ -31,7 +36,7 @@ Finally, before coming to the analysis, load the replication data into a table:
 
 To focus on the GK instrument, we filter the data for only the GK instrument, interest rates, output gap, commodity prices and inflation
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=14 end-line=15}
+```{.julia include="wegner2025-section-5-1.jl" start-line=11 end-line=12}
 ```
 
 With the data at hand, our transmission channel analysis follows the common six steps. 
@@ -40,31 +45,31 @@ With the data at hand, our transmission channel analysis follows the common six 
 
 The first step to any transmission channel analysis is to define the model. Here, we will go with a VAR model. We include the instrument in the VAR, thus effectively deciding that we identify the shock via an internal instrument. 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=18 end-line=19}
+```{.julia include="wegner2025-section-5-1.jl" start-line=15 end-line=16}
 ```
 
 ### 2. Obtaining IRFs
 
 Next, we obtain the total effects -- the structural IRFs -- by using the GK series as as internal instrument. We thus define our `InternalInstrument` identification method: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=22 end-line=22}
+```{.julia include="wegner2025-section-5-1.jl" start-line=20 end-line=20}
 ```
 
-Structural IRFs can then be obtained by using `IRF` and providing the `identificationMethod`. 
+Structural IRFs can then be obtained by using `IRF` and providing the identification method. 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=24 end-line=25}
+```{.julia include="wegner2025-section-5-1.jl" start-line=23 end-line=23}
 ```
 
 Although not strictly necessary, we normalise the shock's size to 25bps. This can be achieved by mutiplying the structural IRFs, currently normalised to a 1pp increase, by `0.25`.
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=26 end-line=26}
+```{.julia include="wegner2025-section-5-1.jl" start-line=24 end-line=24}
 ```
 
 ### 3. Defining the transmission matrix
 
 The third step to any transmission channel analysis is the definition of the transmission matrix. @wegnerTCA2024 order the Fed Funds rate first, followed by all other variables. The implementation of internal instruments is slightly different here, requiring us to order the internal instrument first, followed by the Fed Funds rate, and all other variables. The transmission matrix can then be defined in the following way: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=28 end-line=28}
+```{.julia include="wegner2025-section-5-1.jl" start-line=27 end-line=27}
 ```
 
 ::: {.callout-note appearance="minimal"}
@@ -77,46 +82,65 @@ The fourth step is to define the transmission channels. @wegnerTCA2024 focus on 
 
 The non-contemporanous channel can be defined in the following way: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=30 end-line=30}
+```{.julia include="wegner2025-section-5-1.jl" start-line=30 end-line=30}
 ```
 
-The contemporanous channel can be defined in a similar way: 
+The contemporanous channel can be defined as the complement: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=31 end-line=31}
+```{.julia include="wegner2025-section-5-1.jl" start-line=31 end-line=31}
 ```
 
 ### 5. Computing transmission effects
 
-Transmission effects can now be computed using `transmission`. We must provide our `InternalInstrument` `identificationMethod`: 
+Transmission effects can now be computed using `transmission`. We must provide our `InternalInstrument` identification method: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=33 end-line=37}
+```{.julia include="wegner2025-section-5-1.jl" start-line=34 end-line=38}
 ```
 
 To double check whether everything worked, we check whether the two channels perfectly decompose the total effect. Very minor differences might exist due to numerical rounding. 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=39 end-line=39}
+```{.julia include="wegner2025-section-5-1.jl" start-line=40 end-line=40}
 ```
 
 ### 6. Visualising decomposition
 
-Lastly, we visualise the decomposition using `plotDecomposition`. We must first define the channel names: 
+Lastly, we visualise the decomposition using `plot_decomposition`. We must first define the channel names and collect all transmission effects into a vector: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=41 end-line=42}
+```{.julia include="wegner2025-section-5-1.jl" start-line=43 end-line=44}
 ```
 
 The decomposition for the effects of a monetary policy shock on the federal funds rate (the second variable in the data) can then be obtained in the following way: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=44 end-line=44}
+```{.julia include="wegner2025-section-5-1.jl" start-line=45 end-line=45}
 ```
 
-![Decomposition of the GK identified monetary policy shock on the federal funds rate.](gk-ffr.png){#fig-gk-ffr}
+However, we are also interested in the effect on inflation. Instead of creating a separate plot for the federal funds rate and inflation, we can plot them into a single plot using `plot_decomposition!`. This requires a bit more work, but is also more flexible than the above method. 
 
-Similarly, the decomposition for the effects of a monetary policy shock on inflation (the fourth variable in the data) can be obtained in the following way: 
+To plot both variables into a single figure, we first create a figure: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=48 end-line=48}
+```{.julia include="wegner2025-section-5-1.jl" start-line=48 end-line=48}
 ```
 
-![Decomposition of the GK identified monetary policy shock on inflation.](gk-infl.png){#fig-gk-infl}
+Next, we create a new axis as position `[1,1]` in the figure. We plot the decomposition for the federal funds rate into this axis using `plot_decomposition!`. 
+
+```{.julia include="wegner2025-section-5-1.jl" start-line=49 end-line=50}
+```
+
+We do the same for the plot for inflation, with the differences that we this time plot the axis to position `[1,2`], thus to the right of the federal funds rate plot. 
+
+```{.julia include="wegner2025-section-5-1.jl" start-line=51 end-line=52}
+```
+
+Lastly, we add a legend below the two plots: 
+
+```{.julia include="wegner2025-section-5-1.jl" start-line=53 end-line=53}
+```
+
+The figure below displays the final decomposition plot, showing both the decomposition of the total effect of a monetary policy shock on the federal funds rate and inflation. 
+
+::: {.column-page}
+![Decomposition of a @gertlerMonetaryPolicySurprises2015 monetary policy shock on the federal funds rate (FFR) and inflation into a contemporaneous and non-contemporaneous channel](./gk_both.png)
+:::
 
 ## Romer and Romer
 
@@ -124,30 +148,30 @@ Most of the transmission channel analysis for the @romerNewMeasureMonetary2004 i
 
 Before we start, we must first adjust the data and replace the GK with the RR instrument: 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=56 end-line=57}
+```{.julia include="wegner2025-section-5-1.jl" start-line=63 end-line=63}
 ```
 
 ### 1. Defining the model 
 
 Because the data has changed, our model definition changes slightly -- the dataset name changes. 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=60 end-line=61}
+```{.julia include="wegner2025-section-5-1.jl" start-line=66 end-line=67}
 ```
 
 ### 3. Defining transmission matrix
 
 The transmission matrix remains largely the same, but the name of the instrument changes. 
 
-```{.matlab include="wegner2025-section-5-1.m" start-line=70 end-line=70}
+```{.julia include="wegner2025-section-5-1.jl" start-line=78 end-line=78}
 ```
 
 ### 6. Visualising effects
 
 While the code ramains the same, the graphs change. 
 
-![Decomposition of the RR identified monetary policy shock on the federal funds rate.](rr-ffr.png){#fig-rr-ffr}
-
-![Decomposition of the RR identified monetary policy shock on inflation.](rr-infl.png){#fig-rr-infl}
+::: {.column-page}
+![Decomposition of a @romerNewMeasureMonetary2004 monetary policy shock on the federal funds rate (FFR) and inflation into a contemporaneous and non-contemporaneous channel](./rr_both.png)
+:::
 
 ::: {.callout-note} 
 Minor differences between the decompositions here and the ones in the paper 

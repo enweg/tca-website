@@ -1,6 +1,6 @@
 using TransmissionChannelAnalysis
 using DataFrames, CSV
-using CairoMakie, Makie
+using CairoMakie, Makie  # for plotting
 
 data = DataFrame(CSV.File("./data.csv"))
 
@@ -46,22 +46,14 @@ plot_decomposition(2, irfs[:, 1:1, :], teffects, channel_names; legend=true)
 
 # Plotting the decomposition for all outcomes in one figure
 fig = Figure(;size=(1000, 300));
-ax = Axis(fig[1, 1]; title="Inflation")
+ax = Axis(fig[1, 1]; title="FFR")
 plot_decomposition!(ax, 2, irfs[:, 1:1, :], teffects);
 ax2 = Axis(fig[1, 2]; title="Inflation");
 plot_decomposition!(ax2, 4, irfs[:, 1:1, :], teffects);
 add_decomposition_legend!(fig[2, :], channel_names)
 fig
 
-teffects = [effects_contemp, effects_noncontemp]
-channel_names = ["Contemporaneous", "Non-contemporaneous"]
-plot_decomposition_comparison(2, irfs[:, 1:1, :], channel_names, ["D1", "D2", "D3"], teffects, teffects, teffects)
-
-fig = Figure(;size=(1000, 300));
-ax = Axis(fig[1, 1]);
-plot_decomposition_comparison!(ax, 2, irfs[:, 1:1, :], teffects, teffects)
-add_decompare_legend!(fig[1, 2], channel_names, ["Decomp 1", "Decomp 2"])
-fig
+save("./gk_both.png", fig)
 
 #-------------------------------------------------------------------------------
 # ROMER AND ROMER
@@ -101,11 +93,12 @@ isapprox(irfs, effects_noncontemp + effects_contemp; atol=sqrt(eps()))
 # Plotting the decomposition
 teffects = [effects_contemp, effects_noncontemp]
 channel_names = ["Contemporaneous", "Non-contemporaneous"]
-# fig, ax = plot_decomposition(2, irfs[:, 1:1, :], teffects, channel_names; title="FFR", legend=false);
 fig = Figure(;size=(1000, 300));
-ax = Axis(fig[1, 1]; title="Inflation")
-plot_decomposition!(ax, 2, irfs[:, 1:1, :], teffects, channel_names);
+ax = Axis(fig[1, 1]; title="FFR")
+plot_decomposition!(ax, 2, irfs[:, 1:1, :], teffects);
 ax2 = Axis(fig[1, 2]; title="Inflation");
-plot_decomposition!(ax2, 4, irfs[:, 1:1, :], teffects, channel_names);
+plot_decomposition!(ax2, 4, irfs[:, 1:1, :], teffects);
 add_decomposition_legend!(fig[2, :], channel_names)
 fig
+
+save("./rr_both.png", fig)
