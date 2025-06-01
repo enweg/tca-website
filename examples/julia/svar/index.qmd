@@ -136,7 +136,7 @@ Lastly, we add a legend below the two plots:
 ```{.julia include="wegner2025-section-5-1.jl" start-line=53 end-line=53}
 ```
 
-Figure XXX displays the final decomposition plot, showing both the decomposition of the total effect of a monetary policy shock on the federal funds rate and inflation. 
+The figure below displays the final decomposition plot, showing both the decomposition of the total effect of a monetary policy shock on the federal funds rate and inflation. 
 
 ::: {.column-page}
 ![Decomposition of a @gertlerMonetaryPolicySurprises2015 monetary policy shock on the federal funds rate (FFR) and inflation into a contemporaneous and non-contemporaneous channel](./gk_both.png)
