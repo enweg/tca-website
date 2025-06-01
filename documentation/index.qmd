@@ -1,0 +1,38 @@
+---
+title: Documentation
+sidbar: doc
+---
+
+Documentation for both the Julia and the Matlab libraries can be found below. 
+
+## Julia
+
+Download the package via 
+
+```{.julia}
+] add TransmissionChannelAnalysis
+```
+
+or via 
+
+```{.julia}
+using Pkg; Pkg.add("TransmissionChannelAnalysis")
+```
+
+All code can be found on the [GitHub repository](https://github.com/enweg/TransmissionChannelAnalysis.jl).
+
+Documentation: 
+
+- [Overview](./julia/index.qmd)
+- [Advanced Usage](./julia/advanced.qmd)
+- [Internals](./julia/internals.qmd)
+
+## Matlab
+
+Download the toolbox from [GitHub](https://github.com/enweg/tca-matlab-toolbox) and save it to a location for later use. The documentation below gives further details on how to lead the toolbox. 
+
+Documentation: 
+
+- [Overview](./matlab/index.qmd)
+- [Advanced Usage](./matlab/advanced.qmd)
+- [Internals](./matlab/internals.qmd)

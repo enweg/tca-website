@@ -24,7 +24,7 @@ website:
       - text: Examples 
         href: "examples/index.qmd"
       - text: Documentation
-        href: "documentation/julia/index.qmd"
+        href: "documentation/index.qmd"
       - text: Wiki
         href: "faq/index.qmd"
     right: 
@@ -34,6 +34,7 @@ website:
     - id: doc
       title: Documentation
       contents: 
+      - href: "documentation/index.qmd"
       - section: Julia 
         # href: "documentation/julia/index.qmd"
         contents: 
