@@ -4,6 +4,99 @@ filters:
     - include-code-files
 bibliography: ../../../references.bib
 sidebar: examples
+engine: julia
 ---
 
-This part of the website is still under construction. Our apologies. 
+In this example, we examine the anticipation and implementation effects of government defense spending, closely following Section 5.2 in @wegnerTCA2024. Before beginning, download both the [code](./wegner2025-section-5-2.jl) and the [replication data](./data.csv). Ensure that the data and code are placed in the same folder.
+
+To ensure a clean environment, we recommend starting a new Julia session. 
+
+Next, add add the required packages to the environment. The following steps can be skipped if the packages already exist in the enrivonment. 
+
+```{julia}
+#| eval: false
+] add TransmissionChannelAnalysis, DataFrames, CSV, CairoMakie, Makie
+```
+
+After adding the packages to the environment, load them: 
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=1 end-line=3}
+```
+
+Finally, before proceeding with the analysis, load the replication data into a table:
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=5 end-line=5}
+```
+
+The remainder of this example follows the standard six-step approach.
+
+## 1. Defining the model
+
+We estimate structural impulse response functions (IRFs) using local projections (LPs). An LP model can be created using `LP`, specifying the treatment variable and maximum horizon. @wegnerTCA2024 use the defense spending series from @rameyDefenseNewsShocks2016 as a direct measure of the shock. Thus, the treatment is `newsy`, and the maximum horizon is set to `20` periods.
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=8 end-line=8}
+```
+
+The local projection can then be estimated using `fit!`: 
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=9 end-line=9}
+```
+
+## 2. Obtaining total effects
+
+Since `newsy` is treated as a direct measure of the shock, the effects of a government defense spending shock can be identified recursively by ordering the `newsy` series first. This recursive identification scheme can be defined using `Recursive`:
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=12 end-line=12}
+```
+
+Using this `Recursive` identification scheme, structural IRFs can be obtained via `IRF`:
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=13 end-line=14}
+```
+
+## 3. Defning the transmission matrix / order
+
+The transmission matrix is defined as a vector of `Symbol`. @wegnerTCA2024 split the total effects into anticipation and implementation effects. They define the anticipation channel as effects that do not pass through actual government defense spending. Thus, it is logical to order `gdef` (government defense spending) as early as possible in the transmission matrix, but it must not precede the shock variable, `newsy`. The chosen transmission matrix is:
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=17 end-line=17}
+```
+
+## 4. Defining the transmission channels
+
+@wegnerTCA2024 define the anticipation channel as the effects of the government defense spending shock that do not pass through government defense spending at any period. This channel can be defined using `not_through` as follows:
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=20 end-line=20}
+```
+
+The implementation channel, representing effects passing through government defense spending in at least one period, is then the complement of the anticipation channel:
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=21 end-line=21}
+```
+
+## 5. Computing transmission effects
+
+Transmission effects are computed using `transmission` for the first `20` periods, considering the first shock, corresponding to the defense spending shock. Structural IRFs required for the computations are derived using the `Recursive` identification `method` defined earlier.
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=24 end-line=25}
+```
+
+## 6. Visualising transmission effects
+
+To visualise transmission effects, first define channel names and collect the effects in a vector:
+
+```{.julia include="wegner2025-section-5-2.jl" start-line=28 end-line=29}
+```
+
+The effects can then either be visualised one after another by using `plot_decomposition` or all together by creating a composite figure as below. To create the composite figure showing the decompositions for GDP, total government spending, and defense spending, we first create a new figure: 
+
+We then create a new axis at position `[1, 1]` into which we plot the decomposition of the defense spending shock on GDP using `plot_decomposition!`. 
+
+Similarly, we can plot the decomposition for total government spending and defense spending into positions `[1, 2]` and `[1, 3]`, respectively. 
+
+Lastly, we can add a legend below the three plots using `add_decomposition_legend!`. 
+
+The figure below displays the decompositions. 
+
+::: {.column-page}
+![Decomposition of a government defense spending shock into anticipation and implementation effects](./decomposition.png)
+:::
