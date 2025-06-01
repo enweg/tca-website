@@ -39,15 +39,28 @@ effects_contemp .*= 0.25
 # The effects should perfectly decompose the total effects
 isapprox(irfs, effects_noncontemp + effects_contemp; atol=sqrt(eps()))
 
-# Plotting the decomposition
+# Plotting only one outcome
 teffects = [effects_contemp, effects_noncontemp]
 channel_names = ["Contemporaneous", "Non-contemporaneous"]
+plot_decomposition(2, irfs[:, 1:1, :], teffects, channel_names; legend=true)
+
+# Plotting the decomposition for all outcomes in one figure
 fig = Figure(;size=(1000, 300));
 ax = Axis(fig[1, 1]; title="Inflation")
-plot_decomposition!(ax, 2, irfs[:, 1:1, :], teffects, channel_names);
+plot_decomposition!(ax, 2, irfs[:, 1:1, :], teffects);
 ax2 = Axis(fig[1, 2]; title="Inflation");
-plot_decomposition!(ax2, 4, irfs[:, 1:1, :], teffects, channel_names);
+plot_decomposition!(ax2, 4, irfs[:, 1:1, :], teffects);
 add_decomposition_legend!(fig[2, :], channel_names)
+fig
+
+teffects = [effects_contemp, effects_noncontemp]
+channel_names = ["Contemporaneous", "Non-contemporaneous"]
+plot_decomposition_comparison(2, irfs[:, 1:1, :], channel_names, ["D1", "D2", "D3"], teffects, teffects, teffects)
+
+fig = Figure(;size=(1000, 300));
+ax = Axis(fig[1, 1]);
+plot_decomposition_comparison!(ax, 2, irfs[:, 1:1, :], teffects, teffects)
+add_decompare_legend!(fig[1, 2], channel_names, ["Decomp 1", "Decomp 2"])
 fig
 
 #-------------------------------------------------------------------------------
