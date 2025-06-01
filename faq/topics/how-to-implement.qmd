@@ -8,7 +8,7 @@ sidebar: faq
 bibliography: ../../references.bib
 ---
 
-We provide various packages to make the implementation of TCA easier. Currently, a [Julia](/documentation/julia/index.qmd) and [Matlab](/documentation/matlab/index.qmd) (including Dynare) package exist. These packages all work similarly, with the Julia version being the most general. We also provide various [tutorials](/index.qmd) that help in getting started. 
+We provide various packages to make the implementation of TCA easier. Currently, a [Julia](/documentation/julia/index.qmd) and [Matlab](/documentation/matlab/index.qmd) (including Dynare) package exist. These packages all work similarly, with the Julia version being the most general. We also provide various [examples](/examples/index.qmd) that help in getting started. 
 
 If none of these packages are satisfactory for an application, then the only remaining option is to implement TCA from scratch. In most cases this will entail rewriting the transmission condition into a form that can be used to compute the transmission effect from either the [systems form](systems-form.qmd) or directly from impulse response functions (IRFs). The Julia version could assist in the rewriting process -- check the `make_condition`{.julia} function for this. Once rewritten into an amendable form, transmission effects can be calculated along the way outlined in the appendix of @wegnerTCA2024. 
 

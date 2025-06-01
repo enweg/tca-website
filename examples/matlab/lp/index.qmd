@@ -6,7 +6,7 @@ bibliography: ../../../references.bib
 sidebar: examples
 ---
 
-In this example, we examine the anticipation and implementation effects of government defense spending, closely following Section 5.2 in @wegnerTCA2024. Before beginning, download both the code and the replication data. Ensure that the data and code are placed in the same folder.
+In this example, we examine the anticipation and implementation effects of government defense spending, closely following Section 5.2 in @wegnerTCA2024. Before beginning, download both the [code](./wegner2025-section-5-2.m) and the [replication data](./data.csv). Ensure that the data and code are placed in the same folder.
 
 For a clean working environment, we recommend starting a new Matlab session. Alternatively, clear the workspace and console by running:
 

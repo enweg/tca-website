@@ -576,3 +576,21 @@ If your `SVAR` model is already structurally identified (fitted with a structura
 #| eval: false
 effects = transmission(model, 1, q, transmission_order, max_horizon)
 ```
+
+## 6. Visualising Effects
+
+To inspect the decompositions visually, load `CairoMakie` by running 
+
+```{julia}
+#| eval: false
+using CairoMakie
+```
+
+The following helper functions can then be used to plot decompositions: 
+
+- [`plot_decomposition`](./all-functions/plot_decomposition.qmd) plots the total effects and the decomposed effects. 
+- [`plot_decomposition_comparison`](./all-functions/plot_decomposition_comparison.qmd) allows for the comparison of multiple decompositions obtained via different transmission matrices. 
+
+Both functions above create an entirely new figure. Alternatively, both a decomposition and a decomposition comparison plot can be plotted into an already existing figure / axis via [`plot_decomposition!`](./all-functions/plot_decomposition!.qmd) and [`plot_decomposition_comparison!`](./all-functions/plot_decomposition_comparison!.qmd). 
+
+Legends can be manually added using [`add_decomposition_legend!`](./all-functions/add_decomposition_legend!.qmd) and [`add_decompare_legend!`](./all-functions/add_decompare_legend!.qmd) for a decomposition and a decomposition comparison plot, respectively.

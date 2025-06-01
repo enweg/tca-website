@@ -6,7 +6,7 @@ sidbar: examples
 Examples on how to implement a transmission channel analysis in Julia and Matlab can be found below. We provide examples for local projections (LP) and SVARs for both packages. DSGEs, however, are only supported by the Matlab package. Choose your preferred language below. 
 
 ::: {.callout-note appearance="minimal"}
-The examples are still actively under construction and most examples do not yet exist. Please come back at a later point. Note that the [documentation](../documentation/julia/index.qmd) provides details on the use of LPs, SVARs, and DSGEs. 
+The examples are still actively under construction and most examples do not yet exist. Please come back at a later point. Note that the [documentation](../documentation/index.qmd) provides details on the use of LPs, SVARs, and DSGEs. 
 :::
 
 **Julia**

@@ -1,0 +1,23 @@
+--- 
+title: | 
+  add_decompare_legend!
+sidebar: doc
+engine: julia
+---
+
+```{julia}
+#| echo: false 
+#| output: false 
+
+using DocUtils
+using TransmissionChannelAnalysis
+using CairoMakie  # Must include this to also document extensions
+```
+
+```{julia}
+#| echo: false
+#| output: asis
+
+include_quarto_callout_doc(TransmissionChannelAnalysis, Symbol("add_decompare_legend!"))
+```
+    
