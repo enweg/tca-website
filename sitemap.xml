@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://enweg.github.io/tca-website/examples/julia/lp/index.html</loc>
-    <lastmod>2025-05-01T14:29:56.041Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.922Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/examples/matlab/dynare/index.html</loc>
@@ -34,95 +34,107 @@
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/make_B.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.910Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/get_input_data.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.907Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/hqc.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.908Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/AbstractIdentificationMethod.html</loc>
-    <lastmod>2025-05-01T12:14:09.033Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.899Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/show_y.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.917Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/make_condition.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.911Z</lastmod>
   </url>
   <url>
-    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/@show_y.html</loc>
-    <lastmod>2025-05-01T12:14:09.033Z</lastmod>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/plot_decomposition_comparison!.html</loc>
+    <lastmod>2025-06-01T16:22:23.914Z</lastmod>
+  </url>
+  <url>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/spectral_radius.html</loc>
+    <lastmod>2025-06-01T16:22:23.918Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/fit_and_select!.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.906Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/SVAR.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.903Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/make_systems_form.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.911Z</lastmod>
   </url>
   <url>
-    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/get_variable_names.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/nobs.html</loc>
+    <lastmod>2025-06-01T16:22:23.912Z</lastmod>
+  </url>
+  <url>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/through.html</loc>
+    <lastmod>2025-06-01T16:22:23.918Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/map_y_to_x.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.912Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/IRF.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.900Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/map_x_to_y.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.912Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/Recursive.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.902Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/aic.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.904Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/make_Omega.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.910Z</lastmod>
   </url>
   <url>
-    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/Model.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/ExternalInstrument.html</loc>
+    <lastmod>2025-06-01T16:22:23.900Z</lastmod>
+  </url>
+  <url>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/add_decomposition_legend!.html</loc>
+    <lastmod>2025-06-01T16:22:23.904Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/residuals.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.916Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/make_companion_matrix.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.910Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/bic.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.905Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/cov.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.905Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/fit!.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.906Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/internals.html</loc>
@@ -209,6 +221,10 @@
     <lastmod>2025-05-02T13:08:05.496Z</lastmod>
   </url>
   <url>
+    <loc>https://enweg.github.io/tca-website/documentation/index.html</loc>
+    <lastmod>2025-06-01T16:22:23.897Z</lastmod>
+  </url>
+  <url>
     <loc>https://enweg.github.io/tca-website/documentation/matlab/internals.html</loc>
     <lastmod>2025-05-03T09:45:39.950Z</lastmod>
   </url>
@@ -286,7 +302,7 @@
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/index.html</loc>
-    <lastmod>2025-05-12T09:16:40.908Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.919Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/advanced.html</loc>
@@ -294,95 +310,107 @@
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/VAR.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.903Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/is_structural.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.909Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/coeffs.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.905Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/to_transmission_irfs.html</loc>
-    <lastmod>2025-05-01T12:14:09.037Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.918Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/not_through.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.913Z</lastmod>
   </url>
   <url>
-    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/ExternalInstrument.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/Model.html</loc>
+    <lastmod>2025-06-01T16:22:23.902Z</lastmod>
+  </url>
+  <url>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/plot_decomposition_comparison.html</loc>
+    <lastmod>2025-06-01T16:22:23.914Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/is_stable.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.909Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/simulate.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.918Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/transmission.html</loc>
-    <lastmod>2025-05-01T12:14:09.037Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.918Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/identify!.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.908Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/LP.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.901Z</lastmod>
   </url>
   <url>
-    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/through.html</loc>
-    <lastmod>2025-05-01T12:14:09.037Z</lastmod>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/plot_decomposition.html</loc>
+    <lastmod>2025-06-01T16:22:23.913Z</lastmod>
   </url>
   <url>
-    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/nobs.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/get_variable_names.html</loc>
+    <lastmod>2025-06-01T16:22:23.908Z</lastmod>
+  </url>
+  <url>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/plot_decomposition!.html</loc>
+    <lastmod>2025-06-01T16:22:23.913Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/identify.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.908Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/get_dependent.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.907Z</lastmod>
   </url>
   <url>
-    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/spectral_radius.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/add_decompare_legend!.html</loc>
+    <lastmod>2025-06-01T16:22:23.903Z</lastmod>
+  </url>
+  <url>
+    <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/@show_y.html</loc>
+    <lastmod>2025-06-01T16:22:23.899Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/set_remove_contradictions.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.916Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/sic.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.917Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/simulate!.html</loc>
-    <lastmod>2025-05-01T12:14:09.036Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.917Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/is_fitted.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.909Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/InternalInstrument.html</loc>
-    <lastmod>2025-05-01T12:14:09.034Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.901Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/get_independent.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.907Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/documentation/julia/all-functions/fitted.html</loc>
-    <lastmod>2025-05-01T12:14:09.035Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.906Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/faq/topics/boolean-conditions.html</loc>
@@ -390,7 +418,7 @@
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/faq/topics/how-to-implement.html</loc>
-    <lastmod>2025-05-03T10:00:47.876Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.927Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/faq/topics/what-is-tca.html</loc>
@@ -402,14 +430,14 @@
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/examples/index.html</loc>
-    <lastmod>2025-05-12T09:16:40.909Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.919Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/examples/matlab/lp/index.html</loc>
-    <lastmod>2025-05-27T14:53:05.248Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.927Z</lastmod>
   </url>
   <url>
     <loc>https://enweg.github.io/tca-website/examples/julia/svar/index.html</loc>
-    <lastmod>2025-05-01T14:29:56.062Z</lastmod>
+    <lastmod>2025-06-01T16:22:23.925Z</lastmod>
   </url>
 </urlset>

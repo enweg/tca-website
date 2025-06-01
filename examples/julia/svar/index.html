@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -94,7 +148,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Examples</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../documentation/julia/index.html"> 
+    <a class="nav-link" href="../../../documentation/index.html"> 
 <span class="menu-text">Documentation</span></a>
   </li>  
   <li class="nav-item">
@@ -123,9 +177,9 @@ ul.task-list li input[type="checkbox"] {
         </a>
     </div>
   </nav>
-  <div id="quarto-announcement" data-announcement-id="d1d45beed765f3aac4870d27d9123622" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
-<p><strong>Note</strong> - this website is still actively under construction.</p>
-</div></div>
+  <div id="quarto-announcement" data-announcement-id="ac6a7742dbb2ba6da22a5774a25a0e00" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p><strong>Note</strong>: We are still improving this website. If you find a mistake or have a question, please get in <a href="../../../index.html#about">contact</a></p>
+</div><i class="bi bi-x-lg quarto-announcement-action"></i></div>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
@@ -196,11 +250,31 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#gertler-karadi" id="toc-gertler-karadi" class="nav-link active" data-scroll-target="#gertler-karadi">Gertler Karadi</a>
+  <ul class="collapse">
+  <li><a href="#defining-the-model" id="toc-defining-the-model" class="nav-link" data-scroll-target="#defining-the-model">1. Defining the model</a></li>
+  <li><a href="#obtaining-irfs" id="toc-obtaining-irfs" class="nav-link" data-scroll-target="#obtaining-irfs">2. Obtaining IRFs</a></li>
+  <li><a href="#defining-the-transmission-matrix" id="toc-defining-the-transmission-matrix" class="nav-link" data-scroll-target="#defining-the-transmission-matrix">3. Defining the transmission matrix</a></li>
+  <li><a href="#defining-transmission-channels" id="toc-defining-transmission-channels" class="nav-link" data-scroll-target="#defining-transmission-channels">4. Defining transmission channels</a></li>
+  <li><a href="#computing-transmission-effects" id="toc-computing-transmission-effects" class="nav-link" data-scroll-target="#computing-transmission-effects">5. Computing transmission effects</a></li>
+  <li><a href="#visualising-decomposition" id="toc-visualising-decomposition" class="nav-link" data-scroll-target="#visualising-decomposition">6. Visualising decomposition</a></li>
+  </ul></li>
+  <li><a href="#romer-and-romer" id="toc-romer-and-romer" class="nav-link" data-scroll-target="#romer-and-romer">Romer and Romer</a>
+  <ul class="collapse">
+  <li><a href="#defining-the-model-1" id="toc-defining-the-model-1" class="nav-link" data-scroll-target="#defining-the-model-1">1. Defining the model</a></li>
+  <li><a href="#defining-transmission-matrix" id="toc-defining-transmission-matrix" class="nav-link" data-scroll-target="#defining-transmission-matrix">3. Defining transmission matrix</a></li>
+  <li><a href="#visualising-effects" id="toc-visualising-effects" class="nav-link" data-scroll-target="#visualising-effects">6. Visualising effects</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../examples/julia/svar/index.html">Julia</a></li><li class="breadcrumb-item"><a href="../../../examples/julia/svar/index.html">TCA in SVARs</a></li></ol></nav>
 <div class="quarto-title">
@@ -221,11 +295,161 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This part of the website is still under construction. Our apologies.</p>
+<p>Section 5.1 of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> splits the effects of monetary policy into contemporaneous and non-contemporanous effects, the latter of which are linked to forward guidance and other non-conventional policies. In this example, we do the same. Before we begin, download both the <a href="./wegner2025-section-5-1.jl">code</a> and the <a href="./data.csv">replication data</a>. Make sure to put the data and the code into the same folder.</p>
+<p>To ensure a clean environment, we recommend starting a new Julia session.</p>
+<p>Next, add add the required packages to the environment. The following steps can be skipped if the packages already exist in the enrivonment.</p>
+<div id="2" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>] add TransmissionChannelAnalysis, DataFrames, CSV, CairoMakie, Makie</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After adding the packages to the environment, load them:</p>
+<div class="sourceCode" id="cb2" data-startfrom="1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">TransmissionChannelAnalysis</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">CSV</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CairoMakie</span>, <span class="bu">Makie</span>  <span class="co"># for plotting</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, before coming to the analysis, load the replication data into a <code>DataFrame</code>:</p>
+<div class="sourceCode" id="cb3" data-startfrom="5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 4;"><span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="fu">DataFrame</span>(CSV.<span class="fu">File</span>(<span class="st">"./data.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> do the analysis for two internal instruments of monetary policy shocks: (1) the <span class="citation" data-cites="gertlerMonetaryPolicySurprises2015">Gertler and Karadi (<a href="#ref-gertlerMonetaryPolicySurprises2015" role="doc-biblioref">2015</a>)</span> instrument and (2) the <span class="citation" data-cites="romerNewMeasureMonetary2004">Romer and Romer (<a href="#ref-romerNewMeasureMonetary2004" role="doc-biblioref">2004</a>)</span> instrument. We split our analysis accordingly and start investigating the contemporanous and non-contemporaneous effects of monetary policy estimated using the Gertler and Karadi instrument.</p>
+<section id="gertler-karadi" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="gertler-karadi">Gertler Karadi</h2>
+<p><span class="citation" data-cites="gertlerMonetaryPolicySurprises2015">Gertler and Karadi (<a href="#ref-gertlerMonetaryPolicySurprises2015" role="doc-biblioref">2015</a>)</span> derive an instrument for monetary policy shocks by extracting the surprise component of FOMC meetings from the change in Fed Funds Futures in a tight time window around these FOMC meetings. This instrument is contained in the data and named <code>mp1_tc</code>. Also contained in the data is the <span class="citation" data-cites="romerNewMeasureMonetary2004">Romer and Romer (<a href="#ref-romerNewMeasureMonetary2004" role="doc-biblioref">2004</a>)</span> instrument (<code>rr_3</code>) which we do not currently need.</p>
+<p>To focus on the GK instrument, we filter the data for only the GK instrument, interest rates, output gap, commodity prices and inflation</p>
+<div class="sourceCode" id="cb4" data-startfrom="11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 10;"><span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting the required variables</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>data_gk <span class="op">=</span> <span class="fu">select</span>(data, <span class="op">:</span>mp1_tc, <span class="op">:</span>ffr, <span class="op">:</span>ygap, <span class="op">:</span>infl, <span class="op">:</span>lpcom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>With the data at hand, our transmission channel analysis follows the common six steps.</p>
+<section id="defining-the-model" class="level3">
+<h3 class="anchored" data-anchor-id="defining-the-model">1. Defining the model</h3>
+<p>The first step to any transmission channel analysis is to define the model. Here, we will go with a VAR model. We include the instrument in the VAR, thus effectively deciding that we identify the shock via an internal instrument.</p>
+<div class="sourceCode" id="cb5" data-startfrom="15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 14;"><span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> <span class="fu">VAR</span>(data_gk, <span class="fl">4</span>; trend_exponents<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="obtaining-irfs" class="level3">
+<h3 class="anchored" data-anchor-id="obtaining-irfs">2. Obtaining IRFs</h3>
+<p>Next, we obtain the total effects – the structural IRFs – by using the GK series as as internal instrument. We thus define our <code>InternalInstrument</code> identification method:</p>
+<div class="sourceCode" id="cb6" data-startfrom="20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 19;"><span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>method <span class="op">=</span> <span class="fu">InternalInstrument</span>(<span class="op">:</span>ffr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Structural IRFs can then be obtained by using <code>IRF</code> and providing the identification method.</p>
+<div class="sourceCode" id="cb7" data-startfrom="23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 22;"><span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>irf_obj <span class="op">=</span> <span class="fu">IRF</span>(model, method, <span class="fl">40</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Although not strictly necessary, we normalise the shock’s size to 25bps. This can be achieved by mutiplying the structural IRFs, currently normalised to a 1pp increase, by <code>0.25</code>.</p>
+<div class="sourceCode" id="cb8" data-startfrom="24"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 23;"><span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>irfs <span class="op">=</span> irf_obj.irfs[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">1</span>, <span class="op">:</span>] <span class="op">*</span> <span class="fl">0.25</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="defining-the-transmission-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="defining-the-transmission-matrix">3. Defining the transmission matrix</h3>
+<p>The third step to any transmission channel analysis is the definition of the transmission matrix. <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> order the Fed Funds rate first, followed by all other variables. The implementation of internal instruments is slightly different here, requiring us to order the internal instrument first, followed by the Fed Funds rate, and all other variables. The transmission matrix can then be defined in the following way:</p>
+<div class="sourceCode" id="cb9" data-startfrom="27"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 26;"><span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>transmission_order <span class="op">=</span> [<span class="op">:</span>mp1_tc, <span class="op">:</span>ffr, <span class="op">:</span>ygap, <span class="op">:</span>infl, <span class="op">:</span>lpcom]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>To be more general, the implementation of internal instruments, and specifically the computation of the Cholesky-orthogonalised IRFs needed for transmission channel analysis, is slightly different here than in <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span>. The final results will be qualitatively the same, although quantitatively slightly different.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="defining-transmission-channels" class="level3">
+<h3 class="anchored" data-anchor-id="defining-transmission-channels">4. Defining transmission channels</h3>
+<p>The fourth step is to define the transmission channels. <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> focus on two channels that perfectly decompose the effect. They define the contemporanous channel of monetary policy as the effect of monetary policy going through a contemporanous adjustment in the federal funds rate. They then define the non-contemporaneous channel of monetary policy as the effect of monetary policy not going through a contemporanous adjustment in the federal funds rate – the complement of the contemporaneous channel. Note that according the Section 4.3 of <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> the effects through these channels are invariant to any re-ordering of inflation, commodity prices, and the output gap, as long as they are ordered after the Fed Funds rate.</p>
+<p>The non-contemporanous channel can be defined in the following way:</p>
+<div class="sourceCode" id="cb10" data-startfrom="30"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 29;"><span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>channel_noncontemp <span class="op">=</span> <span class="fu">not_through</span>(model, <span class="op">:</span>ffr, <span class="fl">0</span><span class="op">:</span><span class="fl">0</span>, transmission_order)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The contemporanous channel can be defined as the complement:</p>
+<div class="sourceCode" id="cb11" data-startfrom="31"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 30;"><span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>channel_contemp <span class="op">=</span> !channel_noncontemp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="computing-transmission-effects" class="level3">
+<h3 class="anchored" data-anchor-id="computing-transmission-effects">5. Computing transmission effects</h3>
+<p>Transmission effects can now be computed using <code>transmission</code>. We must provide our <code>InternalInstrument</code> identification method:</p>
+<div class="sourceCode" id="cb12" data-startfrom="34"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 33;"><span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>effects_noncontemp <span class="op">=</span> <span class="fu">transmission</span>(model, method, <span class="fl">1</span>, channel_noncontemp, transmission_order, <span class="fl">40</span>)</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>effects_contemp <span class="op">=</span> <span class="fu">transmission</span>(model, method, <span class="fl">1</span>, channel_contemp, transmission_order, <span class="fl">40</span>)</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjusting for the shock size</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>effects_noncontemp <span class="op">.*=</span> <span class="fl">0.25</span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>effects_contemp <span class="op">.*=</span> <span class="fl">0.25</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To double check whether everything worked, we check whether the two channels perfectly decompose the total effect. Very minor differences might exist due to numerical rounding.</p>
+<div class="sourceCode" id="cb13" data-startfrom="40"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 39;"><span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a><span class="fu">isapprox</span>(irfs, effects_noncontemp <span class="op">+</span> effects_contemp; atol<span class="op">=</span><span class="fu">sqrt</span>(<span class="fu">eps</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="visualising-decomposition" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="visualising-decomposition">6. Visualising decomposition</h3>
+<p>Lastly, we visualise the decomposition using <code>plot_decomposition</code>. We must first define the channel names and collect all transmission effects into a vector:</p>
+<div class="sourceCode" id="cb14" data-startfrom="43"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 42;"><span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>teffects <span class="op">=</span> [effects_contemp, effects_noncontemp]</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>channel_names <span class="op">=</span> [<span class="st">"Contemporaneous"</span>, <span class="st">"Non-contemporaneous"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The decomposition for the effects of a monetary policy shock on the federal funds rate (the second variable in the data) can then be obtained in the following way:</p>
+<div class="sourceCode" id="cb15" data-startfrom="45"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 44;"><span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_decomposition</span>(<span class="fl">2</span>, irfs[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">1</span>, <span class="op">:</span>], teffects, channel_names; legend<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>However, we are also interested in the effect on inflation. Instead of creating a separate plot for the federal funds rate and inflation, we can plot them into a single plot using <code>plot_decomposition!</code>. This requires a bit more work, but is also more flexible than the above method.</p>
+<p>To plot both variables into a single figure, we first create a figure:</p>
+<div class="sourceCode" id="cb16" data-startfrom="48"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 47;"><span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(;size<span class="op">=</span>(<span class="fl">1000</span>, <span class="fl">300</span>));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Next, we create a new axis as position <code>[1,1]</code> in the figure. We plot the decomposition for the federal funds rate into this axis using <code>plot_decomposition!</code>.</p>
+<div class="sourceCode" id="cb17" data-startfrom="49"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 48;"><span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">1</span>]; title<span class="op">=</span><span class="st">"FFR"</span>)</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_decomposition!</span>(ax, <span class="fl">2</span>, irfs[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">1</span>, <span class="op">:</span>], teffects);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We do the same for the plot for inflation, with the differences that we this time plot the axis to position <code>[1,2</code>], thus to the right of the federal funds rate plot.</p>
+<div class="sourceCode" id="cb18" data-startfrom="51"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 50;"><span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">2</span>]; title<span class="op">=</span><span class="st">"Inflation"</span>);</span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_decomposition!</span>(ax2, <span class="fl">4</span>, irfs[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">1</span>, <span class="op">:</span>], teffects);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Lastly, we add a legend below the two plots:</p>
+<div class="sourceCode" id="cb19" data-startfrom="53"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 52;"><span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a><span class="fu">add_decomposition_legend!</span>(fig[<span class="fl">2</span>, <span class="op">:</span>], channel_names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The figure below displays the final decomposition plot, showing both the decomposition of the total effect of a monetary policy shock on the federal funds rate and inflation.</p>
+<div class="page-columns page-full">
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p class="page-columns page-full"><img src="./gk_both.png" class="img-fluid figure-img column-page"></p>
+<figcaption>Decomposition of a <span class="citation" data-cites="gertlerMonetaryPolicySurprises2015">Gertler and Karadi (<a href="#ref-gertlerMonetaryPolicySurprises2015" role="doc-biblioref">2015</a>)</span> monetary policy shock on the federal funds rate (FFR) and inflation into a contemporaneous and non-contemporaneous channel</figcaption>
+</figure>
+</div>
+</div>
+</section>
+</section>
+<section id="romer-and-romer" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="romer-and-romer">Romer and Romer</h2>
+<p>Most of the transmission channel analysis for the <span class="citation" data-cites="romerNewMeasureMonetary2004">Romer and Romer (<a href="#ref-romerNewMeasureMonetary2004" role="doc-biblioref">2004</a>)</span> instrument follows the same steps as for the <span class="citation" data-cites="gertlerMonetaryPolicySurprises2015">Gertler and Karadi (<a href="#ref-gertlerMonetaryPolicySurprises2015" role="doc-biblioref">2015</a>)</span> instrument. Below we highlight only the differences. For steps 2, 4, 5, 6, the same code as above can be used.</p>
+<p>Before we start, we must first adjust the data and replace the GK with the RR instrument:</p>
+<div class="sourceCode" id="cb20" data-startfrom="63"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 62;"><span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a>data_rr <span class="op">=</span> <span class="fu">select</span>(data, <span class="op">:</span>rr_3, <span class="op">:</span>ffr, <span class="op">:</span>ygap, <span class="op">:</span>infl, <span class="op">:</span>lpcom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="defining-the-model-1" class="level3">
+<h3 class="anchored" data-anchor-id="defining-the-model-1">1. Defining the model</h3>
+<p>Because the data has changed, our model definition changes slightly – the dataset name changes.</p>
+<div class="sourceCode" id="cb21" data-startfrom="66"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 65;"><span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> <span class="fu">VAR</span>(data_rr, <span class="fl">4</span>; trend_exponents<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span>)</span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="defining-transmission-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="defining-transmission-matrix">3. Defining transmission matrix</h3>
+<p>The transmission matrix remains largely the same, but the name of the instrument changes.</p>
+<div class="sourceCode" id="cb22" data-startfrom="78"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 77;"><span id="cb22-78"><a href="#cb22-78" aria-hidden="true" tabindex="-1"></a>transmission_order <span class="op">=</span> [<span class="op">:</span>rr_3, <span class="op">:</span>ffr, <span class="op">:</span>ygap, <span class="op">:</span>infl, <span class="op">:</span>lpcom]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="visualising-effects" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="visualising-effects">6. Visualising effects</h3>
+<p>While the code ramains the same, the graphs change.</p>
+<div class="page-columns page-full">
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p class="page-columns page-full"><img src="./rr_both.png" class="img-fluid figure-img column-page"></p>
+<figcaption>Decomposition of a <span class="citation" data-cites="romerNewMeasureMonetary2004">Romer and Romer (<a href="#ref-romerNewMeasureMonetary2004" role="doc-biblioref">2004</a>)</span> monetary policy shock on the federal funds rate (FFR) and inflation into a contemporaneous and non-contemporaneous channel</figcaption>
+</figure>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Minor differences between the decompositions here and the ones in the paper are due to how we obtain the Cholesky-orthogonalised IRFs. In the paper we estimate orthogonal IRFs using a VAR excluding the internal instrument. Here we include the internal instrument.</p>
+</div>
+</div>
 
 
 
-</main> <!-- /main -->
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-gertlerMonetaryPolicySurprises2015" class="csl-entry" role="listitem">
+Gertler, Mark, and Peter Karadi. 2015. <span>“Monetary Policy Surprises, Credit Costs, and Economic Activity.”</span> <em>American Economic Journal: Macroeconomics</em> 7 (1): 44–76.
+</div>
+<div id="ref-romerNewMeasureMonetary2004" class="csl-entry" role="listitem">
+Romer, Christina D, and David H Romer. 2004. <span>“A New Measure of Monetary Shocks: Derivation and Implications.”</span> <em>American Economic Review</em> 94 (4): 1055–84.
+</div>
+<div id="ref-wegnerTCA2024" class="csl-entry" role="listitem">
+Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2025. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

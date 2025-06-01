@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -94,7 +148,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Examples</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../documentation/julia/index.html"> 
+    <a class="nav-link" href="../../../documentation/index.html"> 
 <span class="menu-text">Documentation</span></a>
   </li>  
   <li class="nav-item">
@@ -123,9 +177,9 @@ ul.task-list li input[type="checkbox"] {
         </a>
     </div>
   </nav>
-  <div id="quarto-announcement" data-announcement-id="d1d45beed765f3aac4870d27d9123622" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
-<p><strong>Note</strong> - this website is still actively under construction.</p>
-</div></div>
+  <div id="quarto-announcement" data-announcement-id="ac6a7742dbb2ba6da22a5774a25a0e00" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p><strong>Note</strong>: We are still improving this website. If you find a mistake or have a question, please get in <a href="../../../index.html#about">contact</a></p>
+</div><i class="bi bi-x-lg quarto-announcement-action"></i></div>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
@@ -196,11 +250,22 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#defining-the-model" id="toc-defining-the-model" class="nav-link active" data-scroll-target="#defining-the-model">1. Defining the model</a></li>
+  <li><a href="#obtaining-total-effects" id="toc-obtaining-total-effects" class="nav-link" data-scroll-target="#obtaining-total-effects">2. Obtaining total effects</a></li>
+  <li><a href="#defning-the-transmission-matrix-order" id="toc-defning-the-transmission-matrix-order" class="nav-link" data-scroll-target="#defning-the-transmission-matrix-order">3. Defning the transmission matrix / order</a></li>
+  <li><a href="#defining-the-transmission-channels" id="toc-defining-the-transmission-channels" class="nav-link" data-scroll-target="#defining-the-transmission-channels">4. Defining the transmission channels</a></li>
+  <li><a href="#computing-transmission-effects" id="toc-computing-transmission-effects" class="nav-link" data-scroll-target="#computing-transmission-effects">5. Computing transmission effects</a></li>
+  <li><a href="#visualising-transmission-effects" id="toc-visualising-transmission-effects" class="nav-link" data-scroll-target="#visualising-transmission-effects">6. Visualising transmission effects</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../examples/julia/svar/index.html">Julia</a></li><li class="breadcrumb-item"><a href="../../../examples/julia/lp/index.html">TCA in LPs</a></li></ol></nav>
 <div class="quarto-title">
@@ -221,11 +286,83 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This part of the website is still under construction. Our apologies.</p>
+<p>In this example, we examine the anticipation and implementation effects of government defense spending, closely following Section 5.2 in <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span>. Before beginning, download both the <a href="./wegner2025-section-5-2.jl">code</a> and the <a href="./data.csv">replication data</a>. Ensure that the data and code are placed in the same folder.</p>
+<p>To ensure a clean environment, we recommend starting a new Julia session.</p>
+<p>Next, add add the required packages to the environment. The following steps can be skipped if the packages already exist in the enrivonment.</p>
+<div id="2" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>] add TransmissionChannelAnalysis, DataFrames, CSV, CairoMakie, Makie</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After adding the packages to the environment, load them:</p>
+<div class="sourceCode" id="cb2" data-startfrom="1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">TransmissionChannelAnalysis</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">CSV</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CairoMakie</span>  <span class="co"># for plotting</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, before proceeding with the analysis, load the replication data into a table:</p>
+<div class="sourceCode" id="cb3" data-startfrom="5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 4;"><span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="fu">DataFrame</span>(CSV.<span class="fu">File</span>(<span class="st">"./data.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The remainder of this example follows the standard six-step approach.</p>
+<section id="defining-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="defining-the-model">1. Defining the model</h2>
+<p>We estimate structural impulse response functions (IRFs) using local projections (LPs). An LP model can be created using <code>LP</code>, specifying the treatment variable and maximum horizon. <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> use the defense spending series from <span class="citation" data-cites="rameyDefenseNewsShocks2016">Ramey (<a href="#ref-rameyDefenseNewsShocks2016" role="doc-biblioref">2016</a>)</span> as a direct measure of the shock. Thus, the treatment is <code>newsy</code>, and the maximum horizon is set to <code>20</code> periods.</p>
+<div class="sourceCode" id="cb4" data-startfrom="8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 7;"><span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> <span class="fu">LP</span>(data, <span class="op">:</span>newsy, <span class="fl">4</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">20</span>; include_constant<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The local projection can then be estimated using <code>fit!</code>:</p>
+<div class="sourceCode" id="cb5" data-startfrom="9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 8;"><span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="obtaining-total-effects" class="level2">
+<h2 class="anchored" data-anchor-id="obtaining-total-effects">2. Obtaining total effects</h2>
+<p>Since <code>newsy</code> is treated as a direct measure of the shock, the effects of a government defense spending shock can be identified recursively by ordering the <code>newsy</code> series first. This recursive identification scheme can be defined using <code>Recursive</code>:</p>
+<div class="sourceCode" id="cb6" data-startfrom="12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 11;"><span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>method <span class="op">=</span> <span class="fu">Recursive</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Using this <code>Recursive</code> identification scheme, structural IRFs can be obtained via <code>IRF</code>:</p>
+<div class="sourceCode" id="cb7" data-startfrom="13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 12;"><span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>irfs <span class="op">=</span> <span class="fu">IRF</span>(model, method, <span class="fl">20</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>irfs <span class="op">=</span> irfs.irfs[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">1</span>, <span class="op">:</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="defning-the-transmission-matrix-order" class="level2">
+<h2 class="anchored" data-anchor-id="defning-the-transmission-matrix-order">3. Defning the transmission matrix / order</h2>
+<p>The transmission matrix is defined as a vector of <code>Symbol</code>. <span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> split the total effects into anticipation and implementation effects. They define the anticipation channel as effects that do not pass through actual government defense spending. Thus, it is logical to order <code>gdef</code> (government defense spending) as early as possible in the transmission matrix, but it must not precede the shock variable, <code>newsy</code>. The chosen transmission matrix is:</p>
+<div class="sourceCode" id="cb8" data-startfrom="17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 16;"><span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>transmission_order <span class="op">=</span> [<span class="op">:</span>newsy, <span class="op">:</span>gdef, <span class="op">:</span>g, <span class="op">:</span>y]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="defining-the-transmission-channels" class="level2">
+<h2 class="anchored" data-anchor-id="defining-the-transmission-channels">4. Defining the transmission channels</h2>
+<p><span class="citation" data-cites="wegnerTCA2024">Wegner et al. (<a href="#ref-wegnerTCA2024" role="doc-biblioref">2025</a>)</span> define the anticipation channel as the effects of the government defense spending shock that do not pass through government defense spending at any period. This channel can be defined using <code>not_through</code> as follows:</p>
+<div class="sourceCode" id="cb9" data-startfrom="20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 19;"><span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>anticipation_channel <span class="op">=</span> <span class="fu">not_through</span>(model, <span class="op">:</span>gdef, <span class="fl">0</span><span class="op">:</span><span class="fl">20</span>, transmission_order)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The implementation channel, representing effects passing through government defense spending in at least one period, is then the complement of the anticipation channel:</p>
+<div class="sourceCode" id="cb10" data-startfrom="21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 20;"><span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>implementation_channel <span class="op">=</span> !anticipation_channel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="computing-transmission-effects" class="level2">
+<h2 class="anchored" data-anchor-id="computing-transmission-effects">5. Computing transmission effects</h2>
+<p>Transmission effects are computed using <code>transmission</code> for the first <code>20</code> periods, considering the first shock, corresponding to the defense spending shock. Structural IRFs required for the computations are derived using the <code>Recursive</code> identification <code>method</code> defined earlier.</p>
+<div class="sourceCode" id="cb11" data-startfrom="24"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 23;"><span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>anticipation_effects <span class="op">=</span> <span class="fu">transmission</span>(model, method, <span class="fl">1</span>, anticipation_channel, transmission_order, <span class="fl">20</span>)</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>implementation_effects <span class="op">=</span> <span class="fu">transmission</span>(model, method, <span class="fl">1</span>, implementation_channel, transmission_order, <span class="fl">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="visualising-transmission-effects" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="visualising-transmission-effects">6. Visualising transmission effects</h2>
+<p>To visualise transmission effects, first define channel names and collect the effects in a vector:</p>
+<div class="sourceCode" id="cb12" data-startfrom="28"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia" style="counter-reset: source-line 27;"><span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>teffects <span class="op">=</span> [anticipation_effects, implementation_effects]</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>channel_names <span class="op">=</span> [<span class="st">"Anticipation"</span>, <span class="st">"Implementation"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The effects can then either be visualised one after another by using <code>plot_decomposition</code> or all together by creating a composite figure as below. To create the composite figure showing the decompositions for GDP, total government spending, and defense spending, we first create a new figure:</p>
+<p>We then create a new axis at position <code>[1, 1]</code> into which we plot the decomposition of the defense spending shock on GDP using <code>plot_decomposition!</code>.</p>
+<p>Similarly, we can plot the decomposition for total government spending and defense spending into positions <code>[1, 2]</code> and <code>[1, 3]</code>, respectively.</p>
+<p>Lastly, we can add a legend below the three plots using <code>add_decomposition_legend!</code>.</p>
+<p>The figure below displays the decompositions.</p>
+<div class="page-columns page-full">
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p class="page-columns page-full"><img src="./decomposition.png" class="img-fluid figure-img column-page"></p>
+<figcaption>Decomposition of a government defense spending shock into anticipation and implementation effects</figcaption>
+</figure>
+</div>
+</div>
 
 
 
-</main> <!-- /main -->
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-rameyDefenseNewsShocks2016" class="csl-entry" role="listitem">
+Ramey, Valerie A. 2016. <span>“Defense News Shocks, 1889 - 2015: Estimates Based on News Sources.”</span> Manuscript. Univ. California San Diego. <a href="https://econweb.ucsd.edu/~vramey/research/Defense_News_Narrative.pdf">https://econweb.ucsd.edu/~vramey/research/Defense_News_Narrative.pdf</a>.
+</div>
+<div id="ref-wegnerTCA2024" class="csl-entry" role="listitem">
+Wegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. <span>“Transmission Channel Analysis in Dynamic Models.”</span> 2025. <a href="https://doi.org/10.48550/arxiv.2405.18987">https://doi.org/10.48550/arxiv.2405.18987</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

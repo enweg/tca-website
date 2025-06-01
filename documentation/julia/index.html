@@ -65,6 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
 <link href="../../documentation/julia/advanced.html" rel="next">
+<link href="../../documentation/index.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -156,7 +157,7 @@ window.Quarto = {
 <span class="menu-text">Examples</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../../documentation/julia/index.html" aria-current="page"> 
+    <a class="nav-link active" href="../../documentation/index.html" aria-current="page"> 
 <span class="menu-text">Documentation</span></a>
   </li>  
   <li class="nav-item">
@@ -185,9 +186,9 @@ window.Quarto = {
         </a>
     </div>
   </nav>
-  <div id="quarto-announcement" data-announcement-id="d1d45beed765f3aac4870d27d9123622" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
-<p><strong>Note</strong> - this website is still actively under construction.</p>
-</div></div>
+  <div id="quarto-announcement" data-announcement-id="ac6a7742dbb2ba6da22a5774a25a0e00" class="alert alert-primary hidden"><i class="bi bi-info-circle quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p><strong>Note</strong>: We are still improving this website. If you find a mistake or have a question, please get in <a href="../../index.html#about">contact</a></p>
+</div><i class="bi bi-x-lg quarto-announcement-action"></i></div>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
@@ -195,6 +196,12 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Documentation</span></a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
@@ -241,6 +248,18 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../../documentation/julia/all-functions/AbstractIdentificationMethod.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">AbstractIdentificationMethod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/add_decompare_legend!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">add_decompare_legend!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/add_decomposition_legend!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">add_decomposition_legend!</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -427,6 +446,30 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../../documentation/julia/all-functions/not_through.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">not_through</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/plot_decomposition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">plot_decomposition</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/plot_decomposition_comparison.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">plot_decomposition_comparison</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/plot_decomposition_comparison!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">plot_decomposition_comparison!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../documentation/julia/all-functions/plot_decomposition!.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">plot_decomposition!</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -792,6 +835,7 @@ window.Quarto = {
   <li><a href="#defining-a-transmission-matrix." id="toc-defining-a-transmission-matrix." class="nav-link" data-scroll-target="#defining-a-transmission-matrix.">3. Defining a transmission matrix.</a></li>
   <li><a href="#definining-transmission-channels." id="toc-definining-transmission-channels." class="nav-link" data-scroll-target="#definining-transmission-channels.">4. Definining transmission channels.</a></li>
   <li><a href="#obtaining-transimssion-effects." id="toc-obtaining-transimssion-effects." class="nav-link" data-scroll-target="#obtaining-transimssion-effects.">5. Obtaining transimssion effects.</a></li>
+  <li><a href="#visualising-effects" id="toc-visualising-effects" class="nav-link" data-scroll-target="#visualising-effects">6. Visualising Effects</a></li>
   </ul>
 </nav>
     </div>
@@ -1315,6 +1359,20 @@ Using SVARs and Internal Instruments
 <div id="94" class="cell" data-execution_count="0">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>effects <span class="op">=</span> <span class="fu">transmission</span>(model, <span class="fl">1</span>, q, transmission_order, max_horizon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="visualising-effects" class="level2">
+<h2 class="anchored" data-anchor-id="visualising-effects">6. Visualising Effects</h2>
+<p>To inspect the decompositions visually, load <code>CairoMakie</code> by running</p>
+<div id="96" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CairoMakie</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The following helper functions can then be used to plot decompositions:</p>
+<ul>
+<li><a href="../../documentation/julia/all-functions/plot_decomposition.html"><code>plot_decomposition</code></a> plots the total effects and the decomposed effects.</li>
+<li><a href="../../documentation/julia/all-functions/plot_decomposition_comparison.html"><code>plot_decomposition_comparison</code></a> allows for the comparison of multiple decompositions obtained via different transmission matrices.</li>
+</ul>
+<p>Both functions above create an entirely new figure. Alternatively, both a decomposition and a decomposition comparison plot can be plotted into an already existing figure / axis via <a href="../../documentation/julia/all-functions/plot_decomposition!.html"><code>plot_decomposition!</code></a> and <a href="../../documentation/julia/all-functions/plot_decomposition_comparison!.html"><code>plot_decomposition_comparison!</code></a>.</p>
+<p>Legends can be manually added using <a href="../../documentation/julia/all-functions/add_decomposition_legend!.html"><code>add_decomposition_legend!</code></a> and <a href="../../documentation/julia/all-functions/add_decompare_legend!.html"><code>add_decompare_legend!</code></a> for a decomposition and a decomposition comparison plot, respectively.</p>
 
 
 </section>
@@ -1739,6 +1797,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../../documentation/index.html" class="pagination-link" aria-label="Documentation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Documentation</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../../documentation/julia/advanced.html" class="pagination-link" aria-label="Advanced Tools">

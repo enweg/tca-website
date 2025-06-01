@@ -4,7 +4,79 @@
     "href": "examples/julia/lp/index.html",
     "title": "TCA in Local Projections",
     "section": "",
-    "text": "This part of the website is still under construction. Our apologies.",
+    "text": "In this example, we examine the anticipation and implementation effects of government defense spending, closely following Section 5.2 in Wegner et al. (2025). Before beginning, download both the code and the replication data. Ensure that the data and code are placed in the same folder.\nTo ensure a clean environment, we recommend starting a new Julia session.\nNext, add add the required packages to the environment. The following steps can be skipped if the packages already exist in the enrivonment.\n] add TransmissionChannelAnalysis, DataFrames, CSV, CairoMakie, Makie\nAfter adding the packages to the environment, load them:\nFinally, before proceeding with the analysis, load the replication data into a table:\nThe remainder of this example follows the standard six-step approach.",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/julia/lp/index.html#defining-the-model",
+    "href": "examples/julia/lp/index.html#defining-the-model",
+    "title": "TCA in Local Projections",
+    "section": "1. Defining the model",
+    "text": "1. Defining the model\nWe estimate structural impulse response functions (IRFs) using local projections (LPs). An LP model can be created using LP, specifying the treatment variable and maximum horizon. Wegner et al. (2025) use the defense spending series from Ramey (2016) as a direct measure of the shock. Thus, the treatment is newsy, and the maximum horizon is set to 20 periods.\nmodel = LP(data, :newsy, 4, 0:20; include_constant=true)\nThe local projection can then be estimated using fit!:\nfit!(model)",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/julia/lp/index.html#obtaining-total-effects",
+    "href": "examples/julia/lp/index.html#obtaining-total-effects",
+    "title": "TCA in Local Projections",
+    "section": "2. Obtaining total effects",
+    "text": "2. Obtaining total effects\nSince newsy is treated as a direct measure of the shock, the effects of a government defense spending shock can be identified recursively by ordering the newsy series first. This recursive identification scheme can be defined using Recursive:\nmethod = Recursive()\nUsing this Recursive identification scheme, structural IRFs can be obtained via IRF:\nirfs = IRF(model, method, 20)\nirfs = irfs.irfs[:, 1:1, :]",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/julia/lp/index.html#defning-the-transmission-matrix-order",
+    "href": "examples/julia/lp/index.html#defning-the-transmission-matrix-order",
+    "title": "TCA in Local Projections",
+    "section": "3. Defning the transmission matrix / order",
+    "text": "3. Defning the transmission matrix / order\nThe transmission matrix is defined as a vector of Symbol. Wegner et al. (2025) split the total effects into anticipation and implementation effects. They define the anticipation channel as effects that do not pass through actual government defense spending. Thus, it is logical to order gdef (government defense spending) as early as possible in the transmission matrix, but it must not precede the shock variable, newsy. The chosen transmission matrix is:\ntransmission_order = [:newsy, :gdef, :g, :y]",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/julia/lp/index.html#defining-the-transmission-channels",
+    "href": "examples/julia/lp/index.html#defining-the-transmission-channels",
+    "title": "TCA in Local Projections",
+    "section": "4. Defining the transmission channels",
+    "text": "4. Defining the transmission channels\nWegner et al. (2025) define the anticipation channel as the effects of the government defense spending shock that do not pass through government defense spending at any period. This channel can be defined using not_through as follows:\nanticipation_channel = not_through(model, :gdef, 0:20, transmission_order)\nThe implementation channel, representing effects passing through government defense spending in at least one period, is then the complement of the anticipation channel:\nimplementation_channel = !anticipation_channel",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/julia/lp/index.html#computing-transmission-effects",
+    "href": "examples/julia/lp/index.html#computing-transmission-effects",
+    "title": "TCA in Local Projections",
+    "section": "5. Computing transmission effects",
+    "text": "5. Computing transmission effects\nTransmission effects are computed using transmission for the first 20 periods, considering the first shock, corresponding to the defense spending shock. Structural IRFs required for the computations are derived using the Recursive identification method defined earlier.\nanticipation_effects = transmission(model, method, 1, anticipation_channel, transmission_order, 20)\nimplementation_effects = transmission(model, method, 1, implementation_channel, transmission_order, 20)",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "TCA in LPs"
+    ]
+  },
+  {
+    "objectID": "examples/julia/lp/index.html#visualising-transmission-effects",
+    "href": "examples/julia/lp/index.html#visualising-transmission-effects",
+    "title": "TCA in Local Projections",
+    "section": "6. Visualising transmission effects",
+    "text": "6. Visualising transmission effects\nTo visualise transmission effects, first define channel names and collect the effects in a vector:\nteffects = [anticipation_effects, implementation_effects]\nchannel_names = [\"Anticipation\", \"Implementation\"]\nThe effects can then either be visualised one after another by using plot_decomposition or all together by creating a composite figure as below. To create the composite figure showing the decompositions for GDP, total government spending, and defense spending, we first create a new figure:\nWe then create a new axis at position [1, 1] into which we plot the decomposition of the defense spending shock on GDP using plot_decomposition!.\nSimilarly, we can plot the decomposition for total government spending and defense spending into positions [1, 2] and [1, 3], respectively.\nLastly, we can add a legend below the three plots using add_decomposition_legend!.\nThe figure below displays the decompositions.\n\n\n\n\nDecomposition of a government defense spending shock into anticipation and implementation effects",
     "crumbs": [
       "Home",
       "Julia",
@@ -236,7 +308,7 @@
     "section": "",
     "text": "make_B\n\n\n\n\n\nConstruct B of the systems representation \\(x = Bx + Omega\\varepsilon\\).\n\nNotes\n\nSee make_systems_form for further information.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "make_B"
@@ -249,7 +321,7 @@
     "section": "",
     "text": "get_input_data\n\n\n\n\n\nget_input_data(::Model)\nReturn the data used for the estimation.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "get_input_data"
@@ -262,7 +334,7 @@
     "section": "",
     "text": "hqc\n\n\n\n\n\naic(model::Union{VAR,SVAR}) -&gt; Real\naic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nbic(model::Union{VAR,SVAR}) -&gt; Real\nbic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nsic(model::Union{VAR,SVAR}) -&gt; Real\nsic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nhqc(model::Union{VAR,SVAR}) -&gt; Real\nhqc(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\nComputes information criteria for model selection in VARs.\nGiven a fitted VAR model or directly the covariance matrix Sigma_u, the number of estimated coefficients, and sample size T, each function returns the respective criterion value:\n\nAIC (Akaike Information Criterion):\n\n\\[\n\\text{AIC} = \\log\\det(\\Sigma_u) + \\frac{2k}{T}\n\\]\n\nSIC/BIC (Schwarz/Bayesian Information Criterion):\n\n\\[\n\\text{SIC} = \\log\\det(\\Sigma_u) + \\frac{\\log(T) k}{T}\n\\]\n\nHQC (Hannan-Quinn Criterion):\n\n\\[\n\\text{HQC} = \\log\\det(\\Sigma_u) + \\frac{2 \\log(\\log T) k}{T}\n\\]\nHere, \\(k\\) is the number of estimated parameters and \\(T\\) is the effective sample size.\n\nArguments\n\nmodel::VAR: A fitted VAR model\nSigma_u::Matrix{&lt;:Number}: Residual covariance matrix\nnum_coeffs::Int: Number of estimated coefficients\nT::Int: Number of observations used in estimation",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "hqc"
@@ -275,7 +347,7 @@
     "section": "",
     "text": "AbstractIdentificationMethod\n\n\n\n\n\nAbstractIdentificationMethod\nAbstract supertype for all identification methods.\nNew identification methods must subtype AbstractIdentificationMethod. If the identification method can be used to estimate the structural model, i.e. identify the structural model’s coefficients, then functions fit! and fit_and_select! should be implemented. If the identification method can be used to identify structural IRFs from a reduced form model, e.g. structural IRFs from a VAR, then the method IRF should be implemented. For further details regarding the latter point, see the documentation for IRF.\nFor structural VARs (SVARs), developers may alternatively extend the internal methods _identify and _identify_irfs.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "AbstractIdentificationMethod"
@@ -288,7 +360,7 @@
     "section": "",
     "text": "show_y\n\n\n\n\n\nshow_y(q::Q, order::AbstractVector{&lt;:Int})\n@show_y(q, order)\nPretty print the condition q::Q using the variables of the dynamic system, i.e. y.\n\n\n\nq::Q: A transmission condition. See also Q.\norder::AbstractVector{&lt;:Int}: The order of variables defined by the transmission matrix.\n\n\n\n\ns_y = \"y_{1,0} | !y_{1,1}\"\norder = [3,1,2]\n\nq = make_condition(s_y, order)\n@show_y q $order",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "show_y"
@@ -301,7 +373,7 @@
     "section": "",
     "text": "q::Q: A transmission condition. See also Q.\norder::AbstractVector{&lt;:Int}: The order of variables defined by the transmission matrix.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "show_y"
@@ -314,7 +386,7 @@
     "section": "",
     "text": "s_y = \"y_{1,0} | !y_{1,1}\"\norder = [3,1,2]\n\nq = make_condition(s_y, order)\n@show_y q $order",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "show_y"
@@ -327,7 +399,7 @@
     "section": "",
     "text": "make_condition\n\n\n\n\n\nmake_condition(s::String)\nmake_condition(s_y::String, order::AbstractVector{&lt;:Int})\nMake a transmission condition, i.e. Q(b), out of a string.\nTransmission channels are described using Boolean statements involving the variables in the dynamic model. make_condition allows for specifying these Boolean conditions as a string which is then converted to an internal representation allowing the computation of transmission channels.\nTwo ways of specifying the Boolean conditions exist:\n\nmake_condition(s::String) takes the Boolean condition in the systems form of Wegner et al (2024), i.e. variables must start with x followed by a number. For example, given a three variable VAR(1), y_{1,t} -&gt; x_1, y_{2, t} -&gt; x_2, y_{3, t} -&gt; x_3, y_{1, t+1} -&gt; x_4, y_{2, t+1} -&gt; x_5, … Boolean statements then involve expressions in the x variables and define which paths can be taken. Each path involved in the transmission mechanism must satisfy the Boolean statement.\nmake_condition(s_y::String, order::AbstractVector{&lt;:Int}) does the same as the first method, however the Boolean condition can be specified using the variables of the dynamic systems, i.e. y. Variables must then be specified using y_{i,t} where i is the variable number and t is the period. At all times t &gt;= 0 with 0 denoting the contemporaneous horizon.\n\n\n\n\ns::String: A Boolean statement given as a string. Variables must start with x for them to be valid variables.\ns_y::String: A Boolean statement given as a string. Variabls must have the form y_{i,t} where i is the variable number and t &gt;= 0 is the time period. t=0 corresponds to the contemporaneous horizon.\norder::AbstractVector{&lt;:Int}: The variable ordering defined by the transmission matrix.\n\n\n\n\n\nReturns a transmission condition. See also Q.\n\n\n\n\ns = \"x2 & !x3\"\ncond = make_cond```{julia}on(s)\ns_y = \"y_{1,0} & !y_{1,1}\"\norder = [3,1,2]\ncond = make_condition(s_y, order)\n\n\n\n\nBoolean conditions can consist of AND (&), NOT (!), OR (|), and parentheses.\nThe resulting transmission condition can be used in transmission to calculate the transmission effect.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "make_condition"
@@ -340,7 +412,7 @@
     "section": "",
     "text": "s::String: A Boolean statement given as a string. Variables must start with x for them to be valid variables.\ns_y::String: A Boolean statement given as a string. Variabls must have the form y_{i,t} where i is the variable number and t &gt;= 0 is the time period. t=0 corresponds to the contemporaneous horizon.\norder::AbstractVector{&lt;:Int}: The variable ordering defined by the transmission matrix.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "make_condition"
@@ -353,7 +425,7 @@
     "section": "",
     "text": "Returns a transmission condition. See also Q.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "make_condition"
@@ -366,7 +438,7 @@
     "section": "",
     "text": "s = \"x2 & !x3\"\ncond = make_cond```{julia}on(s)\ns_y = \"y_{1,0} & !y_{1,1}\"\norder = [3,1,2]\ncond = make_condition(s_y, order)",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "make_condition"
@@ -379,49 +451,36 @@
     "section": "",
     "text": "Boolean conditions can consist of AND (&), NOT (!), OR (|), and parentheses.\nThe resulting transmission condition can be used in transmission to calculate the transmission effect.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "make_condition"
     ]
   },
   {
-    "objectID": "documentation/julia/all-functions/@show_y.html",
-    "href": "documentation/julia/all-functions/@show_y.html",
-    "title": "@show_y",
+    "objectID": "documentation/julia/all-functions/plot_decomposition_comparison!.html",
+    "href": "documentation/julia/all-functions/plot_decomposition_comparison!.html",
+    "title": "plot_decomposition_comparison!",
     "section": "",
-    "text": "@show_y\n\n\n\n\n\nshow_y(q::Q, order::AbstractVector{&lt;:Int})\n@show_y(q, order)\nPretty print the condition q::Q using the variables of the dynamic system, i.e. y.\n\n\n\nq::Q: A transmission condition. See also Q.\norder::AbstractVector{&lt;:Int}: The order of variables defined by the transmission matrix.\n\n\n\n\ns_y = \"y_{1,0} | !y_{1,1}\"\norder = [3,1,2]\n\nq = make_condition(s_y, order)\n@show_y q $order",
+    "text": "plot_decomposition_comparison!\n\n\n\n\n\nPlot a decomposition comparison plot into an already existing axis.\n\n\n\n\n\n\n\n\n\n\n\nplot_decomposition_comparison!\n\n\n\n\n\nplot_decomposition_comparison!(\n    ax::Axis,\n    idx_outcome::Int,\n    irfs::AbstractArray{&lt;:Number,3},\n    teffects::Vector{&lt;:AbstractArray{&lt;:Number,3}}...;\n    colors=wong_colors()\n) -&gt; Axis\nPlots a decomposition comparison plot of the total effects (irfs) and the transmission effects (teffects), of various transmission matrices, for a given outcome variable (idx_outcome) into the axis ax.\n\nArguments\n\nidx_outcome::Int: Index of the outcome variable.\nirfs::AbstractArray{&lt;:Number,3}: Total effects, with shape [N, 1, H] where N is the number of endogenous variables, and H is the number of horizons (including zero).\nteffects::Vector{&lt;:AbstractArray{&lt;:Number,3}}...: Transmission effects for each transmission channel and each transmission matrix; Each transmission effect must have the same shape as irfs.\n\n\n\nKeyword Arguments\n\ncolors: Colors for the decomposition bars (default: Wong colors).",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
-      "\\@show_y"
+      "plot_decomposition_comparison!"
     ]
   },
   {
-    "objectID": "documentation/julia/all-functions/@show_y.html#arguments",
-    "href": "documentation/julia/all-functions/@show_y.html#arguments",
-    "title": "@show_y",
+    "objectID": "documentation/julia/all-functions/spectral_radius.html",
+    "href": "documentation/julia/all-functions/spectral_radius.html",
+    "title": "spectral_radius",
     "section": "",
-    "text": "q::Q: A transmission condition. See also Q.\norder::AbstractVector{&lt;:Int}: The order of variables defined by the transmission matrix.",
+    "text": "spectral_radius\n\n\n\n\n\nspectral_radius(X::AbstractMatrix) -&gt; Number\nComputes the spectral radius of a matrix X.\n\nDescription\nThe spectral radius of a matrix is defined as the largest absolute eigenvalue of the matrix.\nMathematically, for a given square matrix X, the spectral radius is computed as:\n\\[\n\\rho(X) = \\max |\\lambda_i|\n\\]\nwhere \\lambda_i are the eigenvalues of X.\n\n\nArguments\n\nX::AbstractMatrix: A square matrix.\n\n\n\nReturns\n\nThe spectral radius of X.\n\n\n\nEx```{julia}le\nX = [0.5 0.2; 0.1 0.9]\nr = spectral_radius(X)\n\n\n\n\n\n\n\n\n\n\n\n\nspectral_radius\n\n\n\n\n\nspectral_radius(model::Union{VAR,SVAR}) -&gt; Real\nComputes the spectral radius of the companion matrix of a fitted VAR model.\nThe spectral radius of a matrix \\(A\\) is defined as the largest absolute value among its eigenvalues:\n\\[\n\\rho(A) = \\max_i |\\lambda_i|\n\\]\nwhere \\(\\lambda_i\\) are the eigenvalues of \\(A\\).\nIn the context of VAR models, the spectral radius of the companion matrix is a key measure of stability. A VAR model is stable if the spectral radius is strictly less than 1.\n\nArguments\n\nmodel::VAR: A fitted VAR model",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
-      "\\@show_y"
-    ]
-  },
-  {
-    "objectID": "documentation/julia/all-functions/@show_y.html#exajuliaes",
-    "href": "documentation/julia/all-functions/@show_y.html#exajuliaes",
-    "title": "@show_y",
-    "section": "",
-    "text": "s_y = \"y_{1,0} | !y_{1,1}\"\norder = [3,1,2]\n\nq = make_condition(s_y, order)\n@show_y q $order",
-    "crumbs": [
-      "Documentation",
-      "Julia",
-      "All",
-      "\\@show_y"
+      "spectral_radius"
     ]
   },
   {
@@ -431,7 +490,7 @@
     "section": "",
     "text": "fit_and_select!\n\n\n\n\n\nfit_and_select!(::Model, args..., selection_function::Function)\nEstimates the model and selects among various models using selection_function. The best model has the smallest selection_function value, where selection_function must return a scalar.\n\n\n\n\n\n\n\n\n\n\n\nfit_and_select!\n\n\n\n\n\nfit_and_select!(model::Model, method::AbstractIdentificationMethod, selection_func::Function)\nFits the model model using the identification method method and selects the best specification based on the selection_func.\nThe selection function should return a scalar value, with lower values indicating better model fit. Examples include information criteria such as AIC.\n\n\n\n\n\n\n\n\n\n\n\nfit_and_select!\n\n\n\n\n\nfit_and_select!(model::VAR, ic_function::Function=aic) --&gt; (VAR, DataFrame)\nSelect and estimate a VAR model.\nThe best model is determined by the model with the smallest ic_function value among all models with p=1:model.p. Thus, the lag-length of the provided model determines the maximum lag length.\nAvailable choices for ic_function are aic, bic, sic, hqc, but user defined functions can be provided as long as they have the signature ic_function(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) where Sigma_u is the VAR error covariance matrix, num_coeffs is the number of estimated coefficients, and T is a number of effective observations.\nTo be correct, the error covariance matrix of all models is estimated over the same time period. Calling aic or other functions on manually estimated models with differing lag-lengths will not compare the models on the same time period – the model with higher p will have fewer effective number of observations`. It is thus recommended to do model comparison via this function.\n\nArguments\n\nmodel::VAR: VAR model, where the provided lag-length p determines the maximum lag-length.\nic_function::Function: Information criterion function. See the details above. Default is AIC, since it is generally recommended to go with more rather than fewer lags.\n\n\n\nReturns\nReturns a tuple (VAR, DataFrame) where the first element is the best model and the second element is a table with information regarding the ic_function value for each estimated model. Note that manually calling aic or similar functions on the returned model might not provide that same value, since the covariance will now be estimated over the full period rather than the common period.\n\n\n\n\n\n\n\n\n\n\n\n\nfit_and_select!\n\n\n\n\n\nfit_and_select!(model::SVAR, \n                identification_method::AbstractIdentificationMethod, \n                ic_function::Function=aic) --&gt; (SVAR, DataFrame)\nSelect and estimate a SVAR model by first selecting an estimating a VAR model and then identifying the SVAR from the VAR using identification_method.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "fit_and_select!"
@@ -444,7 +503,7 @@
     "section": "",
     "text": "SVAR\n\n\n\n\n\nSVAR &lt;: Model\nStructural Vector Autoregressive (SVAR) model in matrix form.\nA SVAR of lag order p is specified as:\n\\[\n    A_0y_t = C e_t + A_1 y_{t-1} + ... + A_p y_{t-p} + \\varepsilon_t\n\\]\nwhere:\n\n\\(e_t\\) is a vector of deterministic components (constant, trends, etc)\n\\(C, A_i\\) are conformable matrices\n\\(\\varepsilon_t\\) are structural shocks\n\nThis can be rewritten compactly as:\n\\[\n    y_t'A0' = z_t' A_+' + u_t'\n\\]\nwhere:\n\n\\(z_t = [e_t; y_{t-1}; ...; y_{t-p}]\\) includes deterministic components and lagged values of all variables\n\\(A_+ = [C, A_1, ..., A_p]\\) is the coefficient matrix stacking trend and autoregressive terms\n\nAssuming \\(A0\\) is invertible, the reduced-form VAR can be obtained as\n\\[\ny_t' = z_t' A_+'(A_0')^{-1} + u_t'(A_0')^{-1}\n\\]\nwhich can be represented using a VAR object.\n\n\n\nA_plus::Matrix{&lt;:Number}: Coefficient matrix [C, A_1, ..., A_p]\nA_0::AbstractMatrix{&lt;:Number}: Contemporaneous relationships.\np::Int: Lag order of the (S)VAR\ntrend_exponents::Vector{&lt;:Number}: Time trend exponents (e.g., [0,1] implies constant and linear trend)\nvar::VAR: Reduced form representation of SVAR",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "SVAR"
@@ -457,7 +516,7 @@
     "section": "Keyword Arguments",
     "text": "Keyword Arguments\n\ntrend_exponents::Vector{&lt;:Number}: Exponents of time trends (default: [0])",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "SVAR"
@@ -470,23 +529,88 @@
     "section": "",
     "text": "make_systems_form\n\n\n\n\n\nmake_systems_form(\n    Phi0::AbstractMatrix, \n    As::Vector{&lt;:AbstractMatrix}, \n    Psis::Vector{&lt;:AbstractMatrix}, \n    Sigma::AbstractMatrix{&lt;:Real}, \n    order::AbstractVector{&lt;:Int}, \n    max_horizon::Int\n) -&gt; Tuple{AbstractMatrix, AbstractMatrix}\nTransform an SVARMA dynamic model into the systems representation \\(x = Bx + Omega\\varepsilon\\).\n\nArguments\n\nPhi0::AbstractMatrix: The matrix of contemporaneous structural impulse responses.\nAs::Vector{&lt;:AbstractMatrix}: A vector of reduced-form autoregressive (AR). First entry corresponds to the AR matrix for the first lag, etc.\nPsis::Vector{&lt;:AbstractMatrix}: A vector of reduced-form moving average (MA) matrices. First index corresponds to the first lag, etc.\nSigma::AbstractMatrix{&lt;:Real}: The covariance matrix of reduced-form errors.\norder::AbstractVector{&lt;:Int}: The vector indicating the order of variables, typically determined by the transmission matrix.\nmax_horizon::Int: The maximum time horizon to consider for the systems model, with 0 representing the contemporaneous period.\n\n\n\nReturns\n\n(B, Omega) with the meaning being the same as in Wegner et al (2024).\n\n\n\nNotes\n\nUse make_B and make_Omega to construct the two matrices seperately.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "make_systems_form"
     ]
   },
   {
-    "objectID": "documentation/julia/all-functions/get_variable_names.html",
-    "href": "documentation/julia/all-functions/get_variable_names.html",
-    "title": "get_variable_names",
+    "objectID": "documentation/julia/all-functions/nobs.html",
+    "href": "documentation/julia/all-functions/nobs.html",
+    "title": "nobs",
     "section": "",
-    "text": "get_variable_names\n\n\n\n\n\nget_variable_names(model::Model) --&gt; Vector{Symbol}\nObtain the variable names of the model’s input data.",
+    "text": "nobs\n\n\n\n\n\nnobs(::Model)\nReturns the effective number of observations used for the estimation of the model.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
-      "get_variable_names"
+      "nobs"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/through.html",
+    "href": "documentation/julia/all-functions/through.html",
+    "title": "through",
+    "section": "",
+    "text": "through\n\n\n\n\n\nthrough(idx, horizons, order) --&gt; Q\nAll paths must go through variables in idx in periods horizons. Note, this uses the dynamic system notation y such that idx refers to the index of the variable in the original dynamic system, i.e. in the SVARMA.\n\n\nFor the single variable version:\n\nidx::Int: Index of variable through which the paths should go. This is the original index in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::AbstractVector{&lt;:Int}: Horizons for which the paths must go through the variable.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix\n\nFor the multiple variable version:\n\nidx::AbstractVector{&lt;:Int}: Indices of variables through which the paths should go. These are the original indices in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::Union{AbstractVector{&lt;:Int},Vector{AbstractVector{&lt;:Int}}}: Horizons for which the paths must go through the variable. Must either be a vector for each variable in idx or a single vector. If it is a single vector, then the horizons will be applied to each variable in idx.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix\n\n\n\n\n\nReturns a transmission condition Q.\n\n\n\n\n\nThe transmission effect can be calculated using transmission.\n\n\n\n\nSuppose we are interested in the contemporaneous channel in Section 5.1 of Wegner et al (2024), i.e. we are interested in the effect going through the federal funds rate contemporaneously. In our estimated model, the federal funds rate is the first variable. We would thus define the contemporaneous channe```{julia}s\ncontemporaneous_channel = through(1, [0], 1:4)  # we have four variables with ffr being first\nMore generally, we could define the following, which would be the effect through the federal funds rate in the first t```{julia}periods.\nq = through(1, [0, 1], 1:4)\nThe following is also allowed which is the effect through the federal funds rate contemporaneously and one period later, and through the output gap contemporaneously and one period later, where the federal funds rate is ordered first and the ```{julia}put gap second.\nq = through([1, 2], [[0, 1], [0, 1]], 1:4)\nIf we want to re-order the federal funds rate after the output gap, we simply change the ordering to [2, 1, 3, 4] where 2 corresponds to the output gap ```{julia}the original ordering.\nq = through([1, 2], [[0, 1], [0, 1]], [2, 1, 3, 4])",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "through"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/through.html#arguments",
+    "href": "documentation/julia/all-functions/through.html#arguments",
+    "title": "through",
+    "section": "",
+    "text": "For the single variable version:\n\nidx::Int: Index of variable through which the paths should go. This is the original index in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::AbstractVector{&lt;:Int}: Horizons for which the paths must go through the variable.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix\n\nFor the multiple variable version:\n\nidx::AbstractVector{&lt;:Int}: Indices of variables through which the paths should go. These are the original indices in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::Union{AbstractVector{&lt;:Int},Vector{AbstractVector{&lt;:Int}}}: Horizons for which the paths must go through the variable. Must either be a vector for each variable in idx or a single vector. If it is a single vector, then the horizons will be applied to each variable in idx.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "through"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/through.html#returns",
+    "href": "documentation/julia/all-functions/through.html#returns",
+    "title": "through",
+    "section": "",
+    "text": "Returns a transmission condition Q.",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "through"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/through.html#notes",
+    "href": "documentation/julia/all-functions/through.html#notes",
+    "title": "through",
+    "section": "",
+    "text": "The transmission effect can be calculated using transmission.",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "through"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/through.html#examples",
+    "href": "documentation/julia/all-functions/through.html#examples",
+    "title": "through",
+    "section": "",
+    "text": "Suppose we are interested in the contemporaneous channel in Section 5.1 of Wegner et al (2024), i.e. we are interested in the effect going through the federal funds rate contemporaneously. In our estimated model, the federal funds rate is the first variable. We would thus define the contemporaneous channe```{julia}s\ncontemporaneous_channel = through(1, [0], 1:4)  # we have four variables with ffr being first\nMore generally, we could define the following, which would be the effect through the federal funds rate in the first t```{julia}periods.\nq = through(1, [0, 1], 1:4)\nThe following is also allowed which is the effect through the federal funds rate contemporaneously and one period later, and through the output gap contemporaneously and one period later, where the federal funds rate is ordered first and the ```{julia}put gap second.\nq = through([1, 2], [[0, 1], [0, 1]], 1:4)\nIf we want to re-order the federal funds rate after the output gap, we simply change the ordering to [2, 1, 3, 4] where 2 corresponds to the output gap ```{julia}the original ordering.\nq = through([1, 2], [[0, 1], [0, 1]], [2, 1, 3, 4])",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "through"
     ]
   },
   {
@@ -496,7 +620,7 @@
     "section": "",
     "text": "map_y_to_x\n\n\n\n\n\nmap_y_to_x(i::Int, t::Int, K::Int, order::AbstractVector{&lt;:Int}) -&gt; Int\nMaps a variable in the original transmission condition (using variables y) to its corresponding systems form (using variables x).\n\nArguments\n\ni::Int: Index of the variable in the original system.\nt::Int: Time index of the variable in the original system.\nK::Int: Total number of variables in the system.\norder::AbstractVector{&lt;:Int}: Vector defining the ordering of variables (defined by the transmission matrix).\n\n\n\nReturns\n\nAn integer representing the index of the corresponding x variable in the systems form.\n\n\n\nNotes\n\nThe contemporaneous period is denoted is period 0.\n\n\n\n\n\n\n\n\n\n\n\n\n\nmap_y_to_x\n\n\n\n\n\nmap_y_to_x(s_y::String, order::AbstractVector{&lt;:Int}) -&gt; String\nTransforms a string representing a transmission condition in terms of the original variables y to a string using the systems form variables x based on a specified ordering.\n\nArguments\n\ns_y::String: A string representing the transmission condition using original variables y, e.g. “y{1,0} & !y{2,0}”.\norder::AbstractVector{&lt;:Int}: Ordering defined in the transmission matrix.\n\n\n\nReturns\n\nA string representing the same transmission question but using variables of the systems form (x) rather than those of the dynamic (original) system (y).\n\n\n\nEx```{julia}le\norder = [3, 1, 2]\ns_y = \"y_{1, 2} & y_{3, 1}\"\nmap_y_to_x(s_y, order)  # Returns: \"x8 & x4\"",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "map_y_to_x"
@@ -509,7 +633,7 @@
     "section": "",
     "text": "IRF\n\n\n\n\n\nIRF(irfs::Array{&lt;:Number,3}, varnames::Vector{Symbol},\n    model::Model, ident_method::Union{Nothing, AbstractIdentificationMethod}=nothing)\nContainer for storing impulse response functions (IRFs) computed from a model.\nThis structure captures both reduced-form and structural IRFs. For IRFs identified from a reduced-form model using an identification method (e.g., recursive or external instruments), the ident_method should be explicitly provided.\nFor models that are already structural (e.g., identified SVARs) or for reduced-form IRFs (without identification), the ident_method should be left as nothing.\n\nFields\n\nirfs::Array{&lt;:Number,3}: The IRFs with shape (variables, shocks, horizons)\nvarnames::Vector{Symbol}: Variable names\nmodel::Model: The model object used to generate the IRFs\nident_method::Union{Nothing, AbstractIdentificationMethod}: The identification method used, if applicable (only for RF models)\n\n\n\nConstructors\n\nIRF(irfs, varnames, model) Creates an IRF object for a structural model or reduced-form IRFs\nIRF(irfs, varnames, model, ident_method) Use this when IRFs are structurally identified from a reduced-form model\n\n\n\n\n\n\n\n\n\n\n\n\n\nIRF\n\n\n\n\n\nIRF(model::Model, max_horizon::Int)\nReturns the impulse response functions (IRFs) from model up to horizon max_horizon.\n\n\n\n\n\n\n\n\n\n\n\nIRF\n\n\n\n\n\nIRF(model::Model, method::AbstractIdentificationMethod, max_horizon::Int)\nReturns the impulse response functions (IRFs) identified from model using the identification method method, up to the specified max_horizon.\nMust return an object of type IRF.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "IRF"
@@ -522,7 +646,7 @@
     "section": "",
     "text": "map_x_to_y\n\n\n\n\n\nmap_x_to_y(xi::Int, order::AbstractVector{&lt;:Int}) -&gt; Tuple{Int, Int}\nMaps a variable from the systems form (using variables x) back to its original transmission condition form (using variables y). This function is the reverse of map_y_to_x.\n\nArguments\n\nxi::Int: Index of the variable in the systems form.\norder::AbstractVector{&lt;:Int}: Ordering defined in the transmission matrix.\n\n\n\nReturns\n\nA tuple (i, t) where i is the index of the variable in the original system and t is its time index.\n\n\n\n\n\n\n\n\n\n\n\n\n\nmap_x_to_y\n\n\n\n\n\nmap_x_to_y(s_x::String, order::AbstractVector{&lt;:Int}) -&gt; String\nTransforms a string representing a transmission condition in terms of the systems form variables x back to a string using the original variables y. This function is the reverse of map_y_to_x.\n\nArguments\n\ns_x::String: A string representing the transmission condition using systems form variables x.\norder::AbstractVector{&lt;:Int}: Ordering defined by the transmission matrix.\n\n\n\nReturns\n\nA string representing the same transmission question but using variables of the dynamic (original) system (y) rather than those of the systems form (x).\n\n\n\nEx```{julia}le\norder = [3, 1, 2]\ns_x = \"x8 & x4\"\nmap_x_to_y(s_x, order)  # Returns: \"y_{1, 2} + y_{3, 1}\"",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "map_x_to_y"
@@ -535,7 +659,7 @@
     "section": "",
     "text": "Recursive\n\n\n\n\n\nRecursive &lt;: AbstractIdentificationMethod\nGeneral-purpose identification method based on recursive, or conditional ignorability, assumptions.\nThis method assumes that, conditional on variables ordered before, a given variable (often interpreted as a treatment or shock) is as good as random. This enables causal interpretation of the identified shock as structural.\nIn macroeconomic applications, this is typically operationalized through a Cholesky decomposition in structural VARs (SVARs), but the method is not limited to this setting. It applies to any model in which recursive ordering (conditioning on other variables) can be used to justify identification.\nConditioning variables are those that are ordered before the treatment variable in the provided dataset.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "Recursive"
@@ -548,7 +672,7 @@
     "section": "",
     "text": "aic\n\n\n\n\n\naic(model::Union{VAR,SVAR}) -&gt; Real\naic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nbic(model::Union{VAR,SVAR}) -&gt; Real\nbic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nsic(model::Union{VAR,SVAR}) -&gt; Real\nsic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nhqc(model::Union{VAR,SVAR}) -&gt; Real\nhqc(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\nComputes information criteria for model selection in VARs.\nGiven a fitted VAR model or directly the covariance matrix Sigma_u, the number of estimated coefficients, and sample size T, each function returns the respective criterion value:\n\nAIC (Akaike Information Criterion):\n\n\\[\n\\text{AIC} = \\log\\det(\\Sigma_u) + \\frac{2k}{T}\n\\]\n\nSIC/BIC (Schwarz/Bayesian Information Criterion):\n\n\\[\n\\text{SIC} = \\log\\det(\\Sigma_u) + \\frac{\\log(T) k}{T}\n\\]\n\nHQC (Hannan-Quinn Criterion):\n\n\\[\n\\text{HQC} = \\log\\det(\\Sigma_u) + \\frac{2 \\log(\\log T) k}{T}\n\\]\nHere, \\(k\\) is the number of estimated parameters and \\(T\\) is the effective sample size.\n\nArguments\n\nmodel::VAR: A fitted VAR model\nSigma_u::Matrix{&lt;:Number}: Residual covariance matrix\nnum_coeffs::Int: Number of estimated coefficients\nT::Int: Number of observations used in estimation",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "aic"
@@ -561,23 +685,62 @@
     "section": "",
     "text": "make_Omega\n\n\n\n\n\nConstruct Omega of the systems representation \\(x = Bx + Omega\\varepsilon\\).\n\nNotes\n\nSee make_systems_form for further information.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "make_Omega"
     ]
   },
   {
-    "objectID": "documentation/julia/all-functions/Model.html",
-    "href": "documentation/julia/all-functions/Model.html",
-    "title": "Model",
+    "objectID": "documentation/julia/all-functions/ExternalInstrument.html",
+    "href": "documentation/julia/all-functions/ExternalInstrument.html",
+    "title": "ExternalInstrument",
     "section": "",
-    "text": "Model\n\n\n\n\n\nNo documentation found for public symbol.\n\n\n\n\n\n\n\n\n\n\n\nModel\n\n\n\n\n\nSummary\n\n\n\n\n\n\n\n\n\n\n\nModel\n\n\n\n\n\nabstract type TransmissionChannelAnalysis.Model\n\n\n\n\n\n\n\n\n\n\n\nModel\n\n\n\n\n\nSubtypes\n\n\n\n\n\n\n\n\n\n\n\nModel\n\n\n\n\n\nTransmissionChannelAnalysis.LP\nTransmissionChannelAnalysis.SVAR\nTransmissionChannelAnalysis.VAR",
+    "text": "ExternalInstrument\n\n\n\n\n\nExternalInstrument &lt;: AbstractIdentificationMethod\nIdentification method using external instruments for structural shock identification in time series models.\nExternal instruments serve as proxies for structural shocks and are not included in the estimation model (e.g., a VAR), but are used in instrumental variable estimators such as two-stage least squares (2SLS).\nThis method identifies relative structural impulse response functions (IRFs), meaning that the scale of the identified shock is normalised. Specifically, the IRF is scaled such that the response of the treatment variable equals one at a given normalising horizon.\nThis approach also generalises to the Local Projections Instrumental Variables (LP-IV) framework and supports the use of multiple instruments.\nThe method is based on:\nStock, J. H., & Watson, M. W. (2018). Identification and Estimation of Dynamic Causal Effects in Macroeconomics Using External Instruments. The Economic Journal, 128(610), 917–948. https://doi.org/10.1111/ecoj.12593\n\n\n\ntreatment::Union{Symbol, Int}: the variable used to normalise the IRF\ninstruments::AbstractMatrix: matrix of external instruments\nnormalising_horizon::Int: the horizon at which the IRF of the treatment variable is set to one",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
-      "Model"
+      "ExternalInstrument"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/ExternalInstrument.html#arguments",
+    "href": "documentation/julia/all-functions/ExternalInstrument.html#arguments",
+    "title": "ExternalInstrument",
+    "section": "Arguments",
+    "text": "Arguments\n\ntreatment::Union{Symbol, Int}: treatment variable in the model data specified either as the column index in the data or by variable name.\ninstruments::Union{AbstractMatrix, DataFrame}: observations of external instruments. Instruments must be observed over the same period as the model data.",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "ExternalInstrument"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/ExternalInstrument.html#keyword-arguments",
+    "href": "documentation/julia/all-functions/ExternalInstrument.html#keyword-arguments",
+    "title": "ExternalInstrument",
+    "section": "Keyword Arguments",
+    "text": "Keyword Arguments\n\nnormalising_horizon::Int: horizon of the treatment variable with respect to which all IRFs are normalised.",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "ExternalInstrument"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/add_decomposition_legend!.html",
+    "href": "documentation/julia/all-functions/add_decomposition_legend!.html",
+    "title": "add_decomposition_legend!",
+    "section": "",
+    "text": "add_decomposition_legend!\n\n\n\n\n\nAdd a decomposition legend to the plot.\n\n\n\n\n\n\n\n\n\n\n\nadd_decomposition_legend!\n\n\n\n\n\nadd_decomposition_legend!(\n    gp::GridPosition, \n    channel_names::AbstractVector{&lt;:String}; \n    colors=wong_colors()\n) -&gt; Legend\nAdd a legend to a decomposition plot.\nThe decomposition plot can be created using plot_decomposition or plot_decomposition!.\n\nArguments\n\ngp::GridPosition: Position to plot the legend into.\nchannel_names::AbstractVector{&lt;:String}: Names of the transmission channels.\n\n\n\nKeyword Arguments\n\ncolors: Colors for the decomposition bars (default: Wong colors).\n\n\n\nReturns\n\nA Legend object that can be further manipulated.",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "add_decomposition_legend!"
     ]
   },
   {
@@ -587,7 +750,7 @@
     "section": "",
     "text": "residuals\n\n\n\n\n\nresiduals(::Model)\nReturns the residuals of the estimated model.\n\n\n\n\n\n\n\n\n\n\n\nresiduals\n\n\n\n\n\nresiduals(model::LP)\nReturns the residuals of the local projection in a three dimensional array, where the third dimension corresponds to the various horizons, and the second dimension corresponds to the various variables.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "residuals"
@@ -600,7 +763,7 @@
     "section": "",
     "text": "make_companion_matrix\n\n\n\n\n\nmake_companion_matrix(B_plus::Matrix{&lt;:Number}) -&gt; Matrix{&lt;:Number}\nmake_companion_matrix(Bs::Vector{&lt;:Matrix{&lt;:Number}}, p::Int, n_exo::Int) -&gt; Matrix{&lt;:Number}\nConstructs the companion matrix of a VAR(p) model.\n\nArguments\n\nBs: a vector of lag matrices [B_1, B_2, ..., B_p], each k × k\nB_plus: a single matrix formed by horizontally concatenating \\([C B_1 B_2 ... B_p]\\) where \\(C\\) is the matrix of coefficients for deterministic (exogeneous) components.\np::Int: lag-length of the VAR.\nn_exo::Int: number of exogenous components, i.e. number of columns in \\(C\\).\n\n\n\nReturns\n\nMatrix{&lt;:Number}: The companion matrix of size (k*p × k*p)\n\n\n\nNotes\nThe companion matrix C has the block form:\n\\[\nC = \\begin{bmatrix}\n    B_+ \\\\\n    I_{(p-1)k} & 0\n\\end{bmatrix}\n\\]\nwhere \\(B_+\\) stacks the lag matrices, and \\(k\\) is the number of variables.\n\n\n\n\n\n\n\n\n\n\n\n\nmake_companion_matrix\n\n\n\n\n\nmake_companion_matrix(model::VAR) -&gt; Matrix{&lt;:Number}\nReturns the companion matrix of a VAR(p) model.\nThe companion matrix is a square matrix of size (k * p, k * p), where k is the number of variables in the system and p is the lag order.\n\\[\n    Z_t = A Z_{t-1} + \\varepsilon_t\n\\]\nwhere \\(Z_t\\) is a \\(k \\times p\\)-dimensional stacked vector of lagged variables.\nThe matrix has the following block form:\n\\[\nA = \\begin{bmatrix}\n    B_1 & B_2 & ... & B_p \\\\\n    I_k & 0   & ... & 0   \\\\\n    0   & I_k & ... & 0   \\\\\n    ... & ... & ... & ...\n\\end{bmatrix}\n\\]\nwhere \\(B_1, ..., B_p\\) are the VAR coefficient matrices, and \\(I_k\\) is the identity matrix of size k.\n\nArguments\n\nmodel::VAR: A fitted VAR model.\n\n\n\n\n\n\n\n\n\n\n\n\n\nmake_companion_matrix\n\n\n\n\n\nmake_companion_matrix(model::SVAR) --&gt; Matrix{&lt;:Number}\nReturns the companion matrix for the VAR representation of the SVAR.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "make_companion_matrix"
@@ -613,7 +776,7 @@
     "section": "",
     "text": "bic\n\n\n\n\n\naic(model::Union{VAR,SVAR}) -&gt; Real\naic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nbic(model::Union{VAR,SVAR}) -&gt; Real\nbic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nsic(model::Union{VAR,SVAR}) -&gt; Real\nsic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nhqc(model::Union{VAR,SVAR}) -&gt; Real\nhqc(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\nComputes information criteria for model selection in VARs.\nGiven a fitted VAR model or directly the covariance matrix Sigma_u, the number of estimated coefficients, and sample size T, each function returns the respective criterion value:\n\nAIC (Akaike Information Criterion):\n\n\\[\n\\text{AIC} = \\log\\det(\\Sigma_u) + \\frac{2k}{T}\n\\]\n\nSIC/BIC (Schwarz/Bayesian Information Criterion):\n\n\\[\n\\text{SIC} = \\log\\det(\\Sigma_u) + \\frac{\\log(T) k}{T}\n\\]\n\nHQC (Hannan-Quinn Criterion):\n\n\\[\n\\text{HQC} = \\log\\det(\\Sigma_u) + \\frac{2 \\log(\\log T) k}{T}\n\\]\nHere, \\(k\\) is the number of estimated parameters and \\(T\\) is the effective sample size.\n\nArguments\n\nmodel::VAR: A fitted VAR model\nSigma_u::Matrix{&lt;:Number}: Residual covariance matrix\nnum_coeffs::Int: Number of estimated coefficients\nT::Int: Number of observations used in estimation",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "bic"
@@ -624,9 +787,9 @@
     "href": "documentation/julia/all-functions/cov.html",
     "title": "cov",
     "section": "",
-    "text": "cov\n\n\n\n\n\nNo documentation found for public symbol.\n\n\n\n\n\n\n\n\n\n\n\ncov\n\n\n\n\n\nTransmissionChannelAnalysis.cov is a Function.\n\n\n\n\n\n\n\n\n\n\n\ncov\n\n\n\n\n\n# 1 method for generic function \"cov\" from TransmissionChannelAnalysis:\n [1] cov(model::TransmissionChannelAnalysis.VAR)\n     @ ~/.julia/packages/TransmissionChannelAnalysis/ZQ5o4/src/models/var.jl:150",
+    "text": "cov\n\n\n\n\n\nNo documentation found for public symbol.\n\n\n\n\n\n\n\n\n\n\n\ncov\n\n\n\n\n\nTransmissionChannelAnalysis.cov is a Function.\n\n\n\n\n\n\n\n\n\n\n\ncov\n\n\n\n\n\n# 1 method for generic function \"cov\" from TransmissionChannelAnalysis:\n [1] cov(model::TransmissionChannelAnalysis.VAR)\n     @ ~/.julia/packages/TransmissionChannelAnalysis/Ln3jm/src/models/var.jl:150",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "cov"
@@ -639,7 +802,7 @@
     "section": "",
     "text": "fit!\n\n\n\n\n\nfit!(::Model, args...; kwargs...)\nEstimates the model.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "fit!"
@@ -652,7 +815,7 @@
     "section": "Argument",
     "text": "Argument\n\nmodel::SVAR: A SVAR model to be estimated\nidentification_method::AbstractIdentificationMethod: Identification method used to identify SVAR from reduced-form VAR",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "fit!"
@@ -4357,6 +4520,36 @@
     ]
   },
   {
+    "objectID": "documentation/index.html",
+    "href": "documentation/index.html",
+    "title": "Documentation",
+    "section": "",
+    "text": "Documentation for both the Julia and the Matlab libraries can be found below.",
+    "crumbs": [
+      "Documentation"
+    ]
+  },
+  {
+    "objectID": "documentation/index.html#julia",
+    "href": "documentation/index.html#julia",
+    "title": "Documentation",
+    "section": "Julia",
+    "text": "Julia\nDownload the package via\n] add TransmissionChannelAnalysis\nor via\nusing Pkg; Pkg.add(\"TransmissionChannelAnalysis\")\nAll code can be found on the GitHub repository.\nDocumentation:\n\nOverview\nAdvanced Usage\nInternals",
+    "crumbs": [
+      "Documentation"
+    ]
+  },
+  {
+    "objectID": "documentation/index.html#matlab",
+    "href": "documentation/index.html#matlab",
+    "title": "Documentation",
+    "section": "Matlab",
+    "text": "Matlab\nDownload the toolbox from GitHub and save it to a location for later use. The documentation below gives further details on how to lead the toolbox.\nDocumentation:\n\nOverview\nAdvanced Usage\nInternals",
+    "crumbs": [
+      "Documentation"
+    ]
+  },
+  {
     "objectID": "documentation/matlab/internals.html",
     "href": "documentation/matlab/internals.html",
     "title": "Internals",
@@ -6888,6 +7081,18 @@
     ]
   },
   {
+    "objectID": "documentation/julia/index.html#visualising-effects",
+    "href": "documentation/julia/index.html#visualising-effects",
+    "title": "TransmissionChannelAnalysis.jl",
+    "section": "6. Visualising Effects",
+    "text": "6. Visualising Effects\nTo inspect the decompositions visually, load CairoMakie by running\n\nusing CairoMakie\n\nThe following helper functions can then be used to plot decompositions:\n\nplot_decomposition plots the total effects and the decomposed effects.\nplot_decomposition_comparison allows for the comparison of multiple decompositions obtained via different transmission matrices.\n\nBoth functions above create an entirely new figure. Alternatively, both a decomposition and a decomposition comparison plot can be plotted into an already existing figure / axis via plot_decomposition! and plot_decomposition_comparison!.\nLegends can be manually added using add_decomposition_legend! and add_decompare_legend! for a decomposition and a decomposition comparison plot, respectively.",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "Overview"
+    ]
+  },
+  {
     "objectID": "documentation/julia/advanced.html",
     "href": "documentation/julia/advanced.html",
     "title": "TransmissionChannelAnalysis.jl",
@@ -7290,7 +7495,7 @@
     "section": "",
     "text": "VAR\n\n\n\n\n\nVAR &lt;: Model\nVector Autoregressive (VAR) model in matrix form.\nA VAR of lag order p is specified as:\n\\[\n    y_t = C e_t + B_1 y_{t-1} + ... + B_p y_{t-p} + u_t\n\\]\nwhere:\n\n\\(e_t\\) is a vector of deterministic components (constant, trends, etc)\n\\(C, B_i\\) are conformable matrices\n\\(u_t\\) is vector white noise\n\nThis can be rewritten compactly as:\n\\[\n    y_t' = z_t' B_+' + u_t'\n\\]\nwhere:\n\n\\(z_t = [e_t; y_{t-1}; ...; y_{t-p}]\\) includes deterministic components and lagged values of all variables\n\\(B_+ = [C, B_1, ..., B_p]\\) is the coefficient matrix stacking trend and autoregressive terms\n\nStacking observations from \\(t = p+1\\) to \\(T\\), the system can be written in matrix form:\n\\[\n    Y = X B_+' + U\n\\]\nwhere:\n\n\\(Y\\): an \\((T - p) \\times k\\) matrix of outcomes\n\\(X\\): an \\((T - p) \\times (k p + d)\\) matrix of regressors (lags and trends)\n\\(B_+\\): a \\(k \\times (kp + d)\\) matrix of coefficients where \\(d\\) is the number of deterministic components.\n\\(U\\): a \\((T - p) \\times k\\) matrix of residuals\n\nThis structure is represented by the VAR object.\n\n\n\nB::Matrix{&lt;:Number}: Coefficient matrix [C, B_1, ..., B_p]\nSigma_u::Matrix{&lt;:Number}: Covariance matrix of the error term\np::Int: Lag order of the VAR\ntrend_exponents::Vector{&lt;:Number}: Time trend exponents (e.g., [0,1] implies constant and linear trend)\ninput_data::DataFrame: Original dataset used to estimate the VAR\nY::Matrix{&lt;:Number}: Left-hand side matrix of outcomes y_t, shape (T - p, k)\nX::Matrix{&lt;:Number}: Right-hand side matrix of regressors z_t, shape (T - p, k * p + d)\nU::Matrix{&lt;:Number}: Residuals u_t, shape (T - p, k)\nYhat::Matrix{&lt;:Number}: Fitted values X * B_+', shape (T - p, k)",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "VAR"
@@ -7303,7 +7508,7 @@
     "section": "Keyword Arguments",
     "text": "Keyword Arguments\n\ntrend_exponents::Vector{&lt;:Number}: Exponents of time trends (default: [0])",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "VAR"
@@ -7316,7 +7521,7 @@
     "section": "",
     "text": "is_structural\n\n\n\n\n\nis_structural(::Model)\nReturns true if the model is a structural model and false otherwise.\n\n\n\n\n\n\n\n\n\n\n\nis_structural\n\n\n\n\n\nis_structural(model::LP)\nAlways returns true. We assume here that local projections are only used to estimate structural IRFs. This is not always true. is_structural should thus be used with care in the case of local projections.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "is_structural"
@@ -7329,7 +7534,7 @@
     "section": "",
     "text": "coeffs\n\n\n\n\n\ncoeffs(::Model, args...)\nReturns the coefficient estimates of the model.\n\n\n\n\n\n\n\n\n\n\n\ncoeffs\n\n\n\n\n\ncoeffs(model::LP, exclude_deterministic::Bool=false)\nReturns the coefficient estimates of the local projections. The returned object is three dimensional with the coefficients for each horizon stacked along the third dimension. If exclude_deterministic is true, then all coefficients for deterministic variables, i.e. the coefficient on the constant, will be removed.\nCoefficients for each horizon have the ordering [constant, contemporaneous controls, treatment, lagged controls]",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "coeffs"
@@ -7342,7 +7547,7 @@
     "section": "",
     "text": "to_transmission_irfs\n\n\n\n\n\nto_transmission_irfs(irfs::AbstractArray{T, 3})\nTransform a standard three dimensional IRF array into a IRF matrix. The\n\n\n\nirfs::AbstractArray{T, 3}: IRF Array of dimension nvariabels × nshocks × n_horizons with the first horizons corresponding to horizon 0.\n\n\n\n\n\nMatrix{T} of dimension (nvariables  nhorizons) × (nvariables * n*horizons). This is the same as what would be obtained via \\((I-B)^{-1}\\mathbb{Q}\\) using the notation of Wegner et al (2024).",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "to_transmission_irfs"
@@ -7355,7 +7560,7 @@
     "section": "",
     "text": "irfs::AbstractArray{T, 3}: IRF Array of dimension nvariabels × nshocks × n_horizons with the first horizons corresponding to horizon 0.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "to_transmission_irfs"
@@ -7368,7 +7573,7 @@
     "section": "",
     "text": "Matrix{T} of dimension (nvariables  nhorizons) × (nvariables * n*horizons). This is the same as what would be obtained via \\((I-B)^{-1}\\mathbb{Q}\\) using the notation of Wegner et al (2024).",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "to_transmission_irfs"
@@ -7381,7 +7586,7 @@
     "section": "",
     "text": "not_through\n\n\n\n\n\nnot_through(idx, horizons, order) --&gt; Q\nAll paths cannot go through variables in idx in periods horizons. Note, this uses the dynamic system notation y such that idx refers to the index of the variable in the original dynamic system, i.e. in the SVARMA.\n\n\nFor the single variable version:\n\nidx::Int: Index of variable through which the paths cannot go. This is the original index in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::AbstractVector{&lt;:Int}: Horizons for which the paths cannot go through the variable.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix\n\nFor the multiple variable version:\n\nidx::AbstractVector{&lt;:Int}: Indices of variables through which the paths cannot go. These are the original indices in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::Union{AbstractVector{&lt;:Int},Vector{AbstractVector{&lt;:Int}}}: Horizons for which the paths cannot go through the variable. Must either be a vector for each variable in idx or a single vector. If it is a single vector, then the horizons will be applied to each variable in idx.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix\n\n\n\n\n\nReturns a transmission condition Q.\n\n\n\n\n\nThe transmission effect can be calculated using transmission.\n\n\n\n\nThe non-contemporaneous channel of monetary policy is defined in Section 5.1 of Wegner et al (2024) as the effect not going through a contemporaneous adjustment of the federal funds rate, where the transmission matrix orders the federal funds rate first. Thus, if the original SVAR has the federal funds rate ordered first, the non-contemporaneous effect can be obtained in the following ```{julia}.\nq = not_through(1, [0], 1:4)\nSimilarly, Wegner et al (2024) define the anticipation channel of government defense spending as the effect not going through government defense spending. With government defense spending ordered second in the VAR, the following can be used to obtain the anticipati```{julia}channel.\nq = not_through(2, 0:20, 1:4)",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "not_through"
@@ -7394,7 +7599,7 @@
     "section": "",
     "text": "For the single variable version:\n\nidx::Int: Index of variable through which the paths cannot go. This is the original index in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::AbstractVector{&lt;:Int}: Horizons for which the paths cannot go through the variable.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix\n\nFor the multiple variable version:\n\nidx::AbstractVector{&lt;:Int}: Indices of variables through which the paths cannot go. These are the original indices in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::Union{AbstractVector{&lt;:Int},Vector{AbstractVector{&lt;:Int}}}: Horizons for which the paths cannot go through the variable. Must either be a vector for each variable in idx or a single vector. If it is a single vector, then the horizons will be applied to each variable in idx.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "not_through"
@@ -7407,7 +7612,7 @@
     "section": "",
     "text": "Returns a transmission condition Q.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "not_through"
@@ -7420,7 +7625,7 @@
     "section": "",
     "text": "The transmission effect can be calculated using transmission.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "not_through"
@@ -7433,49 +7638,36 @@
     "section": "",
     "text": "The non-contemporaneous channel of monetary policy is defined in Section 5.1 of Wegner et al (2024) as the effect not going through a contemporaneous adjustment of the federal funds rate, where the transmission matrix orders the federal funds rate first. Thus, if the original SVAR has the federal funds rate ordered first, the non-contemporaneous effect can be obtained in the following ```{julia}.\nq = not_through(1, [0], 1:4)\nSimilarly, Wegner et al (2024) define the anticipation channel of government defense spending as the effect not going through government defense spending. With government defense spending ordered second in the VAR, the following can be used to obtain the anticipati```{julia}channel.\nq = not_through(2, 0:20, 1:4)",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "not_through"
     ]
   },
   {
-    "objectID": "documentation/julia/all-functions/ExternalInstrument.html",
-    "href": "documentation/julia/all-functions/ExternalInstrument.html",
-    "title": "ExternalInstrument",
+    "objectID": "documentation/julia/all-functions/Model.html",
+    "href": "documentation/julia/all-functions/Model.html",
+    "title": "Model",
     "section": "",
-    "text": "ExternalInstrument\n\n\n\n\n\nExternalInstrument &lt;: AbstractIdentificationMethod\nIdentification method using external instruments for structural shock identification in time series models.\nExternal instruments serve as proxies for structural shocks and are not included in the estimation model (e.g., a VAR), but are used in instrumental variable estimators such as two-stage least squares (2SLS).\nThis method identifies relative structural impulse response functions (IRFs), meaning that the scale of the identified shock is normalised. Specifically, the IRF is scaled such that the response of the treatment variable equals one at a given normalising horizon.\nThis approach also generalises to the Local Projections Instrumental Variables (LP-IV) framework and supports the use of multiple instruments.\nThe method is based on:\nStock, J. H., & Watson, M. W. (2018). Identification and Estimation of Dynamic Causal Effects in Macroeconomics Using External Instruments. The Economic Journal, 128(610), 917–948. https://doi.org/10.1111/ecoj.12593\n\n\n\ntreatment::Union{Symbol, Int}: the variable used to normalise the IRF\ninstruments::AbstractMatrix: matrix of external instruments\nnormalising_horizon::Int: the horizon at which the IRF of the treatment variable is set to one",
+    "text": "Model\n\n\n\n\n\nNo documentation found for public symbol.\n\n\n\n\n\n\n\n\n\n\n\nModel\n\n\n\n\n\nSummary\n\n\n\n\n\n\n\n\n\n\n\nModel\n\n\n\n\n\nabstract type TransmissionChannelAnalysis.Model\n\n\n\n\n\n\n\n\n\n\n\nModel\n\n\n\n\n\nSubtypes\n\n\n\n\n\n\n\n\n\n\n\nModel\n\n\n\n\n\nTransmissionChannelAnalysis.LP\nTransmissionChannelAnalysis.SVAR\nTransmissionChannelAnalysis.VAR",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
-      "ExternalInstrument"
+      "Model"
     ]
   },
   {
-    "objectID": "documentation/julia/all-functions/ExternalInstrument.html#arguments",
-    "href": "documentation/julia/all-functions/ExternalInstrument.html#arguments",
-    "title": "ExternalInstrument",
-    "section": "Arguments",
-    "text": "Arguments\n\ntreatment::Union{Symbol, Int}: treatment variable in the model data specified either as the column index in the data or by variable name.\ninstruments::Union{AbstractMatrix, DataFrame}: observations of external instruments. Instruments must be observed over the same period as the model data.",
+    "objectID": "documentation/julia/all-functions/plot_decomposition_comparison.html",
+    "href": "documentation/julia/all-functions/plot_decomposition_comparison.html",
+    "title": "plot_decomposition_comparison",
+    "section": "",
+    "text": "plot_decomposition_comparison\n\n\n\n\n\nPlot a decomposition comparison plot.\n\n\n\n\n\n\n\n\n\n\n\nplot_decomposition_comparison\n\n\n\n\n\nplot_decomposition_comparison(\n    idx_outcome::Int,\n    irfs::AbstractArray{&lt;:Number,3},\n    channel_names::AbstractVector{&lt;:String},\n    decomposition_names::AbstractVector{&lt;:String},\n    teffects::Vector{&lt;:AbstractArray{&lt;:Number,3}}...;\n    title::String=\"\",\n    legend::Bool=true,\n    colors=wong_colors()\n) -&gt; TCAPlot\nCreates a decomposition comparison plot of the total effects (irfs) and the transmission effects (teffects), of various transmission matrices, for a given outcome variable (idx_outcome).\nThe function returns a TCAPlot object, which displays the figure immediately in interactive environments (unless suppressed with a semicolon). You can also extract the separate Figure and A```{julia}:\nfig, = plot_decomposition_comparison(...)\nfig, ax = plot_decomposition_comparison(...)\n\nArguments\n\nidx_outcome::Int: Index of the outcome variable.\nirfs::AbstractArray{&lt;:Number,3}: Total effects, with shape [N, 1, H] where N is the number of endogenous variables, and H is the number of horizons (including zero).\nchannel_names::AbstractVector{&lt;:String}: Names of the transmission\ndecomposition_names::AbstractVector{&lt;:String}: Names of the decompositions\nteffects::Vector{&lt;:AbstractArray{&lt;:Number,3}}...: Transmission effects for each transmission channel and each transmission matrix; Each transmission effect must have the same shape as irfs.\n\n\n\nKeyword Arguments\n\ntitle::String: Optional figure title.\nlegend::Bool: Whether to plot a legend.\ncolors: Colors for the decomposition bars (default: Wong colors).\n\n\n\nReturns\n\nA TCAPlot that includes the figure and axis for further styling.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
-      "ExternalInstrument"
-    ]
-  },
-  {
-    "objectID": "documentation/julia/all-functions/ExternalInstrument.html#keyword-arguments",
-    "href": "documentation/julia/all-functions/ExternalInstrument.html#keyword-arguments",
-    "title": "ExternalInstrument",
-    "section": "Keyword Arguments",
-    "text": "Keyword Arguments\n\nnormalising_horizon::Int: horizon of the treatment variable with respect to which all IRFs are normalised.",
-    "crumbs": [
-      "Documentation",
-      "Julia",
-      "All",
-      "ExternalInstrument"
+      "plot_decomposition_comparison"
     ]
   },
   {
@@ -7485,7 +7677,7 @@
     "section": "",
     "text": "is_stable\n\n\n\n\n\nis_stable(model::Union{VAR,SVAR}) -&gt; Bool\nis_stable(C::AbstractMatrix) -&gt; Bool\nChecks whether a VAR model or a companion matrix corresponds to a stable VAR process.\nA VAR system is stable if all eigenvalues of its companion matrix lie strictly inside the unit circle. This is equivalent to requiring that the spectral radius is less than one:\n\\[\n\\rho(C) = \\max_i |\\lambda_i| &lt; 1\n\\]\n\nArguments\n\nmodel::VAR: A fitted VAR model\nC::AbstractMatrix: A companion matrix\n\n\n\nReturns\n\nBool: true if the VAR is stable, false otherwise",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "is_stable"
@@ -7498,7 +7690,7 @@
     "section": "",
     "text": "simulate\n\n\n\n\n\nsimulate(::Type{VAR}, T::Int, B::Matrix{&lt;:Number},\n         Sigma_u::Matrix{&lt;:Number}=I(size(B,1));\n         trend_exponents::Vector{&lt;:Number}=[0],\n         initial::Union{Nothing,Vector{&lt;:Number}}=nothing) -&gt; VAR\n\nsimulate!(::Type{VAR}, errors::Matrix{&lt;:Number}, B::Matrix{&lt;:Number};\n          trend_exponents::Vector{&lt;:Number}=[0],\n          initial::Union{Nothing,Vector{&lt;:Number}}=nothing) -&gt; VAR\nSimulates a VAR(p) model using the specified coefficient matrix B and optionally a covariance matrix Sigma_u and deterministic trends.\nThe simulation uses the reduced-form VAR representation:\n\\[\n    y_t = C e_t + B_1 y_{t-1} + ... + B_p y_{t-p} + u_t\n\\]\n\nMethod 1: simulate!\nSimulates a VAR process by overwriting the provided error matrix errors with simulated values. Returns a VAR object constructed from the simulated data.\n\n\nMethod 2: simulate\nGenerates error terms internally from a Gaussian distribution with covariance Sigma_u (default is the identity matrix). Returns a VAR object containing the simulated series.\n\n\nArguments\n\nB::Matrix{&lt;:Number}: Coefficient matrix [C B_1 ... B_p], size k × (k * p + m), where m is the number of deterministic components.\ntrend_exponents::Vector{&lt;:Number}: Exponents used to simulate trends (e.g. [0,1] implies constant and linear trend)\ninitial::Union{Nothing, Vector{&lt;:Number}}: Optional initial values for lags (length k * p). Default is zero.\nT::Int: Number of time periods to simulate\nSigma_u::Matrix{&lt;:Number}: Covariance matrix of the error term (default is identity)\nerrors::Matrix{&lt;:Number}: Pre-allocated matrix of shape k × T, initially filled with innovations, overwritten with simulated data\n\n\n\nReturns\n\nVAR: A new VAR object containing the simulated dataset. The data can be obtained using get_input_data. Alternatively, the model can be directly estimated using fit!.\n\n\n\n\n\n\n\n\n\n\n\n\n\nsimulate\n\n\n\n\n\nsimulate(::Type{SVAR}, shocks::Matrix{&lt;:Number}, A0::Matrix{&lt;:Number},\n         A_plus::Matrix{&lt;:Number};\n         trend_exponents::Vector{&lt;:Number}=[0],\n         initial::Union{Nothing,Vector{&lt;:Number}}=nothing) -&gt; SVAR\n\nsimulate(::Type{SVAR}, T::Int, A0::Matrix{&lt;:Number}, A_plus::Matrix{&lt;:Number};\n         trend_exponents::Vector{&lt;:Number}=[0],\n         initial::Union{Nothing,Vector{&lt;:Number}}=nothing) -&gt; SVAR\nSimulates a structural VAR (SVAR) model using the structural form characterised by matrices A0 and A_plus.\nThe SVAR model is given by:\n\\[\n    A_0 y_t = C e_t + A_1 y_{t-1} + ... + A_p y_{t-p} + \\varepsilon_t\n\\]\n\nMethod 1: simulate(::Type{SVAR}, shocks, A0, A_plus)\nSimulates an SVAR process given structural shocks.\n\n\nMethod 2: simulate(::Type{SVAR}, T, A0, A_plus)\nGenerates random structural shocks from a multivariate Guassian with identify covariance and simulates the SVAR process using these shocks.\n\n\nArguments\n\nA0::Matrix{&lt;:Number}: Contemporaneous impact matrix (invertible)\nA_plus::Matrix{&lt;:Number}: Coefficient matrix [C A_1 ... A_p] (size k × (k*p + m)) where m is the number of exogenous components.\nshocks::Matrix{&lt;:Number}: Structural shocks of shape k × T\nT::Int: Number of time periods to simulate\ntrend_exponents::Vector{&lt;:Number}: Exponents for deterministic trends (e.g., [0,1] for constant and linear trend)\ninitial::Union{Nothing, Vector{&lt;:Number}}: Optional initial conditions for lagged variables (length k * p). If nothing lags will be initialised at zero.\n\n\n\nReturns\n\nSVAR: A simulated SVAR model containing the generated dataset. The data can be accessed using get_input_data, or the model can be estimated using fit!.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "simulate"
@@ -7511,7 +7703,7 @@
     "section": "",
     "text": "transmission\n\n\n\n\n\ntransmission(from::Int, arr1::AbstractMatrix{T}, arr2::AbstractMatrix{T}, q::Q; method = :BOmega) where {T}\nGiven a transmission condition q, calculate the transmission effect using the either the :BOmega method (the default), or the :irfs method.\n\n\n\nfrom::Int: Shock number.\narr1::AbstractMatrix{T}. In case of :BOmega this must be B, in case of :irfs this must be irfs. See the documentation for the specific methods for transmission(..., ::Type{Val{:BOmega}}) and transmission(...,::Type{Val{:irfs}}).\narr2::AbstractMatrix{T}: In case of :BOmega this must be Omega, in case of :irfs this must be irfs_ortho. See the documentation for the specific methods for transmission(..., ::Type{Val{:BOmega}}) and transmission(...,::Type{Val{:irfs}}).\nq::Q: A transmission condition. See also Q.\n\n\n\n\n\nmethod::Symbol: Either :BOmega in which case the transmission effect will be calculated using the second method in Wegner et al (2024), or :irfs in which case the transmission effect is calculated using the first method in Wegner et al (2024).\n\n\n\n\n\nReturns a Vector{T} with entry i corresponding to the transmission effect on variable \\(x_i\\). If \\(x_k\\) is the variable in the transmission condition with the highest subscript, then all entries in the returned vector with index less thatn k are NaN since interpretation of those results is nonsensical.\n\n\n\n\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nB = randn(k*(h+1), k*(h+1))\nOmega = randn(k*(h+1), k*(h+1))\n\neffect = transmission(1, B, Omega, cond; method = :BOmega)\neffect = transmission(1, B, Omega, cond)  # same as above; default is :BOmega\n\nirfs = randn(k, k, h+1)\nirfs_ortho = randn(k, k, h+1)\n\nirfs = to_transmission_irfs(irfs)\nirfs_ortho = to_transmission_irfs(irfs_ortho)\n\neffect = transmission(1, irfs, irfs_ortho, cond; method = :irfs)",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7524,7 +7716,7 @@
     "section": "",
     "text": "from::Int: Shock number.\narr1::AbstractMatrix{T}. In case of :BOmega this must be B, in case of :irfs this must be irfs. See the documentation for the specific methods for transmission(..., ::Type{Val{:BOmega}}) and transmission(...,::Type{Val{:irfs}}).\narr2::AbstractMatrix{T}: In case of :BOmega this must be Omega, in case of :irfs this must be irfs_ortho. See the documentation for the specific methods for transmission(..., ::Type{Val{:BOmega}}) and transmission(...,::Type{Val{:irfs}}).\nq::Q: A transmission condition. See also Q.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7537,7 +7729,7 @@
     "section": "",
     "text": "method::Symbol: Either :BOmega in which case the transmission effect will be calculated using the second method in Wegner et al (2024), or :irfs in which case the transmission effect is calculated using the first method in Wegner et al (2024).",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7550,7 +7742,7 @@
     "section": "",
     "text": "Returns a Vector{T} with entry i corresponding to the transmission effect on variable \\(x_i\\). If \\(x_k\\) is the variable in the transmission condition with the highest subscript, then all entries in the returned vector with index less thatn k are NaN since interpretation of those results is nonsensical.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7563,7 +7755,7 @@
     "section": "",
     "text": "k = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nB = randn(k*(h+1), k*(h+1))\nOmega = randn(k*(h+1), k*(h+1))\n\neffect = transmission(1, B, Omega, cond; method = :BOmega)\neffect = transmission(1, B, Omega, cond)  # same as above; default is :BOmega\n\nirfs = randn(k, k, h+1)\nirfs_ortho = randn(k, k, h+1)\n\nirfs = to_transmission_irfs(irfs)\nirfs_ortho = to_transmission_irfs(irfs_ortho)\n\neffect = transmission(1, irfs, irfs_ortho, cond; method = :irfs)",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7576,7 +7768,7 @@
     "section": "Arguments",
     "text": "Arguments\n\nfrom::Int: Shock number.\nB::AbstractMatrix{T}: Part of the systems representation in Wegner et al (2024).\nOmega::AbstractMatrix{T}: Part of the systems representation in Wegner et al (2024).\nq::Q: A transmission condition. See also Q.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7589,7 +7781,7 @@
     "section": "Returns",
     "text": "Returns\n\nReturns a Vector{T} with entry i corresponding to the transmission effect on variable \\(x_i\\). If \\(x_k\\) is the variable in the transmission condition with the highest subscript, then all entries in the returned vector with index less thatn k are NaN since interpretation of those results is nonsensical.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7602,7 +7794,7 @@
     "section": "Exa```{julia}es",
     "text": "Exa```{julia}es\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nB = randn(k*(h+1), k*(h+1))\nOmega = randn(k*(h+1), k*(h+1))\n\neffect = transmission(1, B, Omega, cond)",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7615,7 +7807,7 @@
     "section": "Arguments",
     "text": "Arguments\n\nfrom::Int: Shock number.\nirfs::AbstractMatrix{T}: Impulse responses. These should be in the form of the structural transmission model. See also to_transmission_irfs.\nirfs_ortho::AbstractMatrix{T}: Orthogonalised IRFs. These should be in the form of the structural transmission model. See also to_transmission_irfs.\nq::Q: A transmission condition. See also Q.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7628,7 +7820,7 @@
     "section": "Returns",
     "text": "Returns\n\nReturns a Vector{T} with entry i corresponding to the transmission effect on variable \\(x_i\\). If \\(x_k\\) is the variable in the transmission condition with the highest subscript, then all entries in the returned vector with index less thatn k are NaN since interpretation of those results is nonsensical.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7641,7 +7833,7 @@
     "section": "Exa```{julia}es",
     "text": "Exa```{julia}es\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nirfs = randn(k, k, h+1)\nirfs_ortho = randn(k, k, h+1)\n\nirfs = to_transmission_irfs(irfs)\nirfs_ortho = to_transmission_irfs(irfs_ortho)\n\neffect = transmission(1, irfs, irfs_ortho, cond; method = :irfs)",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7654,7 +7846,7 @@
     "section": "Arguments",
     "text": "Arguments\n\nmodel::Model: A model, such as an SVAR, VAR, or LP.\nmethod::AbstractIdentificationMethod: An identification method to identify the from-th structural shock.\nfrom::Int: Shock number.\nq::Q: A transmission condition. See also Q and make_condition.\norder::AbnstractVector{&lt;:Int}: order of variables defined by the transmission matrix using variable indices.\norder::AbnstractVector{Symbol}: order of variables defined by the transmission matrix using variable names.\nmax_horizon::Int: Maximum horizon for the transmission effect.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7667,7 +7859,7 @@
     "section": "Returns",
     "text": "Returns\n\nReturns a three dimensional array with the first dimension correspondin to the endogenous variables (in original order), the second to the shock, and the third to the horizon (from 0 to max_horizon).",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "transmission"
@@ -7678,9 +7870,9 @@
     "href": "documentation/julia/all-functions/identify!.html",
     "title": "identify!",
     "section": "",
-    "text": "identify!\n\n\n\n\n\nNo documentation found for public symbol.\n\n\n\n\n\n\n\n\n\n\n\nidentify!\n\n\n\n\n\nTransmissionChannelAnalysis.identify! is a Function.\n\n\n\n\n\n\n\n\n\n\n\nidentify!\n\n\n\n\n\n# 1 method for generic function \"identify!\" from TransmissionChannelAnalysis:\n [1] identify!(model::TransmissionChannelAnalysis.SVAR, method::TransmissionChannelAnalysis.AbstractIdentificationMethod)\n     @ ~/.julia/packages/TransmissionChannelAnalysis/ZQ5o4/src/models/svar.jl:200",
+    "text": "identify!\n\n\n\n\n\nNo documentation found for public symbol.\n\n\n\n\n\n\n\n\n\n\n\nidentify!\n\n\n\n\n\nTransmissionChannelAnalysis.identify! is a Function.\n\n\n\n\n\n\n\n\n\n\n\nidentify!\n\n\n\n\n\n# 1 method for generic function \"identify!\" from TransmissionChannelAnalysis:\n [1] identify!(model::TransmissionChannelAnalysis.SVAR, method::TransmissionChannelAnalysis.AbstractIdentificationMethod)\n     @ ~/.julia/packages/TransmissionChannelAnalysis/Ln3jm/src/models/svar.jl:200",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "identify!"
@@ -7693,7 +7885,7 @@
     "section": "",
     "text": "LP\n\n\n\n\n\nLP &lt;: Model\nLocal Projection (LP) model for estimating impulse response functions (IRFs) in a flexible and semi-parametric manner.\nEach LP regression estimates the dynamic response of an outcome variable at future horizon h to a one-period change in a treatment variable at time t, controlling for contemporaneous and lagged covariates.\nThe regression model is specified as:\n\\[\n    w_{i,t+h} = \\mu_{i,h} + \\theta_{i,h} x_t + \\gamma_{i,h}' r_t +\n                \\sum_{l=1}^p \\delta_{i,h,l} w_{t-l} + \\xi_{i,h,t}\n\\]\nwhere \\(w_t = (r_t', x_t, q_t')\\) and:\n\n\\(x_t\\) is the treatment variable\n\\(r_t\\) contains contemporaneous controls (all variables before x_t)\n\\(p\\) is the number of lags included\n\\(\\theta_{i,h}\\) is the relative IRF of x_t on the i-th variable at horizon \\(h\\).\n\nThe treatment variable may be endogenous. Structural interpretation of IRFs can be achieved using valid instruments—see ExternalInstrument for one such method. If the treatment satisfies a conditional ignorability assumption (a recursive assumption in macro), then the coefficient has a structural interpretation even without the use of instruments. For this to hold, \\(x_t - E(x_t|r_t, w_{t-1}, ..., w_{t-p})\\) must be equal to the structural shock.\n\n\n\ndata::DataFrame: the dataset containing the time series\ntreatment::Union{Symbol, Int}: column indicating the treatment variable\np::Int: number of lags to include\nhorizons::AbstractVector{&lt;:Int}: forecast horizons for the projections\ninclude_constant::Bool: whether to include an intercept in each regression\ncoeffs::AbstractArray{&lt;:Number}: coefficient estimates per horizon\nY::AbstractArray{&lt;:Number}: dependent variables for each horizon\nX::AbstractMatrix{&lt;:Number}: common regressor matrix\nU::AbstractArray{&lt;:Number}: residuals per horizon\nYhat::AbstractArray{&lt;:Number}: fitted values per horizon",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "LP"
@@ -7706,88 +7898,49 @@
     "section": "Keyword Arguments",
     "text": "Keyword Arguments\n\ninclude_constant: whether to include a constant in the regressors",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "LP"
     ]
   },
   {
-    "objectID": "documentation/julia/all-functions/through.html",
-    "href": "documentation/julia/all-functions/through.html",
-    "title": "through",
+    "objectID": "documentation/julia/all-functions/plot_decomposition.html",
+    "href": "documentation/julia/all-functions/plot_decomposition.html",
+    "title": "plot_decomposition",
     "section": "",
-    "text": "through\n\n\n\n\n\nthrough(idx, horizons, order) --&gt; Q\nAll paths must go through variables in idx in periods horizons. Note, this uses the dynamic system notation y such that idx refers to the index of the variable in the original dynamic system, i.e. in the SVARMA.\n\n\nFor the single variable version:\n\nidx::Int: Index of variable through which the paths should go. This is the original index in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::AbstractVector{&lt;:Int}: Horizons for which the paths must go through the variable.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix\n\nFor the multiple variable version:\n\nidx::AbstractVector{&lt;:Int}: Indices of variables through which the paths should go. These are the original indices in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::Union{AbstractVector{&lt;:Int},Vector{AbstractVector{&lt;:Int}}}: Horizons for which the paths must go through the variable. Must either be a vector for each variable in idx or a single vector. If it is a single vector, then the horizons will be applied to each variable in idx.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix\n\n\n\n\n\nReturns a transmission condition Q.\n\n\n\n\n\nThe transmission effect can be calculated using transmission.\n\n\n\n\nSuppose we are interested in the contemporaneous channel in Section 5.1 of Wegner et al (2024), i.e. we are interested in the effect going through the federal funds rate contemporaneously. In our estimated model, the federal funds rate is the first variable. We would thus define the contemporaneous channe```{julia}s\ncontemporaneous_channel = through(1, [0], 1:4)  # we have four variables with ffr being first\nMore generally, we could define the following, which would be the effect through the federal funds rate in the first t```{julia}periods.\nq = through(1, [0, 1], 1:4)\nThe following is also allowed which is the effect through the federal funds rate contemporaneously and one period later, and through the output gap contemporaneously and one period later, where the federal funds rate is ordered first and the ```{julia}put gap second.\nq = through([1, 2], [[0, 1], [0, 1]], 1:4)\nIf we want to re-order the federal funds rate after the output gap, we simply change the ordering to [2, 1, 3, 4] where 2 corresponds to the output gap ```{julia}the original ordering.\nq = through([1, 2], [[0, 1], [0, 1]], [2, 1, 3, 4])",
+    "text": "plot_decomposition\n\n\n\n\n\nPlot a decomposition plot.\n\n\n\n\n\n\n\n\n\n\n\nplot_decomposition\n\n\n\n\n\nplot_decomposition(\n    idx_outcome::Int,\n    irfs::AbstractArray{&lt;:Number,3},\n    teffects::Vector{&lt;:AbstractArray{&lt;:Number,3}},\n    channel_names::AbstractVector{&lt;:String};\n    title::String=\"\",\n    legend::Bool=false,\n    colors=wong_colors()\n) -&gt; TCAPlot\nCreates a decomposition plot of the total effects (irfs) and the transmission effects (teffects) for a given outcome variable (idx_outcome).\nThe function returns a TCAPlot object, which displays the figure immediately in interactive environments (unless suppressed with a semicolon). You can also extract the separate Figure and A```{julia}:\nfig, = plot_decomposition(...)\nfig, ax = plot_decomposition(...)\n\nArguments\n\nidx_outcome::Int: Index of the outcome variable.\nirfs::AbstractArray{&lt;:Number,3}: Total effects, with shape [N, 1, H] where N is the number of endogenous variables, and H is the number of horizons (including zero).\nteffects::Vector{&lt;:AbstractArray{&lt;:Number,3}}: Transmission effects for each transmission channel, same shape as irfs.\nchannel_names::AbstractVector{&lt;:String}: Names of the transmission channels.\n\n\n\nKeyword Arguments\n\ntitle::String: Optional figure title.\nlegend::Bool: Whether to plot a legend.\ncolors: Colors for the decomposition bars (default: Wong colors).\n\n\n\nReturns\n\nA TCAPlot that includes the figure and axis for further styling.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
-      "through"
+      "plot_decomposition"
     ]
   },
   {
-    "objectID": "documentation/julia/all-functions/through.html#arguments",
-    "href": "documentation/julia/all-functions/through.html#arguments",
-    "title": "through",
+    "objectID": "documentation/julia/all-functions/get_variable_names.html",
+    "href": "documentation/julia/all-functions/get_variable_names.html",
+    "title": "get_variable_names",
     "section": "",
-    "text": "For the single variable version:\n\nidx::Int: Index of variable through which the paths should go. This is the original index in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::AbstractVector{&lt;:Int}: Horizons for which the paths must go through the variable.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix\n\nFor the multiple variable version:\n\nidx::AbstractVector{&lt;:Int}: Indices of variables through which the paths should go. These are the original indices in the dynamic system, e.g. the SVAR, before applying the transmission matrix.\nhorizons::Union{AbstractVector{&lt;:Int},Vector{AbstractVector{&lt;:Int}}}: Horizons for which the paths must go through the variable. Must either be a vector for each variable in idx or a single vector. If it is a single vector, then the horizons will be applied to each variable in idx.\norder::AbstractVector{&lt;:Int}: Variable ordering determined by the transmission matrix",
+    "text": "get_variable_names\n\n\n\n\n\nget_variable_names(model::Model) --&gt; Vector{Symbol}\nObtain the variable names of the model’s input data.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
-      "through"
+      "get_variable_names"
     ]
   },
   {
-    "objectID": "documentation/julia/all-functions/through.html#returns",
-    "href": "documentation/julia/all-functions/through.html#returns",
-    "title": "through",
+    "objectID": "documentation/julia/all-functions/plot_decomposition!.html",
+    "href": "documentation/julia/all-functions/plot_decomposition!.html",
+    "title": "plot_decomposition!",
     "section": "",
-    "text": "Returns a transmission condition Q.",
+    "text": "plot_decomposition!\n\n\n\n\n\nPlot a decomposition plot into an already existing axis.\n\n\n\n\n\n\n\n\n\n\n\nplot_decomposition!\n\n\n\n\n\nplot_decomposition!(\n    ax::Axis,\n    idx_outcome::Int,\n    irfs::AbstractArray{&lt;:Number,3},\n    teffects::Vector{&lt;:AbstractArray{&lt;:Number,3}};\n    colors=wong_colors()\n) -&gt; Axis\nPlots a decomposition plot of the total effects (irfs) and the transmission effects (teffects) for a given outcome variable (idx_outcome) into the axis ax.\n\nArguments\n\nidx_outcome::Int: Index of the outcome variable.\nirfs::AbstractArray{&lt;:Number,3}: Total effects, with shape [N, 1, H] where N is the number of endogenous variables, and H is the number of horizons (including zero).\nteffects::Vector{&lt;:AbstractArray{&lt;:Number,3}}: Transmission effects for each transmission channel, same shape as irfs.\n\n\n\nKeyword Arguments\n\ncolors: Colors for the decomposition bars (default: Wong colors).",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
-      "through"
-    ]
-  },
-  {
-    "objectID": "documentation/julia/all-functions/through.html#notes",
-    "href": "documentation/julia/all-functions/through.html#notes",
-    "title": "through",
-    "section": "",
-    "text": "The transmission effect can be calculated using transmission.",
-    "crumbs": [
-      "Documentation",
-      "Julia",
-      "All",
-      "through"
-    ]
-  },
-  {
-    "objectID": "documentation/julia/all-functions/through.html#examples",
-    "href": "documentation/julia/all-functions/through.html#examples",
-    "title": "through",
-    "section": "",
-    "text": "Suppose we are interested in the contemporaneous channel in Section 5.1 of Wegner et al (2024), i.e. we are interested in the effect going through the federal funds rate contemporaneously. In our estimated model, the federal funds rate is the first variable. We would thus define the contemporaneous channe```{julia}s\ncontemporaneous_channel = through(1, [0], 1:4)  # we have four variables with ffr being first\nMore generally, we could define the following, which would be the effect through the federal funds rate in the first t```{julia}periods.\nq = through(1, [0, 1], 1:4)\nThe following is also allowed which is the effect through the federal funds rate contemporaneously and one period later, and through the output gap contemporaneously and one period later, where the federal funds rate is ordered first and the ```{julia}put gap second.\nq = through([1, 2], [[0, 1], [0, 1]], 1:4)\nIf we want to re-order the federal funds rate after the output gap, we simply change the ordering to [2, 1, 3, 4] where 2 corresponds to the output gap ```{julia}the original ordering.\nq = through([1, 2], [[0, 1], [0, 1]], [2, 1, 3, 4])",
-    "crumbs": [
-      "Documentation",
-      "Julia",
-      "All",
-      "through"
-    ]
-  },
-  {
-    "objectID": "documentation/julia/all-functions/nobs.html",
-    "href": "documentation/julia/all-functions/nobs.html",
-    "title": "nobs",
-    "section": "",
-    "text": "nobs\n\n\n\n\n\nnobs(::Model)\nReturns the effective number of observations used for the estimation of the model.",
-    "crumbs": [
-      "Documentation",
-      "Julia",
-      "All",
-      "nobs"
+      "plot_decomposition!"
     ]
   },
   {
@@ -7795,9 +7948,9 @@
     "href": "documentation/julia/all-functions/identify.html",
     "title": "identify",
     "section": "",
-    "text": "identify\n\n\n\n\n\nNo documentation found for public symbol.\n\n\n\n\n\n\n\n\n\n\n\nidentify\n\n\n\n\n\nTransmissionChannelAnalysis.identify is a Function.\n\n\n\n\n\n\n\n\n\n\n\nidentify\n\n\n\n\n\n# 1 method for generic function \"identify\" from TransmissionChannelAnalysis:\n [1] identify(model::TransmissionChannelAnalysis.VAR, method::TransmissionChannelAnalysis.AbstractIdentificationMethod)\n     @ ~/.julia/packages/TransmissionChannelAnalysis/ZQ5o4/src/models/svar.jl:206",
+    "text": "identify\n\n\n\n\n\nNo documentation found for public symbol.\n\n\n\n\n\n\n\n\n\n\n\nidentify\n\n\n\n\n\nTransmissionChannelAnalysis.identify is a Function.\n\n\n\n\n\n\n\n\n\n\n\nidentify\n\n\n\n\n\n# 1 method for generic function \"identify\" from TransmissionChannelAnalysis:\n [1] identify(model::TransmissionChannelAnalysis.VAR, method::TransmissionChannelAnalysis.AbstractIdentificationMethod)\n     @ ~/.julia/packages/TransmissionChannelAnalysis/Ln3jm/src/models/svar.jl:206",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "identify"
@@ -7810,23 +7963,62 @@
     "section": "",
     "text": "get_dependent\n\n\n\n\n\nget_dependent(::Model)\nReturns the dependent variables.\n\n\n\n\n\n\n\n\n\n\n\nget_dependent\n\n\n\n\n\nget_dependent(model::LP)\nThe dependent variables are returned as a three dimensional array, with the third dimension corresponding the the various forecast horizons.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "get_dependent"
     ]
   },
   {
-    "objectID": "documentation/julia/all-functions/spectral_radius.html",
-    "href": "documentation/julia/all-functions/spectral_radius.html",
-    "title": "spectral_radius",
+    "objectID": "documentation/julia/all-functions/add_decompare_legend!.html",
+    "href": "documentation/julia/all-functions/add_decompare_legend!.html",
+    "title": "add_decompare_legend!",
     "section": "",
-    "text": "spectral_radius\n\n\n\n\n\nspectral_radius(X::AbstractMatrix) -&gt; Number\nComputes the spectral radius of a matrix X.\n\nDescription\nThe spectral radius of a matrix is defined as the largest absolute eigenvalue of the matrix.\nMathematically, for a given square matrix X, the spectral radius is computed as:\n\\[\n\\rho(X) = \\max |\\lambda_i|\n\\]\nwhere \\lambda_i are the eigenvalues of X.\n\n\nArguments\n\nX::AbstractMatrix: A square matrix.\n\n\n\nReturns\n\nThe spectral radius of X.\n\n\n\nEx```{julia}le\nX = [0.5 0.2; 0.1 0.9]\nr = spectral_radius(X)\n\n\n\n\n\n\n\n\n\n\n\n\nspectral_radius\n\n\n\n\n\nspectral_radius(model::Union{VAR,SVAR}) -&gt; Real\nComputes the spectral radius of the companion matrix of a fitted VAR model.\nThe spectral radius of a matrix \\(A\\) is defined as the largest absolute value among its eigenvalues:\n\\[\n\\rho(A) = \\max_i |\\lambda_i|\n\\]\nwhere \\(\\lambda_i\\) are the eigenvalues of \\(A\\).\nIn the context of VAR models, the spectral radius of the companion matrix is a key measure of stability. A VAR model is stable if the spectral radius is strictly less than 1.\n\nArguments\n\nmodel::VAR: A fitted VAR model",
+    "text": "add_decompare_legend!\n\n\n\n\n\nAdd a legend to a decomposition comparison plot.\n\n\n\n\n\n\n\n\n\n\n\nadd_decompare_legend!\n\n\n\n\n\nadd_decompare_legend!(\n    gp::GridPosition, \n    channel_names::AbstractVector{&lt;:String}, \n    decomposition_names::AbstractVector{&lt;:String}; \n    colors=wong_colors()\n) -&gt; Legend\nAdd a legend to a decomposition comparison plot.\nThe decomposition comparison plot can be created using plot_decomposition_comparison or plot_decomposition_comparison!.\n\nArguments\n\ngp::GridPosition: Position to plot the legend into.\nchannel_names::AbstractVector{&lt;:String}: Names of the transmission channels.\ndecomposition_names::AbstractVector{&lt;:String}: Names for the decompositions.\n\n\n\nKeyword Arguments\n\ncolors: Colors for the decomposition bars (default: Wong colors).\n\n\n\nReturns\n\nA Legend object that can be further manipulated.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
-      "spectral_radius"
+      "add_decompare_legend!"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/@show_y.html",
+    "href": "documentation/julia/all-functions/@show_y.html",
+    "title": "@show_y",
+    "section": "",
+    "text": "@show_y\n\n\n\n\n\nshow_y(q::Q, order::AbstractVector{&lt;:Int})\n@show_y(q, order)\nPretty print the condition q::Q using the variables of the dynamic system, i.e. y.\n\n\n\nq::Q: A transmission condition. See also Q.\norder::AbstractVector{&lt;:Int}: The order of variables defined by the transmission matrix.\n\n\n\n\ns_y = \"y_{1,0} | !y_{1,1}\"\norder = [3,1,2]\n\nq = make_condition(s_y, order)\n@show_y q $order",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "\\@show_y"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/@show_y.html#arguments",
+    "href": "documentation/julia/all-functions/@show_y.html#arguments",
+    "title": "@show_y",
+    "section": "",
+    "text": "q::Q: A transmission condition. See also Q.\norder::AbstractVector{&lt;:Int}: The order of variables defined by the transmission matrix.",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "\\@show_y"
+    ]
+  },
+  {
+    "objectID": "documentation/julia/all-functions/@show_y.html#exajuliaes",
+    "href": "documentation/julia/all-functions/@show_y.html#exajuliaes",
+    "title": "@show_y",
+    "section": "",
+    "text": "s_y = \"y_{1,0} | !y_{1,1}\"\norder = [3,1,2]\n\nq = make_condition(s_y, order)\n@show_y q $order",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "All",
+      "\\@show_y"
     ]
   },
   {
@@ -7836,7 +8028,7 @@
     "section": "",
     "text": "set_remove_contradictions\n\n\n\n\n\nset_remove_contradictions(b::Bool)\nSets REMOVE_CONTRADICTIONS to b.\nIf REMOVE_CONTRADICTIONS==true, then contradicting terms are removed before the transmission effect is computed. A term is deemed contradicting if it includes some “xi & !xi”. This would result in the entire Boolean statement to be false, and thus in the effect of this terms to be zero.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "set_remove_contradictions"
@@ -7849,7 +8041,7 @@
     "section": "",
     "text": "sic\n\n\n\n\n\naic(model::Union{VAR,SVAR}) -&gt; Real\naic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nbic(model::Union{VAR,SVAR}) -&gt; Real\nbic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nsic(model::Union{VAR,SVAR}) -&gt; Real\nsic(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\n\nhqc(model::Union{VAR,SVAR}) -&gt; Real\nhqc(Sigma_u::Matrix{&lt;:Number}, num_coeffs::Int, T::Int) -&gt; Real\nComputes information criteria for model selection in VARs.\nGiven a fitted VAR model or directly the covariance matrix Sigma_u, the number of estimated coefficients, and sample size T, each function returns the respective criterion value:\n\nAIC (Akaike Information Criterion):\n\n\\[\n\\text{AIC} = \\log\\det(\\Sigma_u) + \\frac{2k}{T}\n\\]\n\nSIC/BIC (Schwarz/Bayesian Information Criterion):\n\n\\[\n\\text{SIC} = \\log\\det(\\Sigma_u) + \\frac{\\log(T) k}{T}\n\\]\n\nHQC (Hannan-Quinn Criterion):\n\n\\[\n\\text{HQC} = \\log\\det(\\Sigma_u) + \\frac{2 \\log(\\log T) k}{T}\n\\]\nHere, \\(k\\) is the number of estimated parameters and \\(T\\) is the effective sample size.\n\nArguments\n\nmodel::VAR: A fitted VAR model\nSigma_u::Matrix{&lt;:Number}: Residual covariance matrix\nnum_coeffs::Int: Number of estimated coefficients\nT::Int: Number of observations used in estimation",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "sic"
@@ -7862,7 +8054,7 @@
     "section": "",
     "text": "simulate!\n\n\n\n\n\nsimulate(::Type{VAR}, T::Int, B::Matrix{&lt;:Number},\n         Sigma_u::Matrix{&lt;:Number}=I(size(B,1));\n         trend_exponents::Vector{&lt;:Number}=[0],\n         initial::Union{Nothing,Vector{&lt;:Number}}=nothing) -&gt; VAR\n\nsimulate!(::Type{VAR}, errors::Matrix{&lt;:Number}, B::Matrix{&lt;:Number};\n          trend_exponents::Vector{&lt;:Number}=[0],\n          initial::Union{Nothing,Vector{&lt;:Number}}=nothing) -&gt; VAR\nSimulates a VAR(p) model using the specified coefficient matrix B and optionally a covariance matrix Sigma_u and deterministic trends.\nThe simulation uses the reduced-form VAR representation:\n\\[\n    y_t = C e_t + B_1 y_{t-1} + ... + B_p y_{t-p} + u_t\n\\]\n\nMethod 1: simulate!\nSimulates a VAR process by overwriting the provided error matrix errors with simulated values. Returns a VAR object constructed from the simulated data.\n\n\nMethod 2: simulate\nGenerates error terms internally from a Gaussian distribution with covariance Sigma_u (default is the identity matrix). Returns a VAR object containing the simulated series.\n\n\nArguments\n\nB::Matrix{&lt;:Number}: Coefficient matrix [C B_1 ... B_p], size k × (k * p + m), where m is the number of deterministic components.\ntrend_exponents::Vector{&lt;:Number}: Exponents used to simulate trends (e.g. [0,1] implies constant and linear trend)\ninitial::Union{Nothing, Vector{&lt;:Number}}: Optional initial values for lags (length k * p). Default is zero.\nT::Int: Number of time periods to simulate\nSigma_u::Matrix{&lt;:Number}: Covariance matrix of the error term (default is identity)\nerrors::Matrix{&lt;:Number}: Pre-allocated matrix of shape k × T, initially filled with innovations, overwritten with simulated data\n\n\n\nReturns\n\nVAR: A new VAR object containing the simulated dataset. The data can be obtained using get_input_data. Alternatively, the model can be directly estimated using fit!.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "simulate!"
@@ -7875,7 +8067,7 @@
     "section": "",
     "text": "is_fitted\n\n\n\n\n\nis_fitted(::Model)\nReturn true if the model as been estimated. Returns false otherwise.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "is_fitted"
@@ -7888,7 +8080,7 @@
     "section": "",
     "text": "InternalInstrument\n\n\n\n\n\nInternalInstrument &lt;: AbstractIdentificationMethod\nIdentification method using internal instruments within a VAR framework.\nThis method estimates relative structural impulse response functions (IRFs) using an internal instrument—i.e., a variable within the system that is assumed to proxy for a structural shock of interest. The IRFs are normalised such that the response of a designated normalising variable equals one at a specific horizon.\nThis approach is based on:\nPlagborg-Møller, M., & Wolf, C. K. (2021). Local Projections and VARs Estimate the Same Impulse Responses. Econometrica, 89(2), 955–980. https://doi.org/10.3982/ecta17813\n\nFields\n\ninstrument::Union{Symbol, Int}: the variable to be used as the instrument\nnormalising_variable::Union{Symbol, Int}: the variable used to normalise the IRF\nnormalising_horizon::Int: the horizon at which the IRF of the normalising variable is set to one\n\n\n\n\n\n\n\n\n\n\n\n\n\nInternalInstrument\n\n\n\n\n\nInternalInstrument(normalising_variable::Union{Symbol, Int};\n                   instrument::Union{Symbol, Int}=1,\n                   normalising_horizon::Int=0)\nConstructs an InternalInstrument identification method with the given normalising variable, optional instrument (default is the first variable), and normalisation horizon (default is 0).",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "InternalInstrument"
@@ -7901,7 +8093,7 @@
     "section": "",
     "text": "get_independent\n\n\n\n\n\nget_independent(::Model)\nReturns the independent variables.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "get_independent"
@@ -7914,7 +8106,7 @@
     "section": "",
     "text": "fitted\n\n\n\n\n\nfitted(::Model)\nReturns the fitted values of the of the estimated model.\n\n\n\n\n\n\n\n\n\n\n\nfitted\n\n\n\n\n\nfitted(model::LP)\nReturns the fitted values of the local projection in a three dimensional array. The fitted values for each horizon are stacked along the third dimension. The second dimension corresponds to each variable.",
     "crumbs": [
-      "Documentation",
+      "Home",
       "Julia",
       "All",
       "fitted"
@@ -7937,7 +8129,7 @@
     "href": "faq/topics/how-to-implement.html",
     "title": "How can I implement TCA?",
     "section": "",
-    "text": "We provide various packages to make the implementation of TCA easier. Currently, a Julia and Matlab (including Dynare) package exist. These packages all work similarly, with the Julia version being the most general. We also provide various tutorials that help in getting started.\nIf none of these packages are satisfactory for an application, then the only remaining option is to implement TCA from scratch. In most cases this will entail rewriting the transmission condition into a form that can be used to compute the transmission effect from either the systems form or directly from impulse response functions (IRFs). The Julia version could assist in the rewriting process – check the make_condition function for this. Once rewritten into an amendable form, transmission effects can be calculated along the way outlined in the appendix of Wegner et al. (2025).\n\n\n\n\n\n\nIf indeed none of the packages are able to compute the desired transmission effect, please get in contact with us. We try to make these libraries as general as we can, so finding a query that cannot be computed would provide us with key information on how to improve these packages.\n\n\n\n\nRead the Paper\n\n\n\n\n\nReferences\n\nWegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. “Transmission Channel Analysis in Dynamic Models.” 2025. https://doi.org/10.48550/arxiv.2405.18987.",
+    "text": "We provide various packages to make the implementation of TCA easier. Currently, a Julia and Matlab (including Dynare) package exist. These packages all work similarly, with the Julia version being the most general. We also provide various examples that help in getting started.\nIf none of these packages are satisfactory for an application, then the only remaining option is to implement TCA from scratch. In most cases this will entail rewriting the transmission condition into a form that can be used to compute the transmission effect from either the systems form or directly from impulse response functions (IRFs). The Julia version could assist in the rewriting process – check the make_condition function for this. Once rewritten into an amendable form, transmission effects can be calculated along the way outlined in the appendix of Wegner et al. (2025).\n\n\n\n\n\n\nIf indeed none of the packages are able to compute the desired transmission effect, please get in contact with us. We try to make these libraries as general as we can, so finding a query that cannot be computed would provide us with key information on how to improve these packages.\n\n\n\n\nRead the Paper\n\n\n\n\n\nReferences\n\nWegner, Enrico, Lenard Lieb, Stephan Smeekes, and Ines Wilms. 2025. “Transmission Channel Analysis in Dynamic Models.” 2025. https://doi.org/10.48550/arxiv.2405.18987.",
     "crumbs": [
       "Home",
       "Wiki",
@@ -8079,7 +8271,31 @@
     "href": "examples/julia/svar/index.html",
     "title": "TCA in SVARs",
     "section": "",
-    "text": "This part of the website is still under construction. Our apologies.",
+    "text": "Section 5.1 of Wegner et al. (2025) splits the effects of monetary policy into contemporaneous and non-contemporanous effects, the latter of which are linked to forward guidance and other non-conventional policies. In this example, we do the same. Before we begin, download both the code and the replication data. Make sure to put the data and the code into the same folder.\nTo ensure a clean environment, we recommend starting a new Julia session.\nNext, add add the required packages to the environment. The following steps can be skipped if the packages already exist in the enrivonment.\n] add TransmissionChannelAnalysis, DataFrames, CSV, CairoMakie, Makie\nAfter adding the packages to the environment, load them:\nFinally, before coming to the analysis, load the replication data into a DataFrame:\nWegner et al. (2025) do the analysis for two internal instruments of monetary policy shocks: (1) the Gertler and Karadi (2015) instrument and (2) the Romer and Romer (2004) instrument. We split our analysis accordingly and start investigating the contemporanous and non-contemporaneous effects of monetary policy estimated using the Gertler and Karadi instrument.",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "TCA in SVARs"
+    ]
+  },
+  {
+    "objectID": "examples/julia/svar/index.html#gertler-karadi",
+    "href": "examples/julia/svar/index.html#gertler-karadi",
+    "title": "TCA in SVARs",
+    "section": "Gertler Karadi",
+    "text": "Gertler Karadi\nGertler and Karadi (2015) derive an instrument for monetary policy shocks by extracting the surprise component of FOMC meetings from the change in Fed Funds Futures in a tight time window around these FOMC meetings. This instrument is contained in the data and named mp1_tc. Also contained in the data is the Romer and Romer (2004) instrument (rr_3) which we do not currently need.\nTo focus on the GK instrument, we filter the data for only the GK instrument, interest rates, output gap, commodity prices and inflation\n# Selecting the required variables\ndata_gk = select(data, :mp1_tc, :ffr, :ygap, :infl, :lpcom)\nWith the data at hand, our transmission channel analysis follows the common six steps.\n\n1. Defining the model\nThe first step to any transmission channel analysis is to define the model. Here, we will go with a VAR model. We include the instrument in the VAR, thus effectively deciding that we identify the shock via an internal instrument.\nmodel = VAR(data_gk, 4; trend_exponents=0:1)\nfit!(model)\n\n\n2. Obtaining IRFs\nNext, we obtain the total effects – the structural IRFs – by using the GK series as as internal instrument. We thus define our InternalInstrument identification method:\nmethod = InternalInstrument(:ffr)\nStructural IRFs can then be obtained by using IRF and providing the identification method.\nirf_obj = IRF(model, method, 40)\nAlthough not strictly necessary, we normalise the shock’s size to 25bps. This can be achieved by mutiplying the structural IRFs, currently normalised to a 1pp increase, by 0.25.\nirfs = irf_obj.irfs[:, 1:1, :] * 0.25\n\n\n3. Defining the transmission matrix\nThe third step to any transmission channel analysis is the definition of the transmission matrix. Wegner et al. (2025) order the Fed Funds rate first, followed by all other variables. The implementation of internal instruments is slightly different here, requiring us to order the internal instrument first, followed by the Fed Funds rate, and all other variables. The transmission matrix can then be defined in the following way:\ntransmission_order = [:mp1_tc, :ffr, :ygap, :infl, :lpcom]\n\n\n\n\n\n\nTo be more general, the implementation of internal instruments, and specifically the computation of the Cholesky-orthogonalised IRFs needed for transmission channel analysis, is slightly different here than in Wegner et al. (2025). The final results will be qualitatively the same, although quantitatively slightly different.\n\n\n\n\n\n4. Defining transmission channels\nThe fourth step is to define the transmission channels. Wegner et al. (2025) focus on two channels that perfectly decompose the effect. They define the contemporanous channel of monetary policy as the effect of monetary policy going through a contemporanous adjustment in the federal funds rate. They then define the non-contemporaneous channel of monetary policy as the effect of monetary policy not going through a contemporanous adjustment in the federal funds rate – the complement of the contemporaneous channel. Note that according the Section 4.3 of Wegner et al. (2025) the effects through these channels are invariant to any re-ordering of inflation, commodity prices, and the output gap, as long as they are ordered after the Fed Funds rate.\nThe non-contemporanous channel can be defined in the following way:\nchannel_noncontemp = not_through(model, :ffr, 0:0, transmission_order)\nThe contemporanous channel can be defined as the complement:\nchannel_contemp = !channel_noncontemp\n\n\n5. Computing transmission effects\nTransmission effects can now be computed using transmission. We must provide our InternalInstrument identification method:\neffects_noncontemp = transmission(model, method, 1, channel_noncontemp, transmission_order, 40)\neffects_contemp = transmission(model, method, 1, channel_contemp, transmission_order, 40)\n# Adjusting for the shock size\neffects_noncontemp .*= 0.25\neffects_contemp .*= 0.25\nTo double check whether everything worked, we check whether the two channels perfectly decompose the total effect. Very minor differences might exist due to numerical rounding.\nisapprox(irfs, effects_noncontemp + effects_contemp; atol=sqrt(eps()))\n\n\n6. Visualising decomposition\nLastly, we visualise the decomposition using plot_decomposition. We must first define the channel names and collect all transmission effects into a vector:\nteffects = [effects_contemp, effects_noncontemp]\nchannel_names = [\"Contemporaneous\", \"Non-contemporaneous\"]\nThe decomposition for the effects of a monetary policy shock on the federal funds rate (the second variable in the data) can then be obtained in the following way:\nplot_decomposition(2, irfs[:, 1:1, :], teffects, channel_names; legend=true)\nHowever, we are also interested in the effect on inflation. Instead of creating a separate plot for the federal funds rate and inflation, we can plot them into a single plot using plot_decomposition!. This requires a bit more work, but is also more flexible than the above method.\nTo plot both variables into a single figure, we first create a figure:\nfig = Figure(;size=(1000, 300));\nNext, we create a new axis as position [1,1] in the figure. We plot the decomposition for the federal funds rate into this axis using plot_decomposition!.\nax = Axis(fig[1, 1]; title=\"FFR\")\nplot_decomposition!(ax, 2, irfs[:, 1:1, :], teffects);\nWe do the same for the plot for inflation, with the differences that we this time plot the axis to position [1,2], thus to the right of the federal funds rate plot.\nax2 = Axis(fig[1, 2]; title=\"Inflation\");\nplot_decomposition!(ax2, 4, irfs[:, 1:1, :], teffects);\nLastly, we add a legend below the two plots:\nadd_decomposition_legend!(fig[2, :], channel_names)\nThe figure below displays the final decomposition plot, showing both the decomposition of the total effect of a monetary policy shock on the federal funds rate and inflation.\n\n\n\n\nDecomposition of a Gertler and Karadi (2015) monetary policy shock on the federal funds rate (FFR) and inflation into a contemporaneous and non-contemporaneous channel",
+    "crumbs": [
+      "Home",
+      "Julia",
+      "TCA in SVARs"
+    ]
+  },
+  {
+    "objectID": "examples/julia/svar/index.html#romer-and-romer",
+    "href": "examples/julia/svar/index.html#romer-and-romer",
+    "title": "TCA in SVARs",
+    "section": "Romer and Romer",
+    "text": "Romer and Romer\nMost of the transmission channel analysis for the Romer and Romer (2004) instrument follows the same steps as for the Gertler and Karadi (2015) instrument. Below we highlight only the differences. For steps 2, 4, 5, 6, the same code as above can be used.\nBefore we start, we must first adjust the data and replace the GK with the RR instrument:\ndata_rr = select(data, :rr_3, :ffr, :ygap, :infl, :lpcom)\n\n1. Defining the model\nBecause the data has changed, our model definition changes slightly – the dataset name changes.\nmodel = VAR(data_rr, 4; trend_exponents=0:1)\nfit!(model)\n\n\n3. Defining transmission matrix\nThe transmission matrix remains largely the same, but the name of the instrument changes.\ntransmission_order = [:rr_3, :ffr, :ygap, :infl, :lpcom]\n\n\n6. Visualising effects\nWhile the code ramains the same, the graphs change.\n\n\n\n\nDecomposition of a Romer and Romer (2004) monetary policy shock on the federal funds rate (FFR) and inflation into a contemporaneous and non-contemporaneous channel\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nMinor differences between the decompositions here and the ones in the paper are due to how we obtain the Cholesky-orthogonalised IRFs. In the paper we estimate orthogonal IRFs using a VAR excluding the internal instrument. Here we include the internal instrument.",
     "crumbs": [
       "Home",
       "Julia",
