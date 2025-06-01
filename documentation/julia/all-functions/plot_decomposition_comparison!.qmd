@@ -1,6 +1,6 @@
 --- 
 title: | 
-  bic
+  plot_decomposition_comparison!
 sidebar: doc
 engine: julia
 ---
@@ -18,6 +18,6 @@ using CairoMakie  # Must include this to also document extensions
 #| echo: false
 #| output: asis
 
-include_quarto_callout_doc(TransmissionChannelAnalysis, Symbol("bic"))
+include_quarto_callout_doc(TransmissionChannelAnalysis, Symbol("plot_decomposition_comparison!"))
 ```
     

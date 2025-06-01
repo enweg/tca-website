@@ -1,4 +1,4 @@
-  --- 
+--- 
 title: | 
   IRF
 sidebar: doc
@@ -11,6 +11,7 @@ engine: julia
 
 using DocUtils
 using TransmissionChannelAnalysis
+using CairoMakie  # Must include this to also document extensions
 ```
 
 ```{julia}

@@ -1,5 +1,6 @@
 using DocUtils
 using TransmissionChannelAnalysis
+using CairoMakie  # Need to load this so that extensions are also documented
 
 function make_doc_page(s, path)
   name = string(s)
@@ -20,6 +21,7 @@ engine: julia
 
 using DocUtils
 using TransmissionChannelAnalysis
+using CairoMakie  # Must include this to also document extensions
 ```
 
 ```{julia}
