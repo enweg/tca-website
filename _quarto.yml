@@ -1,19 +1,22 @@
 project:
   type: website
+  resources:
+    - CNAME # used for custom website
 
-language: 
+language:
   search-text-placeholder: "What would you like to know?"
 
 website:
   title: "Transmission Channel Analysis"
+  site-url: https://tca.enricowegner.com
   page-navigation: true
-  announcement: 
+  announcement:
     icon: info-circle
     dismissable: true
     content: "**Note**: We are still improving this website. If you find a mistake or have a question, please get in [contact](/index.qmd#about)"
     type: primary
     position: below-navbar
-  search: 
+  search:
     location: navbar
     type: textbox
   navbar:
@@ -21,48 +24,48 @@ website:
     left:
       - text: Home
         href: index.qmd
-      - text: Examples 
+      - text: Examples
         href: "examples/index.qmd"
       - text: Documentation
         href: "documentation/index.qmd"
       - text: Wiki
         href: "faq/index.qmd"
-    right: 
+    right:
       - text: About
         href: "index.qmd#about"
-  sidebar: 
+  sidebar:
     - id: doc
       title: Documentation
-      contents: 
-      - href: "documentation/index.qmd"
-      - section: Julia 
-        # href: "documentation/julia/index.qmd"
-        contents: 
-          - text: Overview
-            href: "documentation/julia/index.qmd"
-          - text: Advanced Tools
-            href: "documentation/julia/advanced.qmd"
-          - text: Internals
-            href: "documentation/julia/internals.qmd"
-          - section: All
-            contents: documentation/julia/all-functions/*
-      - section: Matlab
-        # href: "documentation/matlab/index.qmd"
-        contents: 
-          - text: Overview
-            href: "documentation/matlab/index.qmd"
-          - text: Advanced Tools
-            href: "documentation/matlab/advanced.qmd"
-          - text: Internals
-            href: "documentation/matlab/internals.qmd"
-          - section: All
-            contents: documentation/matlab/all-functions/*
+      contents:
+        - href: "documentation/index.qmd"
+        - section: Julia
+          # href: "documentation/julia/index.qmd"
+          contents:
+            - text: Overview
+              href: "documentation/julia/index.qmd"
+            - text: Advanced Tools
+              href: "documentation/julia/advanced.qmd"
+            - text: Internals
+              href: "documentation/julia/internals.qmd"
+            - section: All
+              contents: documentation/julia/all-functions/*
+        - section: Matlab
+          # href: "documentation/matlab/index.qmd"
+          contents:
+            - text: Overview
+              href: "documentation/matlab/index.qmd"
+            - text: Advanced Tools
+              href: "documentation/matlab/advanced.qmd"
+            - text: Internals
+              href: "documentation/matlab/internals.qmd"
+            - section: All
+              contents: documentation/matlab/all-functions/*
 
     - id: faq
       title: Wiki
       contents:
         - section: Wiki
-          contents: 
+          contents:
             - "faq/topics/what-is-tca.qmd"
             - "faq/topics/how-to-implement.qmd"
             - "faq/topics/dynamic-form.qmd"
@@ -72,22 +75,22 @@ website:
 
     - id: examples
       title: Examples
-      contents: 
-      - href: "examples/index.qmd"
-      - section: Julia 
-        contents: 
-          - text: TCA in SVARs
-            href: "examples/julia/svar/index.qmd"
-          - text: TCA in LPs
-            href: "examples/julia/lp/index.qmd"
-      - section: Matlab
-        contents: 
-          - text: TCA in SVARs
-            href: "examples/matlab/svar/index.qmd"
-          - text: TCA in LPs
-            href: "examples/matlab/lp/index.qmd"
-          - text: TCA in DSGEs
-            href: "examples/matlab/dynare/index.qmd"
+      contents:
+        - href: "examples/index.qmd"
+        - section: Julia
+          contents:
+            - text: TCA in SVARs
+              href: "examples/julia/svar/index.qmd"
+            - text: TCA in LPs
+              href: "examples/julia/lp/index.qmd"
+        - section: Matlab
+          contents:
+            - text: TCA in SVARs
+              href: "examples/matlab/svar/index.qmd"
+            - text: TCA in LPs
+              href: "examples/matlab/lp/index.qmd"
+            - text: TCA in DSGEs
+              href: "examples/matlab/dynare/index.qmd"
 
 format:
   html:
@@ -97,6 +100,3 @@ format:
     css: styles.css
     toc: true
     smooth-scroll: true
-
-
-
