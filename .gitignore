@@ -1,3 +1,7 @@
 **/.DS_Store
 /_site/
 /.quarto/
+
+# Local analysis vault (Obsidian), see CLAUDE.md
+/CLAUDE-ANALYSIS/
+CLAUDE.md
