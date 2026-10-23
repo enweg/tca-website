@@ -3,8 +3,8 @@
   "language": "matlab",
   "library": {
     "name": "tca-matlab-toolbox",
-    "version": "v0.3.0",
-    "commit": "e0416bf4101bea014b2292de8f0e396a59eeb0f4",
+    "version": "v0.3.0-1-gafcd08c",
+    "commit": "afcd08c70e11a2f831c52cd15dca78c22b4bcba5",
     "source_url": null
   },
   "generator": "ApiDocs.jl 0.1.0",

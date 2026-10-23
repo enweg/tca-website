@@ -3,8 +3,8 @@
   "language": "julia",
   "library": {
     "name": "TransmissionChannelAnalysis",
-    "version": "0.2.1",
-    "commit": "f008c89ec98c62f06835445b6b0e3f38f21bad27",
+    "version": "0.2.2",
+    "commit": "43e28b377325c3f91946769ba9530dc76f2de767",
     "source_url": "https://github.com/enweg/TransmissionChannelAnalysis.jl/blob/{commit}/{path}#L{line}"
   },
   "generator": "ApiDocs.jl 0.1.0",
