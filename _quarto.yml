@@ -2,6 +2,10 @@ project:
   type: website
   # Renders documentation/_api/*.json into the reference pages and shortcode snippets
   pre-render: julia --project=tools tools/build_api.jl
+  # Only render .qmd pages; skips README.md, CLAUDE.md and the local CLAUDE-ANALYSIS vault
+  render:
+    - "*.qmd"
+    - "!CLAUDE-ANALYSIS/"
   resources:
     - CNAME # used for custom website
 
