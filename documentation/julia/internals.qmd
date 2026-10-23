@@ -1,33 +1,16 @@
 ---
 sidebar: doc
-engine: julia
 ---
-
-```{julia}
-#| echo: false
-#| output: false
-
-using DocUtils
-using TransmissionChannelAnalysis
-```
 
 # Internals
 
 The internals of `TransmissionChannelAnalysis.jl`{.julia} all resolve around the type `Q`{.julia}, which is the internal representation of a transmission condition using the variables of the [systems form](/faq/topics/systems-form.qmd); thus $x_i$ and **not** $y_{i,t}$.  
 
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_quarto_callout_doc(TransmissionChannelAnalysis, :Q)
-```
+{{< api julia Q >}}
 
 The basic idea is to start with a singleton statement, such as $x_i$, $\neg x_i$ or sometimes even just $\text{TRUE}$. Each of these singleton -- or atomic -- statements refers to the simplest transmission channel in which $x_i$ must be on the path, $x_i$ cannot be on the path, or in which case the condition is always true. Such singleton statement can be created in the following way. 
 
-```{julia}
-#| output: false
-
+```julia
 # Q is not exported
 
 # x1 must be on the path
@@ -38,7 +21,6 @@ not_x2 = TransmissionChannelAnalysis.Q("!x2")
 
 # TRUE
 T = TransmissionChannelAnalysis.Q("")
-
 ```
 
 More complex transmission conditions are then simply a combination of these singleton statements. More precisely, a transmission condition `q1::Q`{.julia} can be combined with another transmission condition `q2::Q`{.julia} using any of AND (`&`{.julia}), OR (`|`{.julia}) and NOT (`!`{.julia}). Throughout, parentheses can be used to change the precedence. In the following we will describe how such combinations are internally implemented. 
@@ -47,8 +29,7 @@ More complex transmission conditions are then simply a combination of these sing
 
 Suppose we wanted to combine two conditions `q1::Q`{.julia} and `q2::Q`{.julia} using an AND. Thus, suppose we wanted to do
 
-```{julia}
-#| eval: false
+```julia
 q1 & q2
 ```
 
@@ -64,40 +45,17 @@ Under [Assumption @nte-assumption1-internal-julia] `q1::Q`{.julia} and `q2::Q`{.
 
 The detailed internal implementation is given by 
 
-```{julia}
-#| echo: false 
-#| output: asis
+{{< api julia Base.& >}}
 
-docs = Base.Docs.doc(&, Tuple{TransmissionChannelAnalysis.Q, TransmissionChannelAnalysis.Q})
-println(DocUtils.create_quarto_callout(docs, "&")[1])
-```
-
-
-```{julia}
-#| echo: false 
-#| output: asis
-
-include_quarto_callout_doc(TransmissionChannelAnalysis, :string_and)
-```
+{{< api julia string_and >}}
 
 While concatenating the two conditions, we need to watch out that no contradictions are being introduced. Contradictions are any statements along the lines $x_i \land \neg x_i$ which would always result in `false`{.julia}. This is taken care of by the following functions. 
 
+{{< api julia check_contradiction >}}
 
-```{julia}
-#| echo: false 
-#| output: asis
+{{< api julia remove_contradictions >}}
 
-include_quarto_callout_doc(TransmissionChannelAnalysis, :check_contradiction)
-```
-
-```{julia}
-#| echo: false 
-#| output: asis
-
-include_quarto_callout_doc(TransmissionChannelAnalysis, :remove_contradictions)
-```
-
-As stated in the [overview]("./index.qmd") of the documentation, removal of contradictions is governed by `REMOVE_CONTRADICTION`{.julia} and the utility function `set_remove_contradictions`{.julia}. Not removing contradictions does not lead to a mistakes in the computation, but can result in longer computations. Contrary, removing contradictions can lead to longer compile times -- it takes longer to compile the transmission conditions. Thus, a trade-off between compile and computing time exists. 
+As stated in the [overview](./index.qmd) of the documentation, removal of contradictions is governed by `REMOVE_CONTRADICTION`{.julia} and the utility function `set_remove_contradictions`{.julia}. Not removing contradictions does not lead to a mistakes in the computation, but can result in longer computations. Contrary, removing contradictions can lead to longer compile times -- it takes longer to compile the transmission conditions. Thus, a trade-off between compile and computing time exists. 
 
 ## Combining two conditions using OR (`|`{.julia})
 
@@ -107,14 +65,7 @@ Q(b \lor b') = Q(b) + Q(b') - Q(b \land b').
 $$
 Implementation of OR (`|`{.julia}) therefore simply uses AND and the ability for `Q`{.julia} to represent multiple terms with different multipliers. The precise implementation of OR can be found in the following function. 
 
-
-```{julia}
-#| echo: false 
-#| output: asis
-
-docs = Base.Docs.doc(|, Tuple{TransmissionChannelAnalysis.Q, TransmissionChannelAnalysis.Q})
-println(DocUtils.create_quarto_callout(docs, "|")[1])
-```
+{{< api julia Base.| >}}
 
 ## Negating a condition using NOT (`!`{.julia})
 
@@ -124,13 +75,7 @@ Q(\neg b) = Q(T) - Q(b),
 $$
 where $T$ represents the Boolean condition that is always true. This can easily be represented using `Q`{.julia} through its ability to represent multiple terms and multipliers. Specifically, we simply replace the original transmission condition with a new one that consists one one additional term, representing true, and switch the sign of all original terms of the condition. The following function implements this behaviour. 
 
-```{julia}
-#| echo: false 
-#| output: asis
-
-docs = Base.Docs.doc(!, Tuple{TransmissionChannelAnalysis.Q})
-println(DocUtils.create_quarto_callout(docs, "!")[1])
-```
+{{< api julia Base.! >}}
 
 ## Parsing transmission conditions using `make_condition`{.julia}
 
@@ -140,10 +85,4 @@ For user friendliness, we also provide a version of `make_condition`{.julia} tha
 
 In any case, `make_conditions`{.julia} should be seen as a utility function with the main funcionality being dependent on correct implementation of `Q`{.julia}, `&`{.julia}, `|`{.julia}, and `!`{.julia} as explained above. 
 
-
-```{julia}
-#| echo: false 
-#| output: asis
-
-include_quarto_callout_doc(TransmissionChannelAnalysis, :make_condition)
-```
+{{< api julia make_condition >}}

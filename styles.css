@@ -4,6 +4,19 @@
   font-size: 1.1rem !important;
 }
 
+/* ApiDocs.jl pushes docstring headings down three levels (## Arguments -> #####) */
+.doc-box h4, .doc-box h5, .doc-box h6 {
+  font-size: 1.1rem;
+}
+
+/* "Source" link at the end of each API callout */
+.doc-box a.doc-source {
+  font-size: 0.875rem;
+}
+.doc-box p:has(> a.doc-source) {
+  text-align: right;
+}
+
 .navbar .aa-Form {
   width: 250px !important;
 }

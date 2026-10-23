@@ -1,0 +1,5 @@
+[deps]
+ApiDocs = "8fe3e1a1-cfbe-4018-a3fb-c9b059b22d9b"
+
+[sources]
+ApiDocs = {path = "../../ApiDocs.jl"}

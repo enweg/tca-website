@@ -1,7 +1,16 @@
 project:
   type: website
+  # Renders documentation/_api/*.json into the reference pages and shortcode snippets
+  pre-render: julia --project=tools tools/build_api.jl
   resources:
     - CNAME # used for custom website
+
+# Snippets for the {{< api >}} shortcode (ApiDocs.jl), written by the pre-render step
+apidocs:
+  julia:
+    snippets: documentation/_api/api-julia.snippets.json
+  matlab:
+    snippets: documentation/_api/api-matlab.snippets.json
 
 language:
   search-text-placeholder: "What would you like to know?"
@@ -94,6 +103,8 @@ website:
 
 format:
   html:
+    # Docstrings (Julia Markdown, Matlab help) often start a list right after a line of text
+    from: markdown+lists_without_preceding_blankline
     theme:
       - cosmo
       - brand

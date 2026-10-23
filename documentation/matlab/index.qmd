@@ -1,29 +1,8 @@
 ---
 title: Matlab Toolbox for Transmission Channel Analysis
 sidebar: doc
-engine: julia
 bibliography: ../../references.bib
 ---
-
-```{julia}
-#| echo: false 
-#| include: false 
-
-using DocUtils
-using JSON
-
-
-function load_from_json(filename)
-  dict = open(filename, "r") do file 
-    JSON.parse(file)
-  end
-  return dict
-end
-
-functions = load_from_json("matlab-documentation-functions.json")
-classes = load_from_json("matlab-documentation-classes.json")
-class_methods = load_from_json("matlab-documentation-class-methods.json")
-```
 
 ::: {.action-read-paper}
 <a href="https://github.com/enweg/tca-matlab-toolbox">Get the Toolbox</a>
@@ -35,7 +14,6 @@ The **MATLAB Toolbox for Transmission Channel Analysis** provides a suite of fun
 This overview focuses on the standard methods. Advanced options are described in the [Advanced Section](./advanced.qmd), and implementation details can be found in the [Internals Section](./internals.qmd). For practical demonstrations, see the [Examples](../../examples/matlab/dynare/index.qmd).
 
 Before performing any transmission analysis, add the TCA toolbox to MATLAB’s search path. Update the paths below to match the location of the toolbox on your system:
-
 
 ```{.matlab}
 % General functions
@@ -72,19 +50,9 @@ Each model class extends the abstract type [`Model`](./all-functions/Model.qmd).
 
 A VAR model can be defined using the VAR class and its constructor as shown below:
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab VAR >}}
 
-include_callout_block_matlab("VAR", classes)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("VAR", "VAR", class_methods)
-```
+{{< api matlab VAR.VAR >}}
 
 The constructor requires a dataset in `matrix` or `table` form, with each column representing a variable and each row an observation, ordered from earliest to latest. For example:
 
@@ -105,12 +73,7 @@ Here, `0:1` indicates a constant ($t^0$) and a linear trend ($t^1$). For constan
 
 To estimate the VAR via OLS, call `fit`:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("VAR", "fit", class_methods)
-```
+{{< api matlab VAR.fit >}}
 
 ```{.matlab}
 % if model is a VAR 
@@ -119,26 +82,11 @@ model.fit()
 
 Retrieve estimates with:
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab VAR.coeffs >}}
 
-include_callout_block_matlab("VAR", "coeffs", class_methods)
-```
+{{< api matlab VAR.fitted >}}
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("VAR", "fitted", class_methods)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("VAR", "residuals", class_methods)
-```
+{{< api matlab VAR.residuals >}}
 
 ```{.matlab}
 % All coefficients
@@ -153,12 +101,7 @@ model.residuals()
 
 To select the optimal lag length automatically, use `fitAndSelect`. This method fits `VAR` models for every lag length from 0 up to the specified maximum, evaluates each using the chosen information criterion (AIC by default), and returns the model with the lowest criterion value along with a table of lag lengths and their corresponding scores:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("VAR", "fitAndSelect", class_methods)
-```
+{{< api matlab VAR.fitAndSelect >}}
 
 ```{.matlab}
 % Choosing a maximum of 20 lags
@@ -168,33 +111,13 @@ model = VAR(data, 20);
 
 `fitAndSelect` supports the following information criteria. Note the underscore suffix (_) on these functions.
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab VAR.aic_ >}}
 
-include_callout_block_matlab("VAR", "aic_", class_methods)
-```
+{{< api matlab VAR.bic_ >}}
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab VAR.sic_ >}}
 
-include_callout_block_matlab("VAR", "bic_", class_methods)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("VAR", "sic_", class_methods)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("VAR", "hqc_", class_methods)
-```
+{{< api matlab VAR.hqc_ >}}
 
 For example, to use the Bayesian Information Criteria, call:
 
@@ -205,33 +128,13 @@ model = VAR(data, 20);
 
 To compute information criteria for an already estimated model over its own sample, use methods without the trailing underscore. Note these values may differ from those returned by `fitAndSelect`, which evaluates ICs over a common sample across all models:
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab VAR.aic >}}
 
-include_callout_block_matlab("VAR", "aic", class_methods)
-```
+{{< api matlab VAR.bic >}}
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab VAR.sic >}}
 
-include_callout_block_matlab("VAR", "bic", class_methods)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("VAR", "sic", class_methods)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("VAR", "hqc", class_methods)
-```
+{{< api matlab VAR.hqc >}}
 
 ```{.matlab}
 # Get the HQC value for an estimated model
@@ -242,19 +145,9 @@ model.hqc()
 
 An SVAR can be defined using the `SVAR` class and its constructor as documented below:
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab SVAR >}}
 
-include_callout_block_matlab("SVAR", classes)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("SVAR", "SVAR", class_methods)
-```
+{{< api matlab SVAR.SVAR >}}
 
 The constructor requires a dataset in `matrix` or `table` form, with each column representing a variable and each row an observation, ordered from earliest to latest. For example, to specify a lag order of four (p = 4):
 
@@ -272,12 +165,7 @@ model = SVAR(data, p, 'trendExponents', 0:1)
 
 To estimate the structural model, an identification method must be provided. Only recursive identification (`Recursive`) is supported for full structural identification. Note that `InternalInstrument` methods can be used to identify impulse responses to a single shock; these are documented in a later section. Fit the model as follows:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("SVAR", "fit", class_methods)
-```
+{{< api matlab SVAR.fit >}}
 
 ```{.matlab}
 model.fit(Recursive())
@@ -285,27 +173,11 @@ model.fit(Recursive())
 
 After fitting, extract coefficients, fitted values, and residuals:
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab SVAR.coeffs >}}
 
-include_callout_block_matlab("SVAR", "coeffs", class_methods)
-```
+{{< api matlab SVAR.fitted >}}
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("SVAR", "fitted", class_methods)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("SVAR", "residuals", class_methods)
-```
-
+{{< api matlab SVAR.residuals >}}
 
 ```{.matlab}
 % Structural coefficient matrices A0 and APlus
@@ -320,12 +192,7 @@ model.residuals()
 
 You can select the lag length automatically via `fitAndSelect`, which first determines the best reduced‑form `VAR` up to the maximum lag and then applies the chosen identification method:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("SVAR", "fitAndSelect", class_methods)
-```
+{{< api matlab SVAR.fitAndSelect >}}
 
 Using AIC (default) with a maximum of twenty lags:
 
@@ -347,19 +214,9 @@ All `VAR` information‑criterion functions (with underscore) may be supplied to
 
 A local projection model can be specified using the `LP` class and its constructor:
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab LP >}}
 
-include_callout_block_matlab("LP", classes)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("LP", "LP", class_methods)
-```
+{{< api matlab LP.LP >}}
 
 The constructor requires:
 
@@ -382,12 +239,7 @@ model = LP(data, 'Y1', 4, 0:20, 'includeConstant', false)
 
 Use the `fit` method to estimate the projections:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("LP", "fit", class_methods)
-```
+{{< api matlab LP.fit >}}
 
 ```{.matlab}
 % Uses Recursive by default
@@ -401,12 +253,7 @@ Available identification schemes:
 - `Recursive` (default)
 - `ExternalInstrument` (for external‐instrument IV)
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("ExternalInstrument", classes)
-```
+{{< api matlab ExternalInstrument >}}
 
 To use an external instrument, first instantiate `ExternalInstrument` with the treatment name and an instrument dataset, then supply it to `fit`:
 
@@ -421,26 +268,11 @@ After estimation, extract the results (note the differing dimensions) via:
 - `coeffs`: (response variable × regressors × horizons)
 - `fitted`, `residuals`: (observations × variables × horizons)
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab LP.coeffs >}}
 
-include_callout_block_matlab("LP", "coeffs", class_methods)
-```
+{{< api matlab LP.fitted >}}
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("LP", "fitted", class_methods)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("LP", "residuals", class_methods)
-```
+{{< api matlab LP.residuals >}}
 
 ```{.matlab}
 # Coefficients
@@ -455,12 +287,7 @@ model.residuals()
 
 To select the lag order automatically, use `fitAndSelect`, which fits `VAR`s internally to choose the optimal `p`:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("LP", "fitAndSelect", class_methods)
-```
+{{< api matlab LP.fitAndSelect >}}
 
 All `VAR` underscore‑suffixed information‑criterion functions (e.g., `aic_`, `bic_`, `sic_`, `hqc_`) may be used for `LP` lag selection. For example, using BIC:
 
@@ -473,12 +300,7 @@ model = LP(data, 'Y1', 20, 0:20);
 
 A DSGE model can be specified using the `DSGE` class. Before defining the model, you must compute its first‐order approximation in *Dynare*. Refer to [Dynare’s manual](https://www.dynare.org/manual/) for details.
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("DSGE", classes)
-```
+{{< api matlab DSGE >}}
 
 Once Dynare has run, the workspace should contain the structures `M_`, `oo_`, and `options_`. Use these to define your `DSGE` model:
 
@@ -507,12 +329,7 @@ Details on IRF computation for all models are provided below.
 
 Obtain reduced‐form IRFs from a VAR model by specifying the maximal horizon:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("VAR", "IRF", class_methods)
-```
+{{< api matlab VAR.IRF >}}
 
 ```{.matlab}
 maxHorizon = 20;
@@ -521,12 +338,7 @@ irfObj = model.IRF(maxHorizon);
 
 Here, `irfObj` is an `IRFContainer` holding both the IRF array and related metadata:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("IRFContainer", classes)
-```
+{{< api matlab IRFContainer >}}
 
 Printing `irfObj` displays a 3D array with dimensions:
 
@@ -542,34 +354,13 @@ irfObj.getIrfArray()
 
 To compute structural IRFs, supply an `IdentificationMethod`. Supported methods include recursive and internal‐instrument schemes:
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab IdentificationMethod >}}
 
-include_callout_block_matlab("IdentificationMethod", classes)
-```
+{{< api matlab Recursive >}}
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab InternalInstrument >}}
 
-include_callout_block_matlab("Recursive", classes)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("InternalInstrument", classes)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("InternalInstrument", "InternalInstrument", class_methods)
-```
-
+{{< api matlab InternalInstrument.InternalInstrument >}}
 
 For a recursive identification:
 
@@ -599,18 +390,12 @@ method = InternalInstrument('Y3', 'instrument', 'Y2', 'normalisingHorizon', 1)
 
 Impulse response functions can be obtained from an `SVAR` using the `IRF` function, analogous to the `VAR` case. Since an SVAR is already structurally identified, `IRF` returns structural IRFs directly:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("SVAR", "IRF", class_methods)
-```
+{{< api matlab SVAR.IRF >}}
 
 ::: {.callout-note}
 # Using SVARs and Internal Instruments
 
 The `SVAR.IRF` method requires a fully identified `SVAR`. Internal instruments (via `InternalInstrument`) cannot be applied to an `SVAR` directly. To use internal instruments for IRF identification, first define a reduced‐form `VAR`, apply the instrument there, and then compute IRFs:
-
 
 ```{.matlab}
 model = VAR(data, p);
@@ -625,12 +410,7 @@ irfObj = model.IRF(maxHorizon, 'identificationMethod', method);
 
 Impulse response functions can be obtained from an estimated `LP` model using `IRF`. These IRFs are structural whenever the LP model was estimated structurally.
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("LP", "IRF", class_methods)
-```
+{{< api matlab LP.IRF >}}
 
 ```{.matlab}
 irfObj = model.IRF(maxHorizon)
@@ -650,12 +430,7 @@ irfObj = model.IRF(maxHorizon, 'identificationMethod', method);
 
 If a VARMA representation of the `DSGE` model exists, compute IRFs for the `varobs` variables via `IRF`:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("DSGE", "IRF", class_methods)
-```
+{{< api matlab DSGE.IRF >}}
 
 ```{.matlab}
 maxHorizon = 20;
@@ -680,23 +455,13 @@ Advanced methods for constructing transmission matrices are covered in the [Adva
 
 With the transmission matrix in place, you can specify transmission channels of interest via the helper functions `through` and `notThrough`. These functions return a transmission condition `Q` that you can combine to define complex transmission channels. More advanced methods for defining transmission channels are documented in the [Advanced Methods Section](./advanced.qmd).
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("Q", classes)
-```
+{{< api matlab Q >}}
 
 **through**
 
 Use `through` to define channels that pass through specified variables at given horizons:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("Model", "through", class_methods)
-```
+{{< api matlab Model.through >}}
 
 Examples (for any model — VAR, SVAR, LP, or DSGE — with transmissionOrder or a transmission matrix as described above):
 
@@ -722,12 +487,7 @@ q = model.through({'Y1', 'Y2'}, {0:0, 0:1}, transmissionOrder);
 
 Use `notThrough` to define channels that **do not** go through specified variables at given horizons:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("Model", "notThrough", class_methods)
-```
+{{< api matlab Model.notThrough >}}
 
 Examples (for any model — VAR, SVAR, LP, or DSGE — with transmissionOrder or a transmission matrix as described above):
 
@@ -800,26 +560,11 @@ Once you have defined a `model` (VAR, SVAR, LP, or DSGE), the `transmission` met
 
 For `VAR`, or for `SVAR` and `LP` models that have not yet been structurally estimated, you must provide an `IdentificationMethod` (since at least one structural shock is required):
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab VAR.transmission >}}
 
-include_callout_block_matlab("VAR", "transmission", class_methods)
-```
+{{< api matlab SVAR.transmission >}}
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("SVAR", "transmission", class_methods)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("LP", "transmission", class_methods)
-```
+{{< api matlab LP.transmission >}}
 
 For example, to compute the effects of the first structural shock up to `maxHorizon`, using a transmission matrix `transmissionOrder` and a transmission condition `q`:
 
@@ -851,12 +596,7 @@ effects = model.transmission(1, q, transmissionOrder, maxHorizon)
 
 Since `DSGE` models are inherently structural and shocks can be named, you may specify the shock by name or index. No identification method is needed:
 
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("DSGE", "transmission", class_methods)
-```
+{{< api matlab DSGE.transmission >}}
 
 For example, if `mp` (monetary policy shock) is the first shock:
 
@@ -872,19 +612,9 @@ effects = model.transmission(1, q, transmissionOrder, maxHorizon);
 
 To inspect transmission effects graphically, use the helper functions:
 
-```{julia}
-#| echo: false
-#| output: asis
+{{< api matlab plotDecomposition >}}
 
-include_callout_block_matlab("plotDecomposition", functions)
-```
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("plotCompareDecomposition", functions)
-```
+{{< api matlab plotCompareDecompositions >}}
 
 - `plotDecomposition` Visualises a single transmission-channel decomposition of the IRFs.
 - `plotCompareDecomposition`: Compares two decompositions obtained from different transmission matrices.

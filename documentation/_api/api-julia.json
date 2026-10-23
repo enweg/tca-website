@@ -1,0 +1,2743 @@
+{
+  "schema_version": "0.1.0",
+  "language": "julia",
+  "library": {
+    "name": "TransmissionChannelAnalysis",
+    "version": "0.2.1",
+    "commit": "f008c89ec98c62f06835445b6b0e3f38f21bad27",
+    "source_url": "https://github.com/enweg/TransmissionChannelAnalysis.jl/blob/{commit}/{path}#L{line}"
+  },
+  "generator": "ApiDocs.jl 0.1.0",
+  "symbols": [
+    {
+      "id": "julia:Base.!",
+      "name": "!",
+      "qualname": "Base.!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "foreign",
+      "attributes": {
+        "defined_in": "TransmissionChannelAnalysis"
+      },
+      "summary": "Return NOT the transmission condition if the condition involves more than one variables.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Q)",
+          "signature": "Base.!(q1::Q)",
+          "markdown": "    Base.!(q1::Q)\n\nReturn NOT the transmission condition if the condition involves more than one\nvariables. If the condition only involves one variables, then \"!x1\" is returned\nwhere \"1\" is replaced by the respective variable number. \n\nNote: The decision not to simplify terms of the form \"!x1\" was made because\ncalculations usign the second calculation method in Wegner et al (2024) are\nfaster than having to simplify \"!x1\" type of terms and using the first\ncalculation method. \n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 259
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:Base.&",
+      "name": "&",
+      "qualname": "Base.&",
+      "kind": "function",
+      "parent": null,
+      "visibility": "foreign",
+      "attributes": {
+        "defined_in": "TransmissionChannelAnalysis"
+      },
+      "summary": "Combine two transmission conditions using AND.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Q, Q)",
+          "signature": "Base.&(q1::Q, q2::Q)",
+          "markdown": "    Base.&(q1::Q, q2::Q)\n\nCombine two transmission conditions using AND. \n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 224
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:Base.string",
+      "name": "string",
+      "qualname": "Base.string",
+      "kind": "function",
+      "parent": null,
+      "visibility": "foreign",
+      "attributes": {
+        "defined_in": "TransmissionChannelAnalysis"
+      },
+      "summary": "Obtain a string representation of a transmission condition.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Q)",
+          "signature": "Base.string(q::Q)",
+          "markdown": "    Base.string(q::Q)\n\nObtain a string representation of a transmission condition.\n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 288
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:Base.|",
+      "name": "|",
+      "qualname": "Base.|",
+      "kind": "function",
+      "parent": null,
+      "visibility": "foreign",
+      "attributes": {
+        "defined_in": "TransmissionChannelAnalysis"
+      },
+      "summary": "Combine two transmission conditions using OR.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Q, Q)",
+          "signature": "Base.|(q1::Q, q2::Q)",
+          "markdown": "    Base.|(q1::Q, q2::Q)\n\nCombine two transmission conditions using OR. \n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 244
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:CairoMakieExt.TCAPlot",
+      "name": "TCAPlot",
+      "qualname": "CairoMakieExt.TCAPlot",
+      "kind": "struct",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {
+        "provided_by": "CairoMakieExt"
+      },
+      "summary": "Convenience struct for CairoMakie plotting functions in the TCA package.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "TCAPlot",
+          "markdown": "    TCAPlot\n\nConvenience struct for CairoMakie plotting functions in the TCA package.\nStores a `Figure` and a `Axis`, and implements custom behavior\nfor display and unpacking.\n\n## Fields\n\n- `fig::Figure`\n- `ax::Axis`\n\n## Notes\n\nThe `TCAPlot` struct allows:\n\n- Displaying the figure when called directly in the REPL or script:\n  ```julia\n  tcaplot  # displays the figure\n  tcaplot; # does not display figure (semicolon suppression)\n  ```\n\n- Flexible unpacking of components:\n  ```julia\n  fig, = tcaplot       # returns only the figure\n  fig, ax = tcaplot    # returns figure and axis\n  ```\n\nThe figure is displayed automatically in interactive contexts unless the\ncall is suppressed by a semicolon.\n",
+          "source": {
+            "path": "ext/CairoMakieExt.jl",
+            "line": 8
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.@show_y",
+      "name": "@show_y",
+      "qualname": "TransmissionChannelAnalysis.@show_y",
+      "kind": "macro",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Pretty print the condition `q::Q` using the variables of the dynamic system, i.e. `y`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Any, Any)",
+          "signature": "show_y(q::Q, order::AbstractVector{<:Int})\n@show_y(q, order)",
+          "markdown": "\n    show_y(q::Q, order::AbstractVector{<:Int})\n    @show_y(q, order)\n\nPretty print the condition `q::Q` using the variables of the dynamic system, i.e. `y`.\n\n## Arguments\n- `q::Q`: A transmission condition. See also `Q`. \n- `order::AbstractVector{<:Int}`: The order of variables defined by the \n  transmission matrix. \n\n## Examples\n\n```julia\ns_y = \"y_{1,0} | !y_{1,1}\"\norder = [3,1,2]\n\nq = make_condition(s_y, order)\n@show_y q $order\n```\n\n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 325
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.AbstractIdentificationMethod",
+      "name": "AbstractIdentificationMethod",
+      "qualname": "TransmissionChannelAnalysis.AbstractIdentificationMethod",
+      "kind": "abstract_type",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Abstract supertype for all identification methods.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "AbstractIdentificationMethod",
+          "markdown": "    AbstractIdentificationMethod\n\nAbstract supertype for all identification methods.\n\nNew identification methods must subtype `AbstractIdentificationMethod`.\nIf the identification method can be used to estimate the structural model, i.e. \nidentify the structural model's coefficients, then functions `fit!` and \n`fit_and_select!` should be implemented. If the identification method can be \nused to identify structural IRFs from a reduced form model, e.g. structural \nIRFs from a VAR, then the method `IRF` should be implemented. For further \ndetails regarding the latter point, see the documentation for `IRF`. \n\nFor structural VARs (SVARs), developers may alternatively extend the\ninternal methods `_identify` and `_identify_irfs`.\n",
+          "source": {
+            "path": "src/models/identification.jl",
+            "line": 3
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.ExternalInstrument",
+      "name": "ExternalInstrument",
+      "qualname": "TransmissionChannelAnalysis.ExternalInstrument",
+      "kind": "struct",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Identification method using external instruments for structural shock identification in time series models.",
+      "bases": ["julia:TransmissionChannelAnalysis.AbstractIdentificationMethod"],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "ExternalInstrument <: AbstractIdentificationMethod",
+          "markdown": "    ExternalInstrument <: AbstractIdentificationMethod\n\nIdentification method using external instruments for structural shock\nidentification in time series models.\n\nExternal instruments serve as proxies for structural shocks and are not\nincluded in the estimation model (e.g., a VAR), but are used in\ninstrumental variable estimators such as two-stage least squares (2SLS).\n\nThis method identifies *relative* structural impulse response functions\n(IRFs), meaning that the scale of the identified shock is normalised.\nSpecifically, the IRF is scaled such that the response of the treatment\nvariable equals one at a given normalising horizon.\n\nThis approach also generalises to the Local Projections Instrumental\nVariables (LP-IV) framework and supports the use of multiple instruments.\n\nThe method is based on:\n\nStock, J. H., & Watson, M. W. (2018). Identification and Estimation of\nDynamic Causal Effects in Macroeconomics Using External Instruments.\n*The Economic Journal*, 128(610), 917–948.\nhttps://doi.org/10.1111/ecoj.12593\n\n# Fields\n- `treatment::Union{Symbol, Int}`: the variable used to normalise the IRF\n- `instruments::AbstractMatrix`: matrix of external instruments\n- `normalising_horizon::Int`: the horizon at which the IRF of the treatment\n  variable is set to one\n\n",
+          "source": {
+            "path": "src/models/identification.jl",
+            "line": 138
+          },
+          "refs": []
+        },
+        {
+          "key": "(Union{Int, Symbol}, Union{DataFrame, AbstractMatrix})",
+          "signature": "ExternalInstrument(treatment::Union{Symbol, Int},\n                   instruments::Union{AbstractMatrix, DataFrame};\n                   normalising_horizon::Int=0)",
+          "markdown": "    ExternalInstrument(treatment::Union{Symbol, Int},\n                       instruments::Union{AbstractMatrix, DataFrame};\n                       normalising_horizon::Int=0)\n\nConstructs an `ExternalInstrument` identification method using a specified\n`treatment` variable, one or more external instruments, and an optional\nnormalisation horizon (default is 0).\n\n## Arguments \n- `treatment::Union{Symbol, Int}`: treatment variable in the model data specified \n  either as the column index in the data or by variable name. \n- `instruments::Union{AbstractMatrix, DataFrame}`: observations of external \n  instruments. Instruments must be observed over the same period as the model data. \n\n## Keyword Arguments \n- `normalising_horizon::Int`: horizon of the treatment variable with respect to \n  which all IRFs are normalised. \n",
+          "source": {
+            "path": "src/models/identification.jl",
+            "line": 176
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.IRF",
+      "name": "IRF",
+      "qualname": "TransmissionChannelAnalysis.IRF",
+      "kind": "struct",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Container for storing impulse response functions (IRFs) computed from a model.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "IRF(irfs::Array{<:Number,3}, varnames::Vector{Symbol},\n    model::Model, ident_method::Union{Nothing, AbstractIdentificationMethod}=nothing)",
+          "markdown": "    IRF(irfs::Array{<:Number,3}, varnames::Vector{Symbol},\n        model::Model, ident_method::Union{Nothing, AbstractIdentificationMethod}=nothing)\n\nContainer for storing impulse response functions (IRFs) computed from a model.\n\nThis structure captures both reduced-form and structural IRFs. For IRFs\nidentified from a reduced-form model using an identification method\n(e.g., recursive or external instruments), the `ident_method` should be\nexplicitly provided.\n\nFor models that are already structural (e.g., identified SVARs) or for\nreduced-form IRFs (without identification), the `ident_method` should be left\nas `nothing`.\n\n# Fields\n- `irfs::Array{<:Number,3}`: The IRFs with shape `(variables, shocks, horizons)`\n- `varnames::Vector{Symbol}`: Variable names\n- `model::Model`: The model object used to generate the IRFs\n- `ident_method::Union{Nothing, AbstractIdentificationMethod}`:\n  The identification method used, if applicable (only for RF models)\n\n# Constructors\n- `IRF(irfs, varnames, model)`\n  Creates an IRF object for a structural model or reduced-form IRFs\n\n- `IRF(irfs, varnames, model, ident_method)`\n  Use this when IRFs are structurally identified from a reduced-form model\n",
+          "source": {
+            "path": "src/models/tools.jl",
+            "line": 1
+          },
+          "refs": []
+        },
+        {
+          "key": "(M, Int) where M<:Model",
+          "signature": "IRF(model::Model, max_horizon::Int)",
+          "markdown": "    IRF(model::Model, max_horizon::Int)\n\nReturns the impulse response functions (IRFs) from `model` up to horizon \n`max_horizon`.\n",
+          "source": {
+            "path": "src/models/tools.jl",
+            "line": 73
+          },
+          "refs": []
+        },
+        {
+          "key": "(M, I, Int} where {M<:Model, I<:AbstractIdentificationMethod)",
+          "signature": "IRF(model::Model, method::AbstractIdentificationMethod, max_horizon::Int)",
+          "markdown": "    IRF(model::Model, method::AbstractIdentificationMethod, max_horizon::Int)\n\nReturns the impulse response functions (IRFs) identified from `model`\nusing the identification method `method`, up to the specified\n`max_horizon`.\n\nMust return an object of type `IRF`. \n",
+          "source": {
+            "path": "src/models/tools.jl",
+            "line": 83
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.InternalInstrument",
+      "name": "InternalInstrument",
+      "qualname": "TransmissionChannelAnalysis.InternalInstrument",
+      "kind": "struct",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Identification method using internal instruments within a VAR framework.",
+      "bases": ["julia:TransmissionChannelAnalysis.AbstractIdentificationMethod"],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "InternalInstrument <: AbstractIdentificationMethod",
+          "markdown": "    InternalInstrument <: AbstractIdentificationMethod\n\nIdentification method using internal instruments within a VAR framework.\n\nThis method estimates relative structural impulse response functions (IRFs)\nusing an internal instrument—i.e., a variable within the system that is\nassumed to proxy for a structural shock of interest. The IRFs are normalised\nsuch that the response of a designated normalising variable equals one at\na specific horizon.\n\nThis approach is based on:\n\nPlagborg-Møller, M., & Wolf, C. K. (2021). Local Projections and VARs Estimate\n    the Same Impulse Responses. *Econometrica*, 89(2), 955–980.\n    https://doi.org/10.3982/ecta17813\n\n# Fields\n- `instrument::Union{Symbol, Int}`: the variable to be used as the instrument\n- `normalising_variable::Union{Symbol, Int}`: the variable used to normalise\n  the IRF\n- `normalising_horizon::Int`: the horizon at which the IRF of the normalising\n  variable is set to one\n",
+          "source": {
+            "path": "src/models/identification.jl",
+            "line": 77
+          },
+          "refs": []
+        },
+        {
+          "key": "(Union{Int, Symbol})",
+          "signature": "InternalInstrument(normalising_variable::Union{Symbol, Int};\n                   instrument::Union{Symbol, Int}=1,\n                   normalising_horizon::Int=0)",
+          "markdown": "    InternalInstrument(normalising_variable::Union{Symbol, Int};\n                       instrument::Union{Symbol, Int}=1,\n                       normalising_horizon::Int=0)\n\nConstructs an `InternalInstrument` identification method with the given\nnormalising variable, optional instrument (default is the first variable),\nand normalisation horizon (default is 0).\n",
+          "source": {
+            "path": "src/models/identification.jl",
+            "line": 106
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.LP",
+      "name": "LP",
+      "qualname": "TransmissionChannelAnalysis.LP",
+      "kind": "struct",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {
+        "mutable": true
+      },
+      "summary": "Local Projection (LP) model for estimating impulse response functions (IRFs) in a flexible and semi-parametric manner.",
+      "bases": ["julia:TransmissionChannelAnalysis.Model"],
+      "related": ["julia:TransmissionChannelAnalysis.coeffs", "julia:TransmissionChannelAnalysis.fitted", "julia:TransmissionChannelAnalysis.get_dependent", "julia:TransmissionChannelAnalysis.is_structural", "julia:TransmissionChannelAnalysis.residuals"],
+      "docs": [
+        {
+          "key": "",
+          "signature": "LP <: Model",
+          "markdown": "    LP <: Model\n\nLocal Projection (LP) model for estimating impulse response functions (IRFs)\nin a flexible and semi-parametric manner.\n\nEach LP regression estimates the dynamic response of an outcome variable at\nfuture horizon `h` to a one-period change in a treatment variable at time `t`,\ncontrolling for contemporaneous and lagged covariates.\n\nThe regression model is specified as:\n\n```math\n    w_{i,t+h} = \\mu_{i,h} + \\theta_{i,h} x_t + \\gamma_{i,h}' r_t +\n                \\sum_{l=1}^p \\delta_{i,h,l} w_{t-l} + \\xi_{i,h,t}\n```\n\nwhere ``w_t = (r_t', x_t, q_t')`` and:\n- ``x_t`` is the treatment variable\n- ``r_t`` contains contemporaneous controls (all variables before `x_t`)\n- ``p`` is the number of lags included\n- ``\\theta_{i,h}`` is the relative IRF of `x_t` on the `i`-th variable at \n  horizon ``h``.\n\nThe treatment variable may be endogenous. Structural interpretation of IRFs\ncan be achieved using valid instruments—see `ExternalInstrument` for one such\nmethod. If the treatment satisfies a conditional ignorability assumption \n(a recursive assumption in macro), then the coefficient has a structural \ninterpretation even without the use of instruments. For this to hold, \n``x_t - E(x_t|r_t, w_{t-1}, ..., w_{t-p})`` must be equal to the structural shock.\n\n# Fields\n- `data::DataFrame`: the dataset containing the time series\n- `treatment::Union{Symbol, Int}`: column indicating the treatment variable\n- `p::Int`: number of lags to include\n- `horizons::AbstractVector{<:Int}`: forecast horizons for the projections\n- `include_constant::Bool`: whether to include an intercept in each regression\n- `coeffs::AbstractArray{<:Number}`: coefficient estimates per horizon\n- `Y::AbstractArray{<:Number}`: dependent variables for each horizon\n- `X::AbstractMatrix{<:Number}`: common regressor matrix\n- `U::AbstractArray{<:Number}`: residuals per horizon\n- `Yhat::AbstractArray{<:Number}`: fitted values per horizon\n",
+          "source": {
+            "path": "src/models/lp.jl",
+            "line": 73
+          },
+          "refs": []
+        },
+        {
+          "key": "(DataFrame, Union{Int, Symbol}, Int, Union{Int, AbstractVector{<:Int}})",
+          "signature": "LP(data::DataFrame,\n   treatment::Union{Symbol, Int},\n   p::Int,\n   horizons::Union{Int, AbstractVector{<:Int}};\n   include_constant::Bool=true)",
+          "markdown": "    LP(data::DataFrame,\n       treatment::Union{Symbol, Int},\n       p::Int,\n       horizons::Union{Int, AbstractVector{<:Int}};\n       include_constant::Bool=true)\n\nConstructs a `LP` model object for estimating local projections with specified\n`horizons`, `treatment` variable, and lag length `p`.\n\nAll variables before the treatment variable in the dataset are used as\ncontemporaneous controls.\n\n# Arguments\n- `data`: the time series dataset\n- `treatment`: the treatment variable (column index or name)\n- `p`: number of lags to include\n- `horizons`: forecast horizons to compute IRFs for\n\n## Keyword Arguments\n- `include_constant`: whether to include a constant in the regressors\n",
+          "source": {
+            "path": "src/models/lp.jl",
+            "line": 130
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.Model",
+      "name": "Model",
+      "qualname": "TransmissionChannelAnalysis.Model",
+      "kind": "abstract_type",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Abstract supertype for all models, for example `VAR`, `SVAR` and `LP`.",
+      "bases": [],
+      "related": ["julia:TransmissionChannelAnalysis.get_variable_names", "julia:TransmissionChannelAnalysis.not_through", "julia:TransmissionChannelAnalysis.through", "julia:TransmissionChannelAnalysis.transmission"],
+      "docs": [
+        {
+          "key": "",
+          "signature": "Model",
+          "markdown": "    Model\n\nAbstract supertype for all models, for example `VAR`, `SVAR` and `LP`.\n\nNew models must subtype `Model` and should implement the generic model functions\nsuch as `fit!`, `is_fitted`, `coeffs` and `get_input_data`. Models that can\nidentify structural IRFs should also implement `IRF`.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 1
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.Q",
+      "name": "Q",
+      "qualname": "TransmissionChannelAnalysis.Q",
+      "kind": "struct",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Represents a transmission condition.",
+      "bases": [],
+      "related": ["julia:Base.!", "julia:Base.&", "julia:Base.string", "julia:Base.|", "julia:TransmissionChannelAnalysis.collect_terms", "julia:TransmissionChannelAnalysis.get_varnums_and_multiplier", "julia:TransmissionChannelAnalysis.remove_contradictions", "julia:TransmissionChannelAnalysis.show_y"],
+      "docs": [
+        {
+          "key": "",
+          "signature": "Q(s::String)\nQ(s::String, m::Number)\nQ(s::Vector{String})\nQ(s::Vector{String}, m::Vector{Number})\nQ(i::Int)",
+          "markdown": "    Q(s::String)\n    Q(s::String, m::Number)\n    Q(s::Vector{String})\n    Q(s::Vector{String}, m::Vector{Number})\n    Q(i::Int)\n\nRepresents a transmission condition. \n\nWe denote with Q(b), where b is a Boolean statement, a transmission question. \n\n**Important**: Each string in `s:` should be a Boolean statement involving\nvariables `x`` followed by a number, i.e. `x1`, `x2`, etc. Additionally, each\nBoolean statement should contain only AND (&) and NOT (!) statements. \n\n**Important**: Users should only use the `Q(i::Int)` constructor. All other\nconstructors are for internal use only. Misuse of the other constructors easily\nleads to mistakes. \n\n## Fields\n\n- `vars::Vector{String}`: Contains the variables. These will be Boolean\n  statements containing only AND and NOT.\n- `multiplier::Vector{Number}`: Multiplier in front of Q(b). \n\n## Arguments\n\n- `s::Union{String, Vector{String}}`: String representation of transmission\n  condition. \n- `m::Union{Number, Vector{Number}}`: Multipliers for transmission conditions. \n- `i::Int`: Variable number.\n\n## Usage\n\n```julia\n\n# Defining all variables in one go\nx = [Q(\"x$i\") for i = 1:10]\nq = (x[1] | x[2]) & !x[3]\n\n# Alternatively variables can be defined separaterly\nx1 = Q(\"x1\")\nx2 = Q(\"x2\")\nx3 = Q(\"x3\")\nq = (x1 | x2) & !x3\n\n# The following are also valid\nq = Q(\"x1 & !x3\", 1)\nq = Q([\"x1\", \"x2\", \"x1 & x2\"], [1, 1, -1])\n\n# The following is NOT valid but does not yet throw an error or warning\nq = Q(\"x1 | x2\")  # DO NOT DO THIS!\n```\n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 7
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.Recursive",
+      "name": "Recursive",
+      "qualname": "TransmissionChannelAnalysis.Recursive",
+      "kind": "struct",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "General-purpose identification method based on recursive, or conditional ignorability, assumptions.",
+      "bases": ["julia:TransmissionChannelAnalysis.AbstractIdentificationMethod"],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "Recursive <: AbstractIdentificationMethod",
+          "markdown": "    Recursive <: AbstractIdentificationMethod\n\nGeneral-purpose identification method based on recursive, or\nconditional ignorability, assumptions.\n\nThis method assumes that, conditional on variables ordered before, a\ngiven variable (often interpreted as a treatment or shock) is as good\nas random. This enables causal interpretation of the identified shock\nas structural.\n\nIn macroeconomic applications, this is typically operationalized through\na Cholesky decomposition in structural VARs (SVARs), but the method is\nnot limited to this setting. It applies to any model in which recursive\nordering (conditioning on other variables) can be used to justify identification.\n\nConditioning variables are those that are ordered before the treatment variable\nin the provided dataset.\n",
+          "source": {
+            "path": "src/models/identification.jl",
+            "line": 51
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.SVAR",
+      "name": "SVAR",
+      "qualname": "TransmissionChannelAnalysis.SVAR",
+      "kind": "struct",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {
+        "mutable": true
+      },
+      "summary": "Structural Vector Autoregressive (SVAR) model in matrix form.",
+      "bases": ["julia:TransmissionChannelAnalysis.Model"],
+      "related": ["julia:TransmissionChannelAnalysis.fit!", "julia:TransmissionChannelAnalysis.fit_and_select!", "julia:TransmissionChannelAnalysis.identify!", "julia:TransmissionChannelAnalysis.make_companion_matrix", "julia:TransmissionChannelAnalysis.shocks"],
+      "docs": [
+        {
+          "key": "",
+          "signature": "SVAR <: Model",
+          "markdown": "    SVAR <: Model\n\nStructural Vector Autoregressive (SVAR) model in matrix form.\n\nA SVAR of lag order `p` is specified as:\n\n```math\n    A_0y_t = C e_t + A_1 y_{t-1} + ... + A_p y_{t-p} + \\varepsilon_t\n```\nwhere:\n- ``e_t`` is a vector of deterministic components (constant, trends, etc)\n- ``C, A_i`` are conformable matrices\n- ``\\varepsilon_t`` are structural shocks\n\nThis can be rewritten compactly as:\n\n```math\n    y_t'A0' = z_t' A_+' + u_t'\n```\n\nwhere:\n- ``z_t = [e_t; y_{t-1}; ...; y_{t-p}]`` includes deterministic components and\n  lagged values of all variables\n- ``A_+ = [C, A_1, ..., A_p]`` is the coefficient matrix stacking trend and\n  autoregressive terms\n\nAssuming ``A0`` is invertible, the reduced-form VAR can be obtained as \n\n```math\ny_t' = z_t' A_+'(A_0')^{-1} + u_t'(A_0')^{-1}\n```\n\nwhich can be represented using a `VAR` object.\n\n# Fields\n- `A_plus::Matrix{<:Number}`: Coefficient matrix `[C, A_1, ..., A_p]`\n- `A_0::AbstractMatrix{<:Number}`: Contemporaneous relationships.\n- `p::Int`: Lag order of the (S)VAR\n- `trend_exponents::Vector{<:Number}`: Time trend exponents (e.g., `[0,1]`\n  implies constant and linear trend)\n- `var::VAR`: Reduced form representation of SVAR \n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 1
+          },
+          "refs": []
+        },
+        {
+          "key": "(DataFrame, Int)",
+          "signature": "SVAR(data::DataFrame, \n     p::Int;\n     trend_exponents::Vector{<:Number} = [0])",
+          "markdown": "    SVAR(data::DataFrame, \n         p::Int;\n         trend_exponents::Vector{<:Number} = [0])\n\nConstructs a `SVAR` model object with data, lag length `p`, and\nspecified time trend exponents. Coefficients and residuals are uninitialised \nbut can be estimed using `fit!` and an appropriate `AbstractIdentificationMethod`.\n\n# Arguments\n- `data::DataFrame`: Dataset used for the estimation\n- `p::Int`: Lag length\n\n## Keyword Arguments\n- `trend_exponents::Vector{<:Number}`: Exponents of time trends (default: `[0]`)\n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 55
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.VAR",
+      "name": "VAR",
+      "qualname": "TransmissionChannelAnalysis.VAR",
+      "kind": "struct",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {
+        "mutable": true
+      },
+      "summary": "Vector Autoregressive (VAR) model in matrix form.",
+      "bases": ["julia:TransmissionChannelAnalysis.Model"],
+      "related": ["julia:TransmissionChannelAnalysis._identify", "julia:TransmissionChannelAnalysis._identify_irfs", "julia:TransmissionChannelAnalysis.cov", "julia:TransmissionChannelAnalysis.fit!", "julia:TransmissionChannelAnalysis.fit_and_select!", "julia:TransmissionChannelAnalysis.identify", "julia:TransmissionChannelAnalysis.make_companion_matrix", "julia:TransmissionChannelAnalysis.spectral_radius"],
+      "docs": [
+        {
+          "key": "",
+          "signature": "VAR <: Model",
+          "markdown": "    VAR <: Model\n\nVector Autoregressive (VAR) model in matrix form.\n\nA VAR of lag order `p` is specified as:\n\n```math\n    y_t = C e_t + B_1 y_{t-1} + ... + B_p y_{t-p} + u_t\n```\nwhere:\n- ``e_t`` is a vector of deterministic components (constant, trends, etc)\n- ``C, B_i`` are conformable matrices\n- ``u_t`` is vector white noise\n\nThis can be rewritten compactly as:\n\n```math\n    y_t' = z_t' B_+' + u_t'\n```\n\nwhere:\n- ``z_t = [e_t; y_{t-1}; ...; y_{t-p}]`` includes deterministic components and\n  lagged values of all variables\n- ``B_+ = [C, B_1, ..., B_p]`` is the coefficient matrix stacking trend and\n  autoregressive terms\n\nStacking observations from ``t = p+1`` to ``T``, the system can be written in\nmatrix form:\n\n```math\n    Y = X B_+' + U\n```\n\nwhere:\n- ``Y``: an ``(T - p) \\times k`` matrix of outcomes\n- ``X``: an ``(T - p) \\times (k p + d)`` matrix of regressors (lags and trends)\n- ``B_+``: a ``k \\times (kp + d)`` matrix of coefficients where ``d`` is the \n  number of deterministic components.\n- ``U``: a ``(T - p) \\times k`` matrix of residuals\n\nThis structure is represented by the `VAR` object.\n\n# Fields\n- `B::Matrix{<:Number}`: Coefficient matrix `[C, B_1, ..., B_p]`\n- `Sigma_u::Matrix{<:Number}`: Covariance matrix of the error term\n- `p::Int`: Lag order of the VAR\n- `trend_exponents::Vector{<:Number}`: Time trend exponents (e.g., `[0,1]`\n  implies constant and linear trend)\n- `input_data::DataFrame`: Original dataset used to estimate the VAR\n- `Y::Matrix{<:Number}`: Left-hand side matrix of outcomes `y_t`, shape `(T - p, k)`\n- `X::Matrix{<:Number}`: Right-hand side matrix of regressors `z_t`, shape `(T - p, k * p + d)`\n- `U::Matrix{<:Number}`: Residuals `u_t`, shape `(T - p, k)`\n- `Yhat::Matrix{<:Number}`: Fitted values `X * B_+'`, shape `(T - p, k)`\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 4
+          },
+          "refs": []
+        },
+        {
+          "key": "(AbstractMatrix{<:Number}, AbstractMatrix{<:Number}, Int, AbstractVector{<:Number}, DataFrame)",
+          "signature": "VAR(B::Matrix{<:Number},\n    Sigma_u::Matrix{<:Number},\n    p::Int,\n    trend_exponents::Vector{<:Number},\n    data::DataFrame)",
+          "markdown": "    VAR(B::Matrix{<:Number},\n        Sigma_u::Matrix{<:Number},\n        p::Int,\n        trend_exponents::Vector{<:Number},\n        data::DataFrame)\n\nConstructs a `VAR` model from estimated coefficient matrix `B`, error\ncovariance matrix `Sigma_u`, lag length `p`, time trend exponents, and\nthe dataset `data`.\n\n# Arguments\n- `B::Matrix{<:Number}`: Coefficient matrix\n- `Sigma_u::Matrix{<:Number}`: Covariance matrix of residuals\n- `p::Int`: Lag order\n- `trend_exponents::Vector{<:Number}`: Trend exponents for time trend terms\n- `data::DataFrame`: Dataset used to construct X and Y\n\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 77
+          },
+          "refs": []
+        },
+        {
+          "key": "(DataFrame, Int)",
+          "signature": "VAR(data::DataFrame, p::Int;\n    trend_exponents::Vector{<:Number} = [0])",
+          "markdown": "    VAR(data::DataFrame, p::Int;\n        trend_exponents::Vector{<:Number} = [0])\n\nConstructs a `VAR` model object with data, lag length `p`, and\nspecified time trend exponents. Coefficients and residuals are uninitialised \nbut can be estimed using `fit!`.\n\n# Arguments\n- `data::DataFrame`: Dataset to construct lag matrix and outcomes\n- `p::Int`: Lag length\n\n## Keyword Arguments\n- `trend_exponents::Vector{<:Number}`: Exponents of time trends (default: `[0]`)\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 118
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._2sls",
+      "name": "_2sls",
+      "qualname": "TransmissionChannelAnalysis._2sls",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Internal function for two-stage least squares (2SLS) estimation.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix{<:Number}, AbstractMatrix{<:Number}, AbstractMatrix{<:Number})",
+          "signature": "_2sls(X::AbstractMatrix{<:Number},\n     Y::AbstractMatrix{<:Number},\n     Z::AbstractMatrix{<:Number})",
+          "markdown": "    _2sls(X::AbstractMatrix{<:Number},\n         Y::AbstractMatrix{<:Number},\n         Z::AbstractMatrix{<:Number})\n\nInternal function for two-stage least squares (2SLS) estimation.\n\nEstimates regression coefficients when some regressors in `X` may be\nendogenous, using instruments in `Z`. Commonly used in external\ninstrument identification.\n\n# Arguments\n- `X::Matrix{<:Number}`: regressors (may include endogenous variables)\n- `Y::Matrix{<:Number}`: outcomes\n- `Z::Matrix{<:Number}`: instruments and exogenous regressors\n\n# Returns\n- `Matrix{<:Number}`: 2SLS coefficient estimates\n",
+          "source": {
+            "path": "src/models/lp.jl",
+            "line": 284
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._create_LP_XY",
+      "name": "_create_LP_XY",
+      "qualname": "TransmissionChannelAnalysis._create_LP_XY",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Constructs the regressor matrix `X` and the response array `Y` for a local projection (LP) setup.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(DataFrame, Int, Int, AbstractVector{<:Int})",
+          "signature": "_create_LP_XY(data::DataFrame, treatment::Int, p::Int,\n              horizons::AbstractVector{<:Int},\n              include_constant::Bool=true)",
+          "markdown": "    _create_LP_XY(data::DataFrame, treatment::Int, p::Int,\n                  horizons::AbstractVector{<:Int},\n                  include_constant::Bool=true)\n\nConstructs the regressor matrix `X` and the response array `Y` for a local\nprojection (LP) setup.\n\nLocal projection regressions are of the form:\n\n```math\n    y^h = X\u0008eta + \u000barepsilon^h\n```\n\nwhere `h` indexes the forecast horizon. The same regressor matrix `X` is used\nfor all horizons, while the dependent variables `y^h` vary by horizon. This\nfunction stacks these horizon-specific dependent variables along the third\ndimension of the returned array `Y`, such that its shape is:\n(observations, variables, horizons))\n\n# Arguments\n- `data::DataFrame`: the input time series dataset\n- `treatment::Int`: index of the treatment variable (used for selecting\n  contemporaneous controls)\n- `p::Int`: the lag length applied uniformly across all horizons\n- `horizons::AbstractVector{<:Int}`: the set of forecast horizons to include\n- `include_constant::Bool`: whether to include a constant column in `X`\n\n# Returns\n- `X`: a matrix of regressors, common across horizons\n- `Y`: a 3-dimensional array of outcomes with horizon `h` stacked along the\n  third dimension\n\n# Details\n- All variables in columns before the `treatment` variable are used as\n  contemporaneous controls.\n- Regressors in `X` include (optionally) a contant, contemporaneous controls, \n  treatment variable, and lagged values of all variables.\n- Dependent variables in `Y` include future values (leads) for all variables\n  at each horizon in `horizons`.\n",
+          "source": {
+            "path": "src/models/lp.jl",
+            "line": 3
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._find_variable_idx",
+      "name": "_find_variable_idx",
+      "qualname": "TransmissionChannelAnalysis._find_variable_idx",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Returns the column index of a variable in a `DataFrame`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Union{Int, Symbol}, DataFrame)",
+          "signature": "_find_variable_idx(variable::Union{Symbol, Int}, data::DataFrame) -> Int",
+          "markdown": "    _find_variable_idx(variable::Union{Symbol, Int}, data::DataFrame) -> Int\n\nReturns the column index of a variable in a `DataFrame`.\n\nIf the input `variable` is an `Int`, it is assumed to already represent\nthe column index and is returned directly.\n\n# Arguments\n- `variable::Union{Symbol, Int}`: Column name (`Symbol`) or column index (`Int`)\n- `data::DataFrame`: The DataFrame in which to search\n\n# Returns\n- `Int`: The column index of the specified variable\n",
+          "source": {
+            "path": "src/models/utils.jl",
+            "line": 246
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._identify",
+      "name": "_identify",
+      "qualname": "TransmissionChannelAnalysis._identify",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Internal method for identifying structural matrices in SVAR models.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(VAR, I) where I<:AbstractIdentificationMethod",
+          "signature": "_identify(model::SVAR, \n          method::AbstractIdentificationMethod\n         ) --> (Matrix{<:Number}, Matrix{<:Number})\n\n_identify(B::AbstractMatrix{<:Number}, \n          Sigma_u::AbstractMatrix{<:Number}, \n          method::AbstractIdentificationMethod\n         ) --> (Matrix{<:Number}, Matrix{<:Number})",
+          "markdown": "    _identify(model::SVAR, \n              method::AbstractIdentificationMethod\n             ) --> (Matrix{<:Number}, Matrix{<:Number})\n\n    _identify(B::AbstractMatrix{<:Number}, \n              Sigma_u::AbstractMatrix{<:Number}, \n              method::AbstractIdentificationMethod\n             ) --> (Matrix{<:Number}, Matrix{<:Number})\n\nInternal method for identifying structural matrices in SVAR models.\n\nMust return `A0` and `A_plus` matrices. Should not be implemented by\nmodels that do not use structural matrices (e.g., local projections).\n\nFor more details, see the `SVAR` documentation.\n\n## Arguments\n- `model::VAR`: An estimated VAR model\n- `method::AbstractIdentificationMethod`: An identification method to identify \n  the SVAR from the VAR. \n- `B::AbstractMatrix{<:Number}`: Coefficient matrix [C B_1 ... B_p] of the VAR. \n  See the `VAR` documention for more information. \n- `Sigma_u::AbstractMatrix{<:Number}`: Covariance matrix of VAR residuals. See\n  the `VAR` documentation for more information. \n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 140
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._identify_irfs",
+      "name": "_identify_irfs",
+      "qualname": "TransmissionChannelAnalysis._identify_irfs",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Internal method to directly identify IRFs from a `VAR` model using the identification method `method`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(VAR, I, Int) where I<:AbstractIdentificationMethod",
+          "signature": "_identify_irfs(model::VAR, method::I, max_horizon::Int)\n    where {I<:AbstractIdentificationMethod}",
+          "markdown": "    _identify_irfs(model::VAR, method::I, max_horizon::Int)\n        where {I<:AbstractIdentificationMethod}\n\nInternal method to directly identify IRFs from a `VAR` model using the \nidentification method `method`.\n\nMust return a 3-dimensional array with dimensions (variables, shocks,\nhorizons) where the maximum horizon is given by `max_horizon`. \n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 416
+          },
+          "refs": []
+        },
+        {
+          "key": "(AbstractMatrix{<:Number}, AbstractMatrix{<:Number}, Int, Recursive, Int)",
+          "signature": "_identify_irfs(B::AbstractMatrix{<:Number}, \n               Sigma_u::AbstractMatrix{<:Number}, \n               p::Int, \n               method::AbstractIdentificationMethod, \n               max_horizon::Int) --> AbstractArray{<:Number, 3}",
+          "markdown": "    _identify_irfs(B::AbstractMatrix{<:Number}, \n                   Sigma_u::AbstractMatrix{<:Number}, \n                   p::Int, \n                   method::AbstractIdentificationMethod, \n                   max_horizon::Int) --> AbstractArray{<:Number, 3}\n\nInternal method to directly identify IRFs from `VAR` matrices `B` and `Sigma_u`\nusing identification method `method`. \n\n## Arguments\n- `B::AbstractMatrix{<:Number}`: Stacked matrix of lag matrices [B_1, ..., B_p]\n  excluding coefficients on deterministic components. \n- `Sigma_u::AbstractMatrix{<:Number}`: Covariance matrix of `VAR` residuals. \n- `p::Int`: Lag-length of `VAR`. \n- `method::AbstractIdentificationMethod`: Identification method used to identify \n  `SVAR` IRFs from `VAR`. \n- `max_horizon::Int`: Maximum horizon for impulse responses. \n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 430
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._inverse_order",
+      "name": "_inverse_order",
+      "qualname": "TransmissionChannelAnalysis._inverse_order",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "If `order` defines an ordering, then `_inverse_order(order)` is the inverse order.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractVector{Int})",
+          "signature": "_inverse_order(order::AbstractVector{<:Int}) --> AbstractVector{<:Int}",
+          "markdown": "    _inverse_order(order::AbstractVector{<:Int}) --> AbstractVector{<:Int}\n\nIf `order` defines an ordering, then `_inverse_order(order)` is the inverse \norder. \n",
+          "source": {
+            "path": "src/models/transmission.jl",
+            "line": 1
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._irf_vec_to_array",
+      "name": "_irf_vec_to_array",
+      "qualname": "TransmissionChannelAnalysis._irf_vec_to_array",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Obtain IRFs in the standard three-dimensional array representation from IRFs in transmission representation, i.e. represented as a matrix in which the third dimension of the standard representation is stacked above each other.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractVector, Int)",
+          "signature": "_irf_vec_to_array(irfs::AbstractVector, \n                  k::Int, \n                  order::AbstractVector{<:Int}) --> Array{<:Number, 3}",
+          "markdown": "    _irf_vec_to_array(irfs::AbstractVector, \n                      k::Int, \n                      order::AbstractVector{<:Int}) --> Array{<:Number, 3}\n\nObtain IRFs in the standard three-dimensional array representation from IRFs \nin transmission representation, i.e. represented as a matrix in which the \nthird dimension of the standard representation is stacked above each other. \nIf `order` is not `1:k`, then the endogenous variables will be re-ordered \nusing the inverse of `order`. \n\n## Arguments\n- `irfs::AbstractVector`: Vector of IRFs of a single shock with dimension \n  (k*h, 1). In transmission representation, i.e. horizons are stacked above \n  each other. \n- `k::Int`: Number of endogenous variables. \n- `order::AbstractVector{<:Int}`: Ordering defined by the transmission matrix. \n",
+          "source": {
+            "path": "src/models/transmission.jl",
+            "line": 15
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._make_trend!",
+      "name": "_make_trend!",
+      "qualname": "TransmissionChannelAnalysis._make_trend!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Given a set of `trend_exponents`, fill the vector `v` with `[t^e for e in trend_exponents]` without any allocations.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractVector, Int, AbstractVector)",
+          "signature": "_make_trend!(v::AbstractVector, t::Int, trend_exponents::AbstractVector{<:Real}) --> AbstractVector",
+          "markdown": "    _make_trend!(v::AbstractVector, t::Int, trend_exponents::AbstractVector{<:Real}) --> AbstractVector\n\nGiven a set of `trend_exponents`, fill the vector `v` with `[t^e for e in trend_exponents]`\nwithout any allocations. \n",
+          "source": {
+            "path": "src/models/utils.jl",
+            "line": 213
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._rotate_in!",
+      "name": "_rotate_in!",
+      "qualname": "TransmissionChannelAnalysis._rotate_in!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Rotate in the new values `x_new` at the beginning of the old `x`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractVector{T}, AbstractVector{T}) where T",
+          "signature": "_rotate_in!(x::AbstractVector{T}, x_new::AbstractVector{T}) --> AbstractVector{T}",
+          "markdown": "    _rotate_in!(x::AbstractVector{T}, x_new::AbstractVector{T}) --> AbstractVector{T}\n\nRotate in the new values `x_new` at the beginning of the old `x`. This works\nby shifting all values in `x` to higher indices such that the subvector `x_new`\nfits into the beginning of `x`. \n\nNotes:\n    - This is used for simulation and other places where the lag vector needs to \n    be updated repeatedly\n",
+          "source": {
+            "path": "src/models/utils.jl",
+            "line": 226
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._separate_lag_matrices",
+      "name": "_separate_lag_matrices",
+      "qualname": "TransmissionChannelAnalysis._separate_lag_matrices",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Internal utility to convert a stacked VAR coefficient matrix into a vector of individual lag matrices.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix, Int)",
+          "signature": "_separate_lag_matrices(B::Matrix{<:Number}, p::Int) -> Vector{Matrix{<:Number}}",
+          "markdown": "    _separate_lag_matrices(B::Matrix{<:Number}, p::Int) -> Vector{Matrix{<:Number}}\n\nInternal utility to convert a stacked VAR coefficient matrix into a vector of\nindividual lag matrices.\n\nGiven a matrix `B_plus = [B_1 B_2 ... B_p]` that horizontally stacks the\nlag coefficient matrices of a VAR(p) model (excluding deterministic components),\nthis function returns a vector containing each `B_i` as a separate matrix.\n\n# Arguments\n- `B::Matrix{<:Number}`: The stacked coefficient matrix of size `(k × k*p)`,\n  where `k` is the number of variables and `p` the lag order\n- `p::Int`: The number of lags in the VAR model\n\n# Returns\n- `Vector{Matrix{<:Number}}`: A vector `[B_1, B_2, ..., B_p]` where each\n  `B_i` is a `k × k` matrix\n\n",
+          "source": {
+            "path": "src/models/utils.jl",
+            "line": 266
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._simulate!",
+      "name": "_simulate!",
+      "qualname": "TransmissionChannelAnalysis._simulate!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Simulate a VAR(p) overwriting `errors` with the simulated data.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix{<:Number}, AbstractMatrix{<:Number})",
+          "signature": "_simulate!(errors::Matrix{<:Number},\n          B::Matrix{<:Number};\n          trend_exponents::Vector{<:Number} = [0],\n          initial::Union{Nothing, Vector{<:Number}} = nothing) -> Matrix{<:Number}",
+          "markdown": "    _simulate!(errors::Matrix{<:Number},\n              B::Matrix{<:Number};\n              trend_exponents::Vector{<:Number} = [0],\n              initial::Union{Nothing, Vector{<:Number}} = nothing) -> Matrix{<:Number}\n\nSimulate a VAR(p) overwriting `errors` with the simulated data.\n\nThe simulated process follows the structure:\n\n```math\n    y_t = C e_t + B_1 y_{t-1} + ... + B_p y_{t-p} + u_t\n```\n\nwhere the full coefficient matrix is `B = [C B_1 ... B_p]`. The simulation\naccounts for deterministic trends via `trend_exponents`. For example, \n`trend_exponents=[0,1]` implies that a constant and a linear trend are included. \n\n# Arguments\n- `errors::Matrix{<:Number}`: A `(k × T)` matrix that is overwritten with the\n  simulated data. Initially contains the error terms `u_t`. `k` is the number \n  of endogneous variables.\n- `B::Matrix{<:Number}`: The full coefficient matrix of size `(k × (k * p + m))`,\n  where `m` is the number of deterministic trend terms.\n- `trend_exponents::Vector{<:Number}`: Exponents of time to model deterministic\n  components (e.g., `[0, 1]` gives constant and linear trend). Default is `[0]`, \n  i.e. a constant.\n- `initial::Union{Nothing, Vector{<:Number}}`: Initial values for lagged variables,\n  a vector of length `k * p`. If `nothing`, lags are initialised at zero.\n\n# Returns\n- The matrix `errors`, now containing the simulated VAR data.\n\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 489
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._svar_irf",
+      "name": "_svar_irf",
+      "qualname": "TransmissionChannelAnalysis._svar_irf",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Internal function to compute structural impulse response functions (IRFs) up to horizon `max_horizon` from a structural VAR(p) model.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix{<:Number}, AbstractMatrix{<:Number}, Int, Int)",
+          "signature": "_svar_irf(A0::Matrix{<:Number}, A_plus::Matrix{<:Number},\n          p::Int, max_horizon::Int) -> Array{<:Number, 3}",
+          "markdown": "    _svar_irf(A0::Matrix{<:Number}, A_plus::Matrix{<:Number},\n              p::Int, max_horizon::Int) -> Array{<:Number, 3}\n\nInternal function to compute structural impulse response functions (IRFs) up to\nhorizon `max_horizon` from a structural VAR(p) model.\n\n!!! warning\n    The matrix `A_plus` must exclude any deterministic components (e.g., constant,\n    trend). Use `coeffs(model, true)` to extract it properly from a `SVAR` model.\n\nThe resulting IRFs have the shape `(k, k, H + 1)`, where:\n- `k`: number of variables\n- `H`: maximum impulse response horizon\n- First dimension: responding variable\n- Second dimension: shock\n- Third dimension: horizon\n\n# Arguments\n- `A0::Matrix{<:Number}`: Contemporaneous impact matrix (must be invertible)\n- `A_plus::Matrix{<:Number}`: Stacked lag coefficient matrix \n  `[A_1 A_2 ... A_p]`, excluding deterministic terms\n- `p::Int`: Lag order\n- `max_horizon::Int`: Maximum horizon for IRFs\n\n# Returns\n- `Array{<:Number, 3}`: Structural IRF array of size `(k, k, max_horizon + 1)`\n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 366
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis._var_irf",
+      "name": "_var_irf",
+      "qualname": "TransmissionChannelAnalysis._var_irf",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Internal function to compute impulse response functions (IRFs) up to horizon `max_horizon` from a reduced-form VAR(p) model.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix{<:Number}, Int, Int)",
+          "signature": "_var_irf(B::Matrix{<:Number}, p::Int, max_horizon::Int) -> Array{<:Number, 3}",
+          "markdown": "    _var_irf(B::Matrix{<:Number}, p::Int, max_horizon::Int) -> Array{<:Number, 3}\n\nInternal function to compute impulse response functions (IRFs) up to \nhorizon `max_horizon` from a reduced-form VAR(p) model.\n\n!!! warning\n    The matrix `B` must **exclude** coefficients for deterministic components\n    (constant, trend, etc.). Use `coeffs(model, true)` when extracting\n    coefficients from a `model::VAR` object to ensure the correct structure.\n\nThe resulting IRFs have the shape `(k, k, H + 1)`, where:\n- `k`: number of variables in the system\n- `H`: maximum impulse response horizon\n- The first dimension is the responding variable\n- The second dimension is the shock\n- The third dimension indexes the horizon\n\n# Arguments\n- `B::Matrix{<:Number}`: VAR coefficient matrix of shape `(k, k * p)`,\n  excluding deterministic components\n- `p::Int`: Lag order of the VAR\n- `max_horizon::Int`: Maximum forecast horizon for the IRFs\n\n# Returns\n- `Array{<:Number, 3}`: IRF array of size `(k, k, max_horizon + 1)`\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 639
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.add_decompare_legend!",
+      "name": "add_decompare_legend!",
+      "qualname": "TransmissionChannelAnalysis.add_decompare_legend!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {
+        "provided_by": "CairoMakieExt"
+      },
+      "summary": "Add a legend to a decomposition comparison plot.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": null,
+          "markdown": "Add a legend to a decomposition comparison plot.\n",
+          "source": {
+            "path": "src/plots.jl",
+            "line": 27
+          },
+          "refs": []
+        },
+        {
+          "key": "(GridPosition, AbstractVector{String}, AbstractVector{String})",
+          "signature": "add_decompare_legend!(\n    gp::GridPosition, \n    channel_names::AbstractVector{<:String}, \n    decomposition_names::AbstractVector{<:String}; \n    colors=wong_colors()\n) -> Legend",
+          "markdown": "    add_decompare_legend!(\n        gp::GridPosition, \n        channel_names::AbstractVector{<:String}, \n        decomposition_names::AbstractVector{<:String}; \n        colors=wong_colors()\n    ) -> Legend\n\nAdd a legend to a decomposition comparison plot. \n\nThe decomposition comparison plot can be created using \n`plot_decomposition_comparison` or `plot_decomposition_comparison!`. \n\n# Arguments\n\n- `gp::GridPosition`: Position to plot the legend into. \n- `channel_names::AbstractVector{<:String}`: Names of the transmission\n  channels.\n- `decomposition_names::AbstractVector{<:String}`: Names for the decompositions.\n\n# Keyword Arguments\n\n- `colors`: Colors for the decomposition bars (default: Wong colors).\n\n# Returns \n\n- A `Legend` object that can be further manipulated. \n",
+          "source": {
+            "path": "ext/CairoMakieExt.jl",
+            "line": 342
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.add_decomposition_legend!",
+      "name": "add_decomposition_legend!",
+      "qualname": "TransmissionChannelAnalysis.add_decomposition_legend!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {
+        "provided_by": "CairoMakieExt"
+      },
+      "summary": "Add a decomposition legend to the plot.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": null,
+          "markdown": "Add a decomposition legend to the plot. \n",
+          "source": {
+            "path": "src/plots.jl",
+            "line": 12
+          },
+          "refs": []
+        },
+        {
+          "key": "(GridPosition, AbstractVector{<:String})",
+          "signature": "add_decomposition_legend!(\n    gp::GridPosition, \n    channel_names::AbstractVector{<:String}; \n    colors=wong_colors()\n) -> Legend",
+          "markdown": "    add_decomposition_legend!(\n        gp::GridPosition, \n        channel_names::AbstractVector{<:String}; \n        colors=wong_colors()\n    ) -> Legend\n\nAdd a legend to a decomposition plot. \n\nThe decomposition plot can be created using `plot_decomposition` or \n`plot_decomposition!`. \n\n# Arguments\n\n- `gp::GridPosition`: Position to plot the legend into. \n- `channel_names::AbstractVector{<:String}`: Names of the transmission\n  channels.\n\n# Keyword Arguments\n\n- `colors`: Colors for the decomposition bars (default: Wong colors).\n\n# Returns \n\n- A `Legend` object that can be further manipulated. \n",
+          "source": {
+            "path": "ext/CairoMakieExt.jl",
+            "line": 169
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.aic",
+      "name": "aic",
+      "qualname": "TransmissionChannelAnalysis.aic",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Computes information criteria for model selection in VARs.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "aic(model::Union{VAR,SVAR}) -> Real\naic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nbic(model::Union{VAR,SVAR}) -> Real\nbic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nsic(model::Union{VAR,SVAR}) -> Real\nsic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nhqc(model::Union{VAR,SVAR}) -> Real\nhqc(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real",
+          "markdown": "    aic(model::Union{VAR,SVAR}) -> Real\n    aic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    bic(model::Union{VAR,SVAR}) -> Real\n    bic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    sic(model::Union{VAR,SVAR}) -> Real\n    sic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    hqc(model::Union{VAR,SVAR}) -> Real\n    hqc(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nComputes information criteria for model selection in VARs.\n\nGiven a fitted `VAR` model or directly the covariance matrix `Sigma_u`, the\nnumber of estimated coefficients, and sample size `T`, each function returns\nthe respective criterion value:\n\n- **AIC** (Akaike Information Criterion):\n\n```math\n\\text{AIC} = \\log\\det(\\Sigma_u) + \\frac{2k}{T}\n```\n\n- **SIC/BIC** (Schwarz/Bayesian Information Criterion):\n\n```math\n\\text{SIC} = \\log\\det(\\Sigma_u) + \\frac{\\log(T) k}{T}\n```\n\n- **HQC** (Hannan-Quinn Criterion):\n\n```math\n\\text{HQC} = \\log\\det(\\Sigma_u) + \\frac{2 \\log(\\log T) k}{T}\n```\n\nHere, ``k`` is the number of estimated parameters and ``T`` is the effective\nsample size.\n\n# Arguments\n- `model::VAR`: A fitted VAR model\n- `Sigma_u::Matrix{<:Number}`: Residual covariance matrix\n- `num_coeffs::Int`: Number of estimated coefficients\n- `T::Int`: Number of observations used in estimation\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 334
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.apply_and!",
+      "name": "apply_and!",
+      "qualname": "TransmissionChannelAnalysis.apply_and!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Manipulate `B` and `Omega` so that `var` lies on all paths.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix, AbstractMatrix, Int, Int)",
+          "signature": "apply_and!(B::AbstractMatrix, Omega::AbstractMatrix, from::Int, var::Int)",
+          "markdown": "    apply_and!(B::AbstractMatrix, Omega::AbstractMatrix, from::Int, var::Int)\n    \nManipulate `B` and `Omega` so that `var` lies on all paths. This corresponds to\nzeroing out all edges going directly from the shock to any variables ordered\nafter `var` and zeroing out any edges going from variables ordered before `var`\nto any variables ordered after `var`.  \n\n## Arguments\n\n- `B::AbstractMatrix`: Part of the systems representation in Wegner et al (2024).\n- `Omega::AbstractMatrix`: Part of the systems representation in Wegner et al (2024).\n- `from::Int`: The shock number. \n- `var::Int`: The variable number that must lie on all paths. \n\n## Notes\n\n- This function is meant for internal use only. \n- See also `apply_not!`, `make_B`, `make_Omega`, and `make_systems_form`\n",
+          "source": {
+            "path": "src/transmission-function-BOmega.jl",
+            "line": 1
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.apply_not!",
+      "name": "apply_not!",
+      "qualname": "TransmissionChannelAnalysis.apply_not!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Manipulate `B` and `Omega` so that `var` lies on no paths.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix, AbstractMatrix, Int, Int)",
+          "signature": "apply_not!(B::AbstractMatrix, Omega::AbstractMatrix, from::Int, var::Int)",
+          "markdown": "    apply_not!(B::AbstractMatrix, Omega::AbstractMatrix, from::Int, var::Int)\n    \nManipulate `B` and `Omega` so that `var` lies on no paths. This corresponds to\nzeroing out the edge from the shock to `var`, and zeroing out all edges from\nvariables ordered before `var` to `var`. \n\n## Arguments\n\n- `B::AbstractMatrix`: Part of the systems representation in Wegner et al (2024).\n- `Omega::AbstractMatrix`: Part of the systems representation in Wegner et al (2024).\n- `from::Int`: The shock number. \n- `var::Int`: The variable number that cannot lie on any paths. \n\n## Notes\n\n- This function is meant for internal use only. \n- See also `apply_and!`, `make_B`, `make_Omega`, and `make_systems_form`\n",
+          "source": {
+            "path": "src/transmission-function-BOmega.jl",
+            "line": 27
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.bic",
+      "name": "bic",
+      "qualname": "TransmissionChannelAnalysis.bic",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Computes information criteria for model selection in VARs.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "aic(model::Union{VAR,SVAR}) -> Real\naic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nbic(model::Union{VAR,SVAR}) -> Real\nbic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nsic(model::Union{VAR,SVAR}) -> Real\nsic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nhqc(model::Union{VAR,SVAR}) -> Real\nhqc(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real",
+          "markdown": "    aic(model::Union{VAR,SVAR}) -> Real\n    aic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    bic(model::Union{VAR,SVAR}) -> Real\n    bic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    sic(model::Union{VAR,SVAR}) -> Real\n    sic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    hqc(model::Union{VAR,SVAR}) -> Real\n    hqc(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nComputes information criteria for model selection in VARs.\n\nGiven a fitted `VAR` model or directly the covariance matrix `Sigma_u`, the\nnumber of estimated coefficients, and sample size `T`, each function returns\nthe respective criterion value:\n\n- **AIC** (Akaike Information Criterion):\n\n```math\n\\text{AIC} = \\log\\det(\\Sigma_u) + \\frac{2k}{T}\n```\n\n- **SIC/BIC** (Schwarz/Bayesian Information Criterion):\n\n```math\n\\text{SIC} = \\log\\det(\\Sigma_u) + \\frac{\\log(T) k}{T}\n```\n\n- **HQC** (Hannan-Quinn Criterion):\n\n```math\n\\text{HQC} = \\log\\det(\\Sigma_u) + \\frac{2 \\log(\\log T) k}{T}\n```\n\nHere, ``k`` is the number of estimated parameters and ``T`` is the effective\nsample size.\n\n# Arguments\n- `model::VAR`: A fitted VAR model\n- `Sigma_u::Matrix{<:Number}`: Residual covariance matrix\n- `num_coeffs::Int`: Number of estimated coefficients\n- `T::Int`: Number of observations used in estimation\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 334
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.calculate_Q_and_only",
+      "name": "calculate_Q_and_only",
+      "qualname": "TransmissionChannelAnalysis.calculate_Q_and_only",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Calculate the transmission effect of a transmission condition/query that involves only ANDs.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Int, AbstractMatrix{T}, AbstractMatrix{T}, AbstractVector{Int}, Number) where T",
+          "signature": "calculate_Q_and_only(from::Int, \n    irfs::AbstractMatrix{T}, \n    irfs_ortho::AbstractMatrix{T}, \n    vars::AbstractVector{Int}, \n    multiplier::Number\n) where {T}",
+          "markdown": "    calculate_Q_and_only(from::Int, \n        irfs::AbstractMatrix{T}, \n        irfs_ortho::AbstractMatrix{T}, \n        vars::AbstractVector{Int}, \n        multiplier::Number\n    ) where {T}\n\nCalculate the transmission effect of a transmission condition/query that\ninvolves only ANDs. \n\n## Arguments\n\n- `from::Int`: ID of shock. \n- `irfs::AbstractMatrix{T}`: IRFs in transmission form. See\n  [`to_transmission_irfs`](@ref).\n- `irfs_ortho::AbstractMatrix{T}`: Orthogonalised IRFs in transmission form. See\n  [`to_transmission_irfs`](@ref).\n- `multiplier::Number`: Multiplier.\n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable in the transmission condition\n  with the highest subscript, then all entries in the returned vector with index\n  less thatn `k` are `NaN` since interpretation of those results is nonsensical.\n\n## Notes\n\n- Only for internal use. \n\n",
+          "source": {
+            "path": "src/transmission-function-irfs.jl",
+            "line": 3
+          },
+          "refs": [
+            {
+              "text": "[`to_transmission_irfs`](@ref)",
+              "span": [391, 421],
+              "label": "to_transmission_irfs",
+              "query": "to_transmission_irfs",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.to_transmission_irfs",
+              "target_key": null,
+              "candidates": []
+            },
+            {
+              "text": "[`to_transmission_irfs`](@ref)",
+              "span": [506, 536],
+              "label": "to_transmission_irfs",
+              "query": "to_transmission_irfs",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.to_transmission_irfs",
+              "target_key": null,
+              "candidates": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.check_contradiction",
+      "name": "check_contradiction",
+      "qualname": "TransmissionChannelAnalysis.check_contradiction",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Check whether there is a contradiction of the form x1 & !x1.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Vector{Int}, Vector{Int})",
+          "signature": "check_contradiction(var_and::Vector{Int}, var_not::Vector{Int})\ncheck_contradiction(var_and::Vector{Vector{Int}}, var_not::Vector{Vector{Int}})",
+          "markdown": "    check_contradiction(var_and::Vector{Int}, var_not::Vector{Int})\n    check_contradiction(var_and::Vector{Vector{Int}}, var_not::Vector{Vector{Int}})\n    \nCheck whether there is a contradiction of the form x1 & !x1. \n\n## Arguments\n\n- `var_and::Union{Vector{Int}, Vector{Vector{Int}}}`: AND variable numbers\n  obtained from [`get_varnums_and_multiplier`](@ref). \n- `var_not::Union{Vector{Int}, Vector{Vector{Int}}}`: NOT variable numbers\n  obtained from [`get_varnums_and_multiplier`](@ref)\n\n## Returns\n\n1. `Bool` indicating whether there are any contradictions. \n2. `Vector{Bool}` indicating which elements yielded a contradiction.\n\n## Notes\n\n- This is used in [`remove_contradictions`](@ref) to remove contradicting terms.\n  This speeds up simplification of terms, since the total number of terms can\n  often be reduced. \n\n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 138
+          },
+          "refs": [
+            {
+              "text": "[`get_varnums_and_multiplier`](@ref)",
+              "span": [325, 361],
+              "label": "get_varnums_and_multiplier",
+              "query": "get_varnums_and_multiplier",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.get_varnums_and_multiplier",
+              "target_key": null,
+              "candidates": []
+            },
+            {
+              "text": "[`get_varnums_and_multiplier`](@ref)",
+              "span": [455, 491],
+              "label": "get_varnums_and_multiplier",
+              "query": "get_varnums_and_multiplier",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.get_varnums_and_multiplier",
+              "target_key": null,
+              "candidates": []
+            },
+            {
+              "text": "[`remove_contradictions`](@ref)",
+              "span": [663, 694],
+              "label": "remove_contradictions",
+              "query": "remove_contradictions",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.remove_contradictions",
+              "target_key": null,
+              "candidates": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.coeffs",
+      "name": "coeffs",
+      "qualname": "TransmissionChannelAnalysis.coeffs",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Returns the coefficient estimates of the model.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "coeffs(::Model, args...)",
+          "markdown": "    coeffs(::Model, args...)\n\nReturns the coefficient estimates of the model.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 29
+          },
+          "refs": []
+        },
+        {
+          "key": "(LP)",
+          "signature": "coeffs(model::LP, exclude_deterministic::Bool=false)",
+          "markdown": "    coeffs(model::LP, exclude_deterministic::Bool=false)\n\nReturns the coefficient estimates of the local projections. The returned \nobject is three dimensional with the coefficients for each horizon stacked \nalong the third dimension. If `exclude_deterministic` is `true`, then \nall coefficients for deterministic variables, i.e. the coefficient on the\nconstant, will be removed.\n\nCoefficients for each horizon have the ordering\n[constant, contemporaneous controls, treatment, lagged controls]\n",
+          "source": {
+            "path": "src/models/lp.jl",
+            "line": 176
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.collect_terms",
+      "name": "collect_terms",
+      "qualname": "TransmissionChannelAnalysis.collect_terms",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Collect all terms Q(b) for which the Boolean statement b is the same and sums their multiplier.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Q)",
+          "signature": "collect_terms(q::Q)",
+          "markdown": "    collect_terms(q::Q)\n\nCollect all terms Q(b) for which the Boolean statement b is the same and sums\ntheir multiplier. The result is a transmission condition for which each term\nonly appears ones, but with multipliers possibly different from plus-minus one. \n\n## Arguments\n\n- `q::Q`: A transmission condition. See also [`Q`](@ref)\n\n## Returns\n\n- Another transmission condition of type `Q`. \n\n## Example\n\n```julia\nq = Q([\"x1\", \"x1\"], [1, 1])  \ncollect_terms(q)\n# output: Q(\"x1\", 2)\nq = Q([\"x1\", \"\", \"x1\"], [1, 1, -1])  \ncollect_terms(q)\n# output: Q(\"\", 1)\n```\n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 71
+          },
+          "refs": [
+            {
+              "text": "[`Q`](@ref)",
+              "span": [321, 332],
+              "label": "Q",
+              "query": "Q",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.Q",
+              "target_key": null,
+              "candidates": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.cov",
+      "name": "cov",
+      "qualname": "TransmissionChannelAnalysis.cov",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Returns the covariance matrix `Sigma_u` of the VAR residuals.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(VAR)",
+          "signature": "cov(model::VAR) --> Matrix{<:Number}",
+          "markdown": "    cov(model::VAR) --> Matrix{<:Number}\n\nReturns the covariance matrix `Sigma_u` of the VAR residuals. The model must\nfirst be estimated using `fit!`.\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 150
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.fit!",
+      "name": "fit!",
+      "qualname": "TransmissionChannelAnalysis.fit!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Estimates the model.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "fit!(::Model, args...; kwargs...)",
+          "markdown": "    fit!(::Model, args...; kwargs...)\n\nEstimates the model. \n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 86
+          },
+          "refs": []
+        },
+        {
+          "key": "Union{Tuple{I}, Tuple{M}, Tuple{M, I}} where {M<:Model, I<:AbstractIdentificationMethod}",
+          "signature": "fit!(model::Model, method::AbstractIdentificationMethod)",
+          "markdown": "    fit!(model::Model, method::AbstractIdentificationMethod)\n\nFits the model `model` using the identification method `method`. All data \nneeded for the estimation should be contained in the `model` struct.\n",
+          "source": {
+            "path": "src/models/identification.jl",
+            "line": 21
+          },
+          "refs": []
+        },
+        {
+          "key": "(VAR)",
+          "signature": "fit!(model::VAR)",
+          "markdown": "    fit!(model::VAR)\n\nEstimate a `VAR` model using OLS.\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 386
+          },
+          "refs": []
+        },
+        {
+          "key": "(SVAR, AbstractIdentificationMethod)",
+          "signature": "fit!(model::SVAR, identification_method::AbstractIdentificationMethod) --> SVAR",
+          "markdown": "    fit!(model::SVAR, identification_method::AbstractIdentificationMethod) --> SVAR\n\nEstimate an SVAR using `identification_method`. \n\n## Argument\n- `model::SVAR`: A SVAR model to be estimated\n- `identification_method::AbstractIdentificationMethod`: Identification method \n  used to identify SVAR from reduced-form VAR\n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 238
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.fit_and_select!",
+      "name": "fit_and_select!",
+      "qualname": "TransmissionChannelAnalysis.fit_and_select!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Estimates the model and selects among various models using `selection_function`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "fit_and_select!(::Model, args..., selection_function::Function)",
+          "markdown": "    fit_and_select!(::Model, args..., selection_function::Function)\n\nEstimates the model and selects among various models using `selection_function`. \nThe best model has the smallest `selection_function` value, where \n`selection_function` must return a scalar.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 93
+          },
+          "refs": []
+        },
+        {
+          "key": "(M, I, Function} where {M<:Model, I<:AbstractIdentificationMethod)",
+          "signature": "fit_and_select!(model::Model, method::AbstractIdentificationMethod, selection_func::Function)",
+          "markdown": "    fit_and_select!(model::Model, method::AbstractIdentificationMethod, selection_func::Function)\n\nFits the model `model` using the identification method `method` and\nselects the best specification based on the `selection_func`.\n\nThe selection function should return a scalar value, with lower values\nindicating better model fit. Examples include information criteria such\nas AIC.\n",
+          "source": {
+            "path": "src/models/identification.jl",
+            "line": 31
+          },
+          "refs": []
+        },
+        {
+          "key": "(VAR)",
+          "signature": "fit_and_select!(model::VAR, ic_function::Function=aic) --> (VAR, DataFrame)",
+          "markdown": "    fit_and_select!(model::VAR, ic_function::Function=aic) --> (VAR, DataFrame)\n\nSelect and estimate a `VAR` model. \n\nThe best model is determined by the model with the smallest `ic_function` value\namong all models with `p=1:model.p`. Thus, the lag-length of the provided model \ndetermines the maximum lag length. \n\nAvailable choices for `ic_function` are `aic`, `bic`, `sic`, `hqc`, but user\ndefined functions can be provided as long as they have the signature\n`ic_function(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int)`\nwhere `Sigma_u` is the VAR error covariance matrix, `num_coeffs` is the number\nof estimated coefficients, and `T` is a number of effective observations. \n\nTo be correct, the error covariance matrix of all models is estimated over the \nsame time period. Calling `aic` or other functions on manually estimated models with differing lag-lengths will not compare the models on the same time \nperiod -- the model with higher `p` will have fewer effective number of \nobservations`. It is thus recommended to do model comparison via this function. \n\n# Arguments\n- `model::VAR`: VAR model, where the provided lag-length `p` determines the \n  maximum lag-length. \n- `ic_function::Function`: Information criterion function. See the details above. \n  Default is AIC, since it is generally recommended to go with more rather than \n  fewer lags. \n\n# Returns\nReturns a tuple `(VAR, DataFrame)` where the first element is the best model and \nthe second element is a table with information regarding the `ic_function` value \nfor each estimated model. Note that manually calling `aic` or similar functions \non the returned model might not provide that same value, since the covariance \nwill now be estimated over the full period rather than the common period.\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 400
+          },
+          "refs": []
+        },
+        {
+          "key": "(SVAR, AbstractIdentificationMethod)",
+          "signature": "fit_and_select!(model::SVAR, \n                identification_method::AbstractIdentificationMethod, \n                ic_function::Function=aic) --> (SVAR, DataFrame)",
+          "markdown": "    fit_and_select!(model::SVAR, \n                    identification_method::AbstractIdentificationMethod, \n                    ic_function::Function=aic) --> (SVAR, DataFrame)\n\nSelect and estimate a `SVAR` model by first selecting an estimating a `VAR` \nmodel and then identifying the `SVAR` from the `VAR` using `identification_method`. \n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 253
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.fitted",
+      "name": "fitted",
+      "qualname": "TransmissionChannelAnalysis.fitted",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Returns the fitted values of the of the estimated model.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "fitted(::Model)",
+          "markdown": "    fitted(::Model)\n\nReturns the fitted values of the of the estimated model. \n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 36
+          },
+          "refs": []
+        },
+        {
+          "key": "(LP)",
+          "signature": "fitted(model::LP)",
+          "markdown": "    fitted(model::LP)\n\nReturns the fitted values of the local projection in a three dimensional array. \nThe fitted values for each horizon are stacked along the third dimension. \nThe second dimension corresponds to each variable. \n",
+          "source": {
+            "path": "src/models/lp.jl",
+            "line": 195
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.get_dependent",
+      "name": "get_dependent",
+      "qualname": "TransmissionChannelAnalysis.get_dependent",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Returns the dependent variables.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "get_dependent(::Model)",
+          "markdown": "    get_dependent(::Model)\n\nReturns the dependent variables. \n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 58
+          },
+          "refs": []
+        },
+        {
+          "key": "(LP)",
+          "signature": "get_dependent(model::LP)",
+          "markdown": "    get_dependent(model::LP)\n\nThe dependent variables are returned as a three dimensional array, with the \nthird dimension corresponding the the various forecast horizons. \n",
+          "source": {
+            "path": "src/models/lp.jl",
+            "line": 215
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.get_independent",
+      "name": "get_independent",
+      "qualname": "TransmissionChannelAnalysis.get_independent",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Returns the independent variables.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "get_independent(::Model)",
+          "markdown": "    get_independent(::Model)\n\nReturns the independent variables.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 65
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.get_input_data",
+      "name": "get_input_data",
+      "qualname": "TransmissionChannelAnalysis.get_input_data",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Return the data used for the estimation.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "get_input_data(::Model)",
+          "markdown": "    get_input_data(::Model)\n\nReturn the data used for the estimation.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 72
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.get_variable_names",
+      "name": "get_variable_names",
+      "qualname": "TransmissionChannelAnalysis.get_variable_names",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Obtain the variable names of the model's input data.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Model)",
+          "signature": "get_variable_names(model::Model) --> Vector{Symbol}",
+          "markdown": "    get_variable_names(model::Model) --> Vector{Symbol}\nObtain the variable names of the model's input data.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 102
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.get_varnums_and_multiplier",
+      "name": "get_varnums_and_multiplier",
+      "qualname": "TransmissionChannelAnalysis.get_varnums_and_multiplier",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Obtain the AND and NOT expressions of a transmission condition.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Q)",
+          "signature": "get_varnums_and_multiplier(q::Q)",
+          "markdown": "    get_varnums_and_multiplier(q::Q)\n\nObtain the AND and NOT expressions of a transmission condition. Also return the\nmultiplier for each term. \n\nA valid transmission condition is a set of terms involving only AND and NOT\nexpressions. For each term, the AND and NOT expressions are collected and a\nvector of the respective variable numbers is returned. \n\n## Arguments\n\n- `q::Q`: A transmission condition. See also [`Q`](@ref). \n\n## Returns\n\n1. `and_nums::Vector{Vector{Int}}`: Contains for each term a vector of variable\n   numbers that are included via AND in the term. \n2. `and_not_nums::Vector{Vector{Int}}`: Contains for each term a vector of\n   variable numbers that are included via NOT in the term. \n3. `multiplier::Vector{Number}`: Contains for each term the multiplier. \n\n## Examples\n\n```julia\nq = Q([\"x1\", \"!x2\", \"x1 & !x2\"], [1, 2, 3])\nand_nums, and_not_nums, multiplier = get_varnums_and_multiplier(q)\n# output: \n# and_nums = [[1], [], [1]]\n# and_not_nums = [[], [2], [2]]\n# multiplier = [1, 2, 3]\n```\n",
+          "source": {
+            "path": "src/transmission-function.jl",
+            "line": 3
+          },
+          "refs": [
+            {
+              "text": "[`Q`](@ref)",
+              "span": [414, 425],
+              "label": "Q",
+              "query": "Q",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.Q",
+              "target_key": null,
+              "candidates": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.hqc",
+      "name": "hqc",
+      "qualname": "TransmissionChannelAnalysis.hqc",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Computes information criteria for model selection in VARs.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "aic(model::Union{VAR,SVAR}) -> Real\naic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nbic(model::Union{VAR,SVAR}) -> Real\nbic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nsic(model::Union{VAR,SVAR}) -> Real\nsic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nhqc(model::Union{VAR,SVAR}) -> Real\nhqc(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real",
+          "markdown": "    aic(model::Union{VAR,SVAR}) -> Real\n    aic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    bic(model::Union{VAR,SVAR}) -> Real\n    bic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    sic(model::Union{VAR,SVAR}) -> Real\n    sic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    hqc(model::Union{VAR,SVAR}) -> Real\n    hqc(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nComputes information criteria for model selection in VARs.\n\nGiven a fitted `VAR` model or directly the covariance matrix `Sigma_u`, the\nnumber of estimated coefficients, and sample size `T`, each function returns\nthe respective criterion value:\n\n- **AIC** (Akaike Information Criterion):\n\n```math\n\\text{AIC} = \\log\\det(\\Sigma_u) + \\frac{2k}{T}\n```\n\n- **SIC/BIC** (Schwarz/Bayesian Information Criterion):\n\n```math\n\\text{SIC} = \\log\\det(\\Sigma_u) + \\frac{\\log(T) k}{T}\n```\n\n- **HQC** (Hannan-Quinn Criterion):\n\n```math\n\\text{HQC} = \\log\\det(\\Sigma_u) + \\frac{2 \\log(\\log T) k}{T}\n```\n\nHere, ``k`` is the number of estimated parameters and ``T`` is the effective\nsample size.\n\n# Arguments\n- `model::VAR`: A fitted VAR model\n- `Sigma_u::Matrix{<:Number}`: Residual covariance matrix\n- `num_coeffs::Int`: Number of estimated coefficients\n- `T::Int`: Number of observations used in estimation\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 334
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.identify",
+      "name": "identify",
+      "qualname": "TransmissionChannelAnalysis.identify",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Identify a `SVAR` from the estimated reduced-form `model` using the identification `method`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(VAR, AbstractIdentificationMethod)",
+          "signature": "identify(model::VAR, method::AbstractIdentificationMethod) --> SVAR",
+          "markdown": "    identify(model::VAR, method::AbstractIdentificationMethod) --> SVAR\n\nIdentify a `SVAR` from the estimated reduced-form `model` using the\nidentification `method`. Returns a new `SVAR` that wraps `model`.\n\n## Arguments\n- `model::VAR`: An estimated VAR model\n- `method::AbstractIdentificationMethod`: Identification method used to\n  identify the SVAR from the VAR\n\nSee also [`identify!`](@ref), [`SVAR`](@ref)\n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 220
+          },
+          "refs": [
+            {
+              "text": "[`identify!`](@ref)",
+              "span": [375, 394],
+              "label": "identify!",
+              "query": "identify!",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.identify!",
+              "target_key": null,
+              "candidates": []
+            },
+            {
+              "text": "[`SVAR`](@ref)",
+              "span": [396, 410],
+              "label": "SVAR",
+              "query": "SVAR",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.SVAR",
+              "target_key": null,
+              "candidates": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.identify!",
+      "name": "identify!",
+      "qualname": "TransmissionChannelAnalysis.identify!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Identify the structural matrices `A0` and `A_plus` of `model` from its already estimated reduced-form VAR using the identification `method`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(SVAR, AbstractIdentificationMethod)",
+          "signature": "identify!(model::SVAR, method::AbstractIdentificationMethod) --> SVAR",
+          "markdown": "    identify!(model::SVAR, method::AbstractIdentificationMethod) --> SVAR\n\nIdentify the structural matrices `A0` and `A_plus` of `model` from its\nalready estimated reduced-form VAR using the identification `method`. The\nmatrices are stored in `model`, which is also returned.\n\n## Arguments\n- `model::SVAR`: A SVAR whose reduced-form VAR has been estimated\n- `method::AbstractIdentificationMethod`: Identification method used to\n  identify the SVAR from the reduced-form VAR\n\nSee also [`identify`](@ref), [`fit!`](@ref)\n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 200
+          },
+          "refs": [
+            {
+              "text": "[`identify`](@ref)",
+              "span": [484, 502],
+              "label": "identify",
+              "query": "identify",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.identify",
+              "target_key": null,
+              "candidates": []
+            },
+            {
+              "text": "[`fit!`](@ref)",
+              "span": [504, 518],
+              "label": "fit!",
+              "query": "fit!",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.fit!",
+              "target_key": null,
+              "candidates": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.is_fitted",
+      "name": "is_fitted",
+      "qualname": "TransmissionChannelAnalysis.is_fitted",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Return `true` if the model as been estimated.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "is_fitted(::Model)",
+          "markdown": "    is_fitted(::Model)\n\nReturn `true` if the model as been estimated. Returns `false` otherwise.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 12
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.is_stable",
+      "name": "is_stable",
+      "qualname": "TransmissionChannelAnalysis.is_stable",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Checks whether a VAR model or a companion matrix corresponds to a stable VAR process.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix)",
+          "signature": "is_stable(model::Union{VAR,SVAR}) -> Bool\nis_stable(C::AbstractMatrix) -> Bool",
+          "markdown": "    is_stable(model::Union{VAR,SVAR}) -> Bool\n    is_stable(C::AbstractMatrix) -> Bool\n\nChecks whether a VAR model or a companion matrix corresponds to a stable\nVAR process.\n\nA VAR system is stable if all eigenvalues of its companion matrix lie strictly\ninside the unit circle. This is equivalent to requiring that the spectral\nradius is less than one:\n\n```math\n\\rho(C) = \\max_i |\\lambda_i| < 1\n```\n# Arguments\n- `model::VAR`: A fitted VAR model\n- `C::AbstractMatrix`: A companion matrix\n\n# Returns\n- `Bool`: `true` if the VAR is stable, `false` otherwise\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 250
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.is_structural",
+      "name": "is_structural",
+      "qualname": "TransmissionChannelAnalysis.is_structural",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Returns `true` if the model is a structural model and `false` otherwise.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "is_structural(::Model)",
+          "markdown": "    is_structural(::Model)\n\nReturns `true` if the model is a structural model and `false` otherwise.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 79
+          },
+          "refs": []
+        },
+        {
+          "key": "(LP)",
+          "signature": "is_structural(model::LP)",
+          "markdown": "    is_structural(model::LP)\n\nAlways returns `true`. We assume here that local projections are only used \nto estimate structural IRFs. This is not always true. `is_structural` should \nthus be used with care in the case of local projections.\n",
+          "source": {
+            "path": "src/models/lp.jl",
+            "line": 227
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.make_B",
+      "name": "make_B",
+      "qualname": "TransmissionChannelAnalysis.make_B",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Construct B of the systems representation ``x = Bx + Omega\\varepsilon``.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Vector{<:AbstractMatrix}, AbstractMatrix{<:Real}, AbstractVector{<:Int}, Int)",
+          "signature": null,
+          "markdown": "Construct B of the systems representation ``x = Bx + Omega\\varepsilon``.\n\n# Notes\n- See `make_systems_form` for further information.\n",
+          "source": {
+            "path": "src/structural-representation.jl",
+            "line": 11
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.make_L_D",
+      "name": "make_L_D",
+      "qualname": "TransmissionChannelAnalysis.make_L_D",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Use the Cholesky decomposition to find ``L`` and ``D`` as used in Wegner et al (2024).",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix{<:Real})",
+          "signature": null,
+          "markdown": "Use the Cholesky decomposition to find ``L`` and ``D`` as used in Wegner et al (2024).\n",
+          "source": {
+            "path": "src/structural-representation.jl",
+            "line": 1
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.make_Omega",
+      "name": "make_Omega",
+      "qualname": "TransmissionChannelAnalysis.make_Omega",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Construct Omega of the systems representation ``x = Bx + Omega\\varepsilon``.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix, Vector{<:AbstractMatrix}, AbstractMatrix{<:Real}, AbstractVector{<:Int}, Int)",
+          "signature": null,
+          "markdown": "Construct Omega of the systems representation ``x = Bx + Omega\\varepsilon``.\n\n# Notes\n- See `make_systems_form` for further information.\n",
+          "source": {
+            "path": "src/structural-representation.jl",
+            "line": 40
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.make_companion_matrix",
+      "name": "make_companion_matrix",
+      "qualname": "TransmissionChannelAnalysis.make_companion_matrix",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Constructs the companion matrix of a VAR(p) model.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractVector{<:AbstractMatrix{<:Number}})",
+          "signature": "make_companion_matrix(B_plus::Matrix{<:Number}) -> Matrix{<:Number}\nmake_companion_matrix(Bs::Vector{<:Matrix{<:Number}}, p::Int, n_exo::Int) -> Matrix{<:Number}",
+          "markdown": "    make_companion_matrix(B_plus::Matrix{<:Number}) -> Matrix{<:Number}\n    make_companion_matrix(Bs::Vector{<:Matrix{<:Number}}, p::Int, n_exo::Int) -> Matrix{<:Number}\n\nConstructs the companion matrix of a VAR(p) model.\n\n# Arguments\n- `Bs`: a vector of lag matrices `[B_1, B_2, ..., B_p]`, each `k × k`\n- `B_plus`: a single matrix formed by horizontally concatenating ``[C B_1 B_2 ... B_p]``\n   where ``C`` is the matrix of coefficients for deterministic (exogeneous) \n   components.\n- `p::Int`: lag-length of the VAR. \n- `n_exo::Int`: number of exogenous components, i.e. number of columns in ``C``.\n\n# Returns\n- `Matrix{<:Number}`: The companion matrix of size `(k*p × k*p)`\n\n# Notes\nThe companion matrix `C` has the block form:\n```math\nC = \\begin{bmatrix}\n    B_+ \\\\\n    I_{(p-1)k} & 0\n\\end{bmatrix}\n```\nwhere ``B_+`` stacks the lag matrices, and ``k`` is the number of variables.\n",
+          "source": {
+            "path": "src/models/utils.jl",
+            "line": 4
+          },
+          "refs": []
+        },
+        {
+          "key": "(VAR)",
+          "signature": "make_companion_matrix(model::VAR) -> Matrix{<:Number}",
+          "markdown": "    make_companion_matrix(model::VAR) -> Matrix{<:Number}\n\nReturns the companion matrix of a `VAR(p)` model.\n\nThe companion matrix is a square matrix of size `(k * p, k * p)`, where `k`\nis the number of variables in the system and `p` is the lag order.\n\n```math\n    Z_t = A Z_{t-1} + \\varepsilon_t\n```\n\nwhere ``Z_t`` is a ``k \\times p``-dimensional stacked vector of lagged variables.\n\nThe matrix has the following block form:\n\n```math\nA = \\begin{bmatrix}\n    B_1 & B_2 & ... & B_p \\\\\n    I_k & 0   & ... & 0   \\\\\n    0   & I_k & ... & 0   \\\\\n    ... & ... & ... & ... \n\\end{bmatrix}\n```\n\nwhere ``B_1, ..., B_p`` are the VAR coefficient matrices, and ``I_k`` is the\nidentity matrix of size `k`. \n\n# Arguments\n- `model::VAR`: A fitted VAR model.\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 187
+          },
+          "refs": []
+        },
+        {
+          "key": "(SVAR)",
+          "signature": "make_companion_matrix(model::SVAR) --> Matrix{<:Number}",
+          "markdown": "    make_companion_matrix(model::SVAR) --> Matrix{<:Number}\n\nReturns the companion matrix for the `VAR` representation of the `SVAR`. \n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 107
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.make_condition",
+      "name": "make_condition",
+      "qualname": "TransmissionChannelAnalysis.make_condition",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Make a transmission condition, i.e. Q(b), out of a string.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(String)",
+          "signature": "make_condition(s::String)\nmake_condition(s_y::String, order::AbstractVector{<:Int})",
+          "markdown": "    make_condition(s::String)\n    make_condition(s_y::String, order::AbstractVector{<:Int})\n\nMake a transmission condition, i.e. Q(b), out of a string. \n\nTransmission channels are described using Boolean statements involving the \nvariables in the dynamic model. `make_condition` allows for specifying these\nBoolean conditions as a string which is then converted to an internal \nrepresentation allowing the computation of transmission channels. \n\nTwo ways of specifying the Boolean conditions exist: \n\n1. `make_condition(s::String)` takes the Boolean condition in the systems form \n    of Wegner et al (2024), i.e. variables must start with `x` followed by a number. \n    For example, given a three variable VAR(1), `y_{1,t} -> x_1`, `y_{2, t} -> x_2`, \n    `y_{3, t} -> x_3`, `y_{1, t+1} -> x_4`, `y_{2, t+1} -> x_5`, ... Boolean statements \n    then involve expressions in the `x` variables and define which paths can be\n    taken. Each path involved in the transmission mechanism must satisfy the Boolean\n    statement. \n2. `make_condition(s_y::String, order::AbstractVector{<:Int})` does the same \n    as the first method, however the Boolean condition can be specified using \n    the variables of the dynamic systems, i.e. `y`. Variables must then be\n    specified using `y_{i,t}` where `i` is the variable number and `t` is \n    the period. At all times `t >= 0` with `0` denoting the contemporaneous \n    horizon.\n\n## Arguments\n\n- `s::String`: A Boolean statement given as a string. Variables must start\n  with `x` for them to be valid variables. \n- `s_y::String`: A Boolean statement given as a string. Variabls must have the \n  form `y_{i,t}` where `i` is the variable number and `t >= 0` is the time period. \n  `t=0` corresponds to the contemporaneous horizon.\n- `order::AbstractVector{<:Int}`: The variable ordering defined by the transmission\n  matrix. \n\n## Returns \n\n- Returns a transmission condition. See also `Q`.\n\n## Examples\n\n```julia\ns = \"x2 & !x3\"\ncond = make_condition(s)\n```\n\n```julia\ns_y = \"y_{1,0} & !y_{1,1}\"\norder = [3,1,2]\ncond = make_condition(s_y, order)\n```\n\n## Notes\n\n- Boolean conditions can consist of AND (&), NOT (!), OR (|), and parentheses. \n- The resulting transmission condition can be used in `transmission` to\n  calculate the transmission effect.\n\n",
+          "source": {
+            "path": "src/condition.jl",
+            "line": 1
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.make_lag_matrix",
+      "name": "make_lag_matrix",
+      "qualname": "TransmissionChannelAnalysis.make_lag_matrix",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Constructs a lag matrix from `Y`, storing the results in `X` (mutating) or returning a new matrix.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "make_lag_matrix!(X::AbstractMatrix{<:Number}, Y::AbstractMatrix{<:Number}) -> AbstractMatrix{<:Number}\nmake_lag_matrix(Y::AbstractMatrix{<:Number}, nlag::Int) -> AbstractMatrix{<:Number}",
+          "markdown": "    make_lag_matrix!(X::AbstractMatrix{<:Number}, Y::AbstractMatrix{<:Number}) -> AbstractMatrix{<:Number}\n    make_lag_matrix(Y::AbstractMatrix{<:Number}, nlag::Int) -> AbstractMatrix{<:Number}\n\nConstructs a lag matrix from `Y`, storing the results in `X` (mutating) or \nreturning a new matrix.\n\nIf `Y` is a matrix of time series data with `T` observations and `k` variables, \nthen the lag matrix `X` has along its first `k` columns data `Y` lagged by \none period, along columns `(k+1):2k` data `Y` lagged by two periods, etc. \n\nMissing values (due to lags) are filled with `NaN` to maintain dimensional \nand type consistency.\n\n# Arguments\n- `X::AbstractMatrix{<:Number}`: A preallocated matrix of dimensions \n  `T × (k \\times nlag)` to store lagged values.\n- `Y::AbstractMatrix{<:Number}`: A matrix of time series data with dimensions \n  `T × k`.\n- `nlag::Int`: The number of lags to include.\n\n# Returns\n- If using `make_lag_matrix!(X, Y)`, the function modifies `X` in place and returns it.\n- If using `make_lag_matrix(Y, nlag)`, a new matrix containing the lagged values \n  is created and returned.\n\n# Examples\n\n**Mutating version**\n\n```julia\nk = 2;\nT = 10;\nY = collect(1:T);\nY = reduce(hcat, fill(Y, k));\nnlag = 2;\nX = zeros(T, size(Y, 2) * nlag);\nmake_lag_matrix!(X, Y)\n```\n\n**Non-mutating version**\n\n```julia\nk = 2;\nT = 10;\nY = collect(1:T);\nY = reduce(hcat, fill(Y, k));\nnlag = 2;\nX = make_lag_matrix(Y, nlag)\n```\n",
+          "source": {
+            "path": "src/models/utils.jl",
+            "line": 96
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.make_lag_matrix!",
+      "name": "make_lag_matrix!",
+      "qualname": "TransmissionChannelAnalysis.make_lag_matrix!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Constructs a lag matrix from `Y`, storing the results in `X` (mutating) or returning a new matrix.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "make_lag_matrix!(X::AbstractMatrix{<:Number}, Y::AbstractMatrix{<:Number}) -> AbstractMatrix{<:Number}\nmake_lag_matrix(Y::AbstractMatrix{<:Number}, nlag::Int) -> AbstractMatrix{<:Number}",
+          "markdown": "    make_lag_matrix!(X::AbstractMatrix{<:Number}, Y::AbstractMatrix{<:Number}) -> AbstractMatrix{<:Number}\n    make_lag_matrix(Y::AbstractMatrix{<:Number}, nlag::Int) -> AbstractMatrix{<:Number}\n\nConstructs a lag matrix from `Y`, storing the results in `X` (mutating) or \nreturning a new matrix.\n\nIf `Y` is a matrix of time series data with `T` observations and `k` variables, \nthen the lag matrix `X` has along its first `k` columns data `Y` lagged by \none period, along columns `(k+1):2k` data `Y` lagged by two periods, etc. \n\nMissing values (due to lags) are filled with `NaN` to maintain dimensional \nand type consistency.\n\n# Arguments\n- `X::AbstractMatrix{<:Number}`: A preallocated matrix of dimensions \n  `T × (k \\times nlag)` to store lagged values.\n- `Y::AbstractMatrix{<:Number}`: A matrix of time series data with dimensions \n  `T × k`.\n- `nlag::Int`: The number of lags to include.\n\n# Returns\n- If using `make_lag_matrix!(X, Y)`, the function modifies `X` in place and returns it.\n- If using `make_lag_matrix(Y, nlag)`, a new matrix containing the lagged values \n  is created and returned.\n\n# Examples\n\n**Mutating version**\n\n```julia\nk = 2;\nT = 10;\nY = collect(1:T);\nY = reduce(hcat, fill(Y, k));\nnlag = 2;\nX = zeros(T, size(Y, 2) * nlag);\nmake_lag_matrix!(X, Y)\n```\n\n**Non-mutating version**\n\n```julia\nk = 2;\nT = 10;\nY = collect(1:T);\nY = reduce(hcat, fill(Y, k));\nnlag = 2;\nX = make_lag_matrix(Y, nlag)\n```\n",
+          "source": {
+            "path": "src/models/utils.jl",
+            "line": 96
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.make_lead_matrix",
+      "name": "make_lead_matrix",
+      "qualname": "TransmissionChannelAnalysis.make_lead_matrix",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Constructs a lead matrix from `Y`, storing the results in `X` (mutating) or returning a new matrix.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "make_lead_matrix!(X::AbstractMatrix{<:Number}, Y::AbstractVecOrMat{<:Number}) -> AbstractMatrix{<:Number}\nmake_lead_matrix(Y::AbstractVecOrMat{<:Number}, nlead::Int) -> AbstractMatrix{<:Number}",
+          "markdown": "    make_lead_matrix!(X::AbstractMatrix{<:Number}, Y::AbstractVecOrMat{<:Number}) -> AbstractMatrix{<:Number}\n    make_lead_matrix(Y::AbstractVecOrMat{<:Number}, nlead::Int) -> AbstractMatrix{<:Number}\n\nConstructs a lead matrix from `Y`, storing the results in `X` (mutating) or\nreturning a new matrix.\n\nIf `Y` is a matrix of time series data with `T` observations and `k` variables,\nthen the lead matrix `X` has along its first `k` columns data `Y` led by\none period, along columns `(k+1):2k` data `Y` led by two periods, etc.\n\nMissing values (due to leads) are filled with `NaN` to preserve shape and\ntype consistency.\n\n# Arguments\n- `X::AbstractMatrix{<:Number}`: A preallocated matrix of dimensions\n  `T × (k × nlead)` to store lead values\n- `Y::AbstractVecOrMat{<:Number}`: A matrix of time series data with dimensions\n  `T × k`\n- `nlead::Int`: The number of leads to include\n\n# Returns\n- If using `make_lead_matrix!(X, Y)`, the function modifies `X` in place and returns it\n- If using `make_lead_matrix(Y, nlead)`, a new matrix containing the lead values is created and returned\n\n# Examples\n**Mutating version**\n```julia\nk = 2;\nT = 10;\nY = reduce(hcat, fill(collect(1:T), k));\nnlead = 2;\nX = zeros(T, size(Y, 2) * nlead);\nmake_lead_matrix!(X, Y)\n```\n\n**Non-mutating version**\n```julia\nk = 2;\nT = 10;\nY = reduce(hcat, fill(collect(1:T), k));\nnlead = 2;\nX = make_lead_matrix(Y, nlead)\n```\n",
+          "source": {
+            "path": "src/models/utils.jl",
+            "line": 166
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.make_lead_matrix!",
+      "name": "make_lead_matrix!",
+      "qualname": "TransmissionChannelAnalysis.make_lead_matrix!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Constructs a lead matrix from `Y`, storing the results in `X` (mutating) or returning a new matrix.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "make_lead_matrix!(X::AbstractMatrix{<:Number}, Y::AbstractVecOrMat{<:Number}) -> AbstractMatrix{<:Number}\nmake_lead_matrix(Y::AbstractVecOrMat{<:Number}, nlead::Int) -> AbstractMatrix{<:Number}",
+          "markdown": "    make_lead_matrix!(X::AbstractMatrix{<:Number}, Y::AbstractVecOrMat{<:Number}) -> AbstractMatrix{<:Number}\n    make_lead_matrix(Y::AbstractVecOrMat{<:Number}, nlead::Int) -> AbstractMatrix{<:Number}\n\nConstructs a lead matrix from `Y`, storing the results in `X` (mutating) or\nreturning a new matrix.\n\nIf `Y` is a matrix of time series data with `T` observations and `k` variables,\nthen the lead matrix `X` has along its first `k` columns data `Y` led by\none period, along columns `(k+1):2k` data `Y` led by two periods, etc.\n\nMissing values (due to leads) are filled with `NaN` to preserve shape and\ntype consistency.\n\n# Arguments\n- `X::AbstractMatrix{<:Number}`: A preallocated matrix of dimensions\n  `T × (k × nlead)` to store lead values\n- `Y::AbstractVecOrMat{<:Number}`: A matrix of time series data with dimensions\n  `T × k`\n- `nlead::Int`: The number of leads to include\n\n# Returns\n- If using `make_lead_matrix!(X, Y)`, the function modifies `X` in place and returns it\n- If using `make_lead_matrix(Y, nlead)`, a new matrix containing the lead values is created and returned\n\n# Examples\n**Mutating version**\n```julia\nk = 2;\nT = 10;\nY = reduce(hcat, fill(collect(1:T), k));\nnlead = 2;\nX = zeros(T, size(Y, 2) * nlead);\nmake_lead_matrix!(X, Y)\n```\n\n**Non-mutating version**\n```julia\nk = 2;\nT = 10;\nY = reduce(hcat, fill(collect(1:T), k));\nnlead = 2;\nX = make_lead_matrix(Y, nlead)\n```\n",
+          "source": {
+            "path": "src/models/utils.jl",
+            "line": 166
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.make_systems_form",
+      "name": "make_systems_form",
+      "qualname": "TransmissionChannelAnalysis.make_systems_form",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Transform an SVARMA dynamic model into the systems representation ``x = Bx + Omega\\varepsilon``.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix, Vector{<:AbstractMatrix}, Vector{<:AbstractMatrix}, AbstractMatrix{<:Real}, AbstractVector{<:Int}, Int)",
+          "signature": "make_systems_form(\n    Phi0::AbstractMatrix, \n    As::Vector{<:AbstractMatrix}, \n    Psis::Vector{<:AbstractMatrix}, \n    Sigma::AbstractMatrix{<:Real}, \n    order::AbstractVector{<:Int}, \n    max_horizon::Int\n) -> Tuple{AbstractMatrix, AbstractMatrix}",
+          "markdown": "    make_systems_form(\n        Phi0::AbstractMatrix, \n        As::Vector{<:AbstractMatrix}, \n        Psis::Vector{<:AbstractMatrix}, \n        Sigma::AbstractMatrix{<:Real}, \n        order::AbstractVector{<:Int}, \n        max_horizon::Int\n    ) -> Tuple{AbstractMatrix, AbstractMatrix}\n\nTransform an SVARMA dynamic model into the systems \nrepresentation ``x = Bx + Omega\\varepsilon``.\n\n# Arguments\n- `Phi0::AbstractMatrix`: The matrix of contemporaneous structural impulse \n  responses.\n- `As::Vector{<:AbstractMatrix}`: A vector of reduced-form autoregressive (AR).\n  First entry corresponds to the AR matrix for the first lag, etc. \n- `Psis::Vector{<:AbstractMatrix}`: A vector of reduced-form moving average (MA) \n  matrices. First index corresponds to the first lag, etc.\n- `Sigma::AbstractMatrix{<:Real}`: The covariance matrix of reduced-form errors.\n- `order::AbstractVector{<:Int}`: The vector indicating the order of variables, \n  typically determined by the transmission matrix.\n- `max_horizon::Int`: The maximum time horizon to consider for the systems model, \n  with `0` representing the contemporaneous period.\n\n# Returns\n- `(B, Omega)` with the meaning being the same as in Wegner et al (2024).\n\n# Notes\n- Use `make_B` and `make_Omega` to construct the two matrices seperately.\n\n",
+          "source": {
+            "path": "src/structural-representation.jl",
+            "line": 68
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.map_x_to_y",
+      "name": "map_x_to_y",
+      "qualname": "TransmissionChannelAnalysis.map_x_to_y",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Maps a variable from the systems form (using variables `x`) back to its original transmission condition form (using variables `y`).",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Int, AbstractVector{<:Int})",
+          "signature": "map_x_to_y(xi::Int, order::AbstractVector{<:Int}) -> Tuple{Int, Int}",
+          "markdown": "    map_x_to_y(xi::Int, order::AbstractVector{<:Int}) -> Tuple{Int, Int}\n\nMaps a variable from the systems form (using variables `x`) back to its original\ntransmission condition form (using variables `y`). This function is the reverse of\n`map_y_to_x`.\n\n# Arguments\n- `xi::Int`: Index of the variable in the systems form.\n- `order::AbstractVector{<:Int}`: Ordering defined in the transmission matrix.\n\n# Returns\n- A tuple `(i, t)` where `i` is the index of the variable in the original system\n  and `t` is its time index.\n\n",
+          "source": {
+            "path": "src/utils.jl",
+            "line": 56
+          },
+          "refs": []
+        },
+        {
+          "key": "(String, AbstractVector{<:Int})",
+          "signature": "map_x_to_y(s_x::String, order::AbstractVector{<:Int}) -> String",
+          "markdown": "    map_x_to_y(s_x::String, order::AbstractVector{<:Int}) -> String\n\nTransforms a string representing a transmission condition in terms of the systems\nform variables `x` back to a string using the original variables `y`. This function\nis the reverse of `map_y_to_x`.\n\n# Arguments\n- `s_x::String`: A string representing the transmission condition using systems\n  form variables `x`.\n- `order::AbstractVector{<:Int}`: Ordering defined by the transmission matrix.\n\n# Returns\n- A string representing the same transmission question but using variables \n  of the dynamic (original) system (`y`) rather than those of the  systems form (`x`).\n\n# Example\n```julia\norder = [3, 1, 2]\ns_x = \"x8 & x4\"\nmap_x_to_y(s_x, order)  # Returns: \"y_{1, 2} + y_{3, 1}\"\n```\n",
+          "source": {
+            "path": "src/utils.jl",
+            "line": 79
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.map_y_to_x",
+      "name": "map_y_to_x",
+      "qualname": "TransmissionChannelAnalysis.map_y_to_x",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Maps a variable in the original transmission condition (using variables `y`) to its corresponding systems form (using variables `x`).",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Int, Int, Int, AbstractVector{<:Int})",
+          "signature": "map_y_to_x(i::Int, t::Int, K::Int, order::AbstractVector{<:Int}) -> Int",
+          "markdown": "    map_y_to_x(i::Int, t::Int, K::Int, order::AbstractVector{<:Int}) -> Int\n\nMaps a variable in the original transmission condition (using variables `y`) \nto its corresponding systems form (using variables `x`).\n\n# Arguments\n- `i::Int`: Index of the variable in the original system.\n- `t::Int`: Time index of the variable in the original system.\n- `K::Int`: Total number of variables in the system.\n- `order::AbstractVector{<:Int}`: Vector defining the ordering of variables \n  (defined by the transmission matrix).\n\n# Returns\n- An integer representing the index of the corresponding `x` variable in the systems form.\n\n# Notes\n- The contemporaneous period is denoted is period `0`.\n",
+          "source": {
+            "path": "src/utils.jl",
+            "line": 2
+          },
+          "refs": []
+        },
+        {
+          "key": "(String, AbstractVector{<:Int})",
+          "signature": "map_y_to_x(s_y::String, order::AbstractVector{<:Int}) -> String",
+          "markdown": "    map_y_to_x(s_y::String, order::AbstractVector{<:Int}) -> String\n\nTransforms a string representing a transmission condition in terms of the original\nvariables `y` to a string using the systems form variables `x` based on a specified\nordering.\n\n# Arguments\n- `s_y::String`: A string representing the transmission condition using original\n  variables `y`, e.g. \"y_{1,0} & !y_{2,0}\".\n- `order::AbstractVector{<:Int}`: Ordering defined in the transmission matrix.\n\n# Returns\n- A string representing the same transmission question but using variables \n  of the  systems form (`x`) rather than those of the dynamic (original) system (`y`).\n\n# Example\n```julia\norder = [3, 1, 2]\ns_y = \"y_{1, 2} & y_{3, 1}\"\nmap_y_to_x(s_y, order)  # Returns: \"x8 & x4\"\n```\n",
+          "source": {
+            "path": "src/utils.jl",
+            "line": 23
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.nobs",
+      "name": "nobs",
+      "qualname": "TransmissionChannelAnalysis.nobs",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Returns the effective number of observations used for the estimation of the model.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "nobs(::Model)",
+          "markdown": "    nobs(::Model)\n\nReturns the effective number of observations used for the estimation of the\nmodel.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 50
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.not_through",
+      "name": "not_through",
+      "qualname": "TransmissionChannelAnalysis.not_through",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "All paths cannot go through variables in `idx` in periods `horizons`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Int, AbstractVector{<:Int}, AbstractVector{<:Int})",
+          "signature": "not_through(idx, horizons, order) --> Q",
+          "markdown": "    not_through(idx, horizons, order) --> Q\n\nAll paths cannot go through variables in `idx` in periods `horizons`. Note, this \nuses the dynamic system notation `y` such that `idx` refers to the index of \nthe variable in the original dynamic system, i.e. in the SVARMA.\n\n\n## Arguments\n\n**For the single variable version**:\n\n- `idx::Int`: Index of variable through which the paths cannot go. This is the  \n  original index in the dynamic system, e.g. the SVAR, before applying the \n  transmission matrix. \n- `horizons::AbstractVector{<:Int}`: Horizons for which the paths cannot go through \n  the variable. \n- `order::AbstractVector{<:Int}`: Variable ordering determined by the transmission \n  matrix\n\n**For the multiple variable version**:\n\n- `idx::AbstractVector{<:Int}`: Indices of variables through which the paths \n  cannot go. These are the original indices in the dynamic system, e.g. the SVAR, \n  before applying the transmission matrix. \n- `horizons::Union{AbstractVector{<:Int},Vector{AbstractVector{<:Int}}}`: Horizons \n  for which the paths cannot go through the variable. Must either be a vector \n  for each variable in `idx` or a single vector. If it is a single vector, then \n  the horizons will be applied to each variable in `idx`.\n- `order::AbstractVector{<:Int}`: Variable ordering determined by the transmission \n  matrix\n\n## Returns\n- Returns a transmission condition `Q`. \n\n## Notes\n- The transmission effect can be calculated using `transmission`. \n\n## Examples\n\nThe non-contemporaneous channel of monetary policy is defined in Section 5.1 of \nWegner et al (2024) as the effect not going through a contemporaneous adjustment of the \nfederal funds rate, where the transmission matrix orders the federal funds rate \nfirst. Thus, if the original SVAR has the federal funds rate ordered first, the \nnon-contemporaneous effect can be obtained in the following way. \n\n```julia\nq = not_through(1, [0], 1:4)\n```\n\nSimilarly, Wegner et al (2024) define the anticipation channel of government defense spending\nas the effect not going through government defense spending. With government \ndefense spending ordered second in the VAR, the following can be used to obtain \nthe anticipation channel. \n\n```{julia}\nq = not_through(2, 0:20, 1:4)\n```\n\n",
+          "source": {
+            "path": "src/transmission-helper-functions.jl",
+            "line": 109
+          },
+          "refs": []
+        },
+        {
+          "key": "(Model, Union{Symbol, AbstractVector{Symbol}}, Union{AbstractVector{<:Int}, Vector{<:AbstractVector{<:Int}}}, AbstractVector{Symbol})",
+          "signature": "not_through(\n    model::Model, \n    variables::Union{AbstractVector{Symbol}, Symbol}, \n    horizons::Union{AbstractVector{<:Int},Vector{<:AbstractVector{<:Int}}}, \n    order::AbstractVector{Symbol}\n) --> Q",
+          "markdown": "    not_through(\n        model::Model, \n        variables::Union{AbstractVector{Symbol}, Symbol}, \n        horizons::Union{AbstractVector{<:Int},Vector{<:AbstractVector{<:Int}}}, \n        order::AbstractVector{Symbol}\n    ) --> Q\n\nDefine a transmission channel not through `variables` for `horizons`. Contrary to \nthe other `not_through` methods, `variables` and `order` are defined using the \nvariable names of the model -- other `not_through` methods use indices. \n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 139
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.permmatrix",
+      "name": "permmatrix",
+      "qualname": "TransmissionChannelAnalysis.permmatrix",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Create a permutation matrix.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractVector{<:Int})",
+          "signature": null,
+          "markdown": "Create a permutation matrix.\n",
+          "source": {
+            "path": "src/utils.jl",
+            "line": 112
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.plot_decomposition",
+      "name": "plot_decomposition",
+      "qualname": "TransmissionChannelAnalysis.plot_decomposition",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {
+        "provided_by": "CairoMakieExt"
+      },
+      "summary": "Plot a decomposition plot.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": null,
+          "markdown": "Plot a decomposition plot.\n",
+          "source": {
+            "path": "src/plots.jl",
+            "line": 2
+          },
+          "refs": []
+        },
+        {
+          "key": "(Int, AbstractArray{<:Number, 3}, Vector{<:AbstractArray{<:Number, 3}}, AbstractVector{<:String})",
+          "signature": "plot_decomposition(\n    idx_outcome::Int,\n    irfs::AbstractArray{<:Number,3},\n    teffects::Vector{<:AbstractArray{<:Number,3}},\n    channel_names::AbstractVector{<:String};\n    title::String=\"\",\n    legend::Bool=false,\n    colors=wong_colors()\n) -> TCAPlot",
+          "markdown": "    plot_decomposition(\n        idx_outcome::Int,\n        irfs::AbstractArray{<:Number,3},\n        teffects::Vector{<:AbstractArray{<:Number,3}},\n        channel_names::AbstractVector{<:String};\n        title::String=\"\",\n        legend::Bool=false,\n        colors=wong_colors()\n    ) -> TCAPlot\n\nCreates a decomposition plot of the total effects (`irfs`) and the\ntransmission effects (`teffects`) for a given outcome variable (idx_outcome).\n\nThe function returns a `TCAPlot` object, which displays the figure\nimmediately in interactive environments (unless suppressed with a\nsemicolon). You can also extract the separate `Figure` and `Axis`:\n\n```julia\nfig, = plot_decomposition(...)\nfig, ax = plot_decomposition(...)\n```\n\n# Arguments\n\n- `idx_outcome::Int`: Index of the outcome variable.\n- `irfs::AbstractArray{<:Number,3}`: Total effects, with shape `[N, 1, H]`\n  where `N` is the number of endogenous variables, and `H` is the number of\n  horizons (including zero).\n- `teffects::Vector{<:AbstractArray{<:Number,3}}`: Transmission effects for\n  each transmission channel, same shape as `irfs`.\n- `channel_names::AbstractVector{<:String}`: Names of the transmission\n  channels.\n\n# Keyword Arguments\n\n- `title::String`: Optional figure title.\n- `legend::Bool`: Whether to plot a legend.\n- `colors`: Colors for the decomposition bars (default: Wong colors).\n\n# Returns\n\n- A `TCAPlot` that includes the figure and axis for further styling.\n",
+          "source": {
+            "path": "ext/CairoMakieExt.jl",
+            "line": 51
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.plot_decomposition!",
+      "name": "plot_decomposition!",
+      "qualname": "TransmissionChannelAnalysis.plot_decomposition!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {
+        "provided_by": "CairoMakieExt"
+      },
+      "summary": "Plot a decomposition plot into an already existing axis.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": null,
+          "markdown": "Plot a decomposition plot into an already existing axis.\n",
+          "source": {
+            "path": "src/plots.jl",
+            "line": 7
+          },
+          "refs": []
+        },
+        {
+          "key": "(Axis, Int, AbstractArray{<:Number, 3}, Vector{<:AbstractArray{<:Number, 3}})",
+          "signature": "plot_decomposition!(\n    ax::Axis,\n    idx_outcome::Int,\n    irfs::AbstractArray{<:Number,3},\n    teffects::Vector{<:AbstractArray{<:Number,3}};\n    colors=wong_colors()\n) -> Axis",
+          "markdown": "    plot_decomposition!(\n        ax::Axis,\n        idx_outcome::Int,\n        irfs::AbstractArray{<:Number,3},\n        teffects::Vector{<:AbstractArray{<:Number,3}};\n        colors=wong_colors()\n    ) -> Axis\n\nPlots a decomposition plot of the total effects (`irfs`) and the\ntransmission effects (`teffects`) for a given outcome variable (idx_outcome)\ninto the axis `ax`.\n\n# Arguments\n\n- `idx_outcome::Int`: Index of the outcome variable.\n- `irfs::AbstractArray{<:Number,3}`: Total effects, with shape `[N, 1, H]`\n  where `N` is the number of endogenous variables, and `H` is the number of\n  horizons (including zero).\n- `teffects::Vector{<:AbstractArray{<:Number,3}}`: Transmission effects for\n  each transmission channel, same shape as `irfs`.\n\n# Keyword Arguments\n\n- `colors`: Colors for the decomposition bars (default: Wong colors).\n\n",
+          "source": {
+            "path": "ext/CairoMakieExt.jl",
+            "line": 117
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.plot_decomposition_comparison",
+      "name": "plot_decomposition_comparison",
+      "qualname": "TransmissionChannelAnalysis.plot_decomposition_comparison",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {
+        "provided_by": "CairoMakieExt"
+      },
+      "summary": "Plot a decomposition comparison plot.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": null,
+          "markdown": "Plot a decomposition comparison plot.\n",
+          "source": {
+            "path": "src/plots.jl",
+            "line": 17
+          },
+          "refs": []
+        },
+        {
+          "key": "(Int, AbstractArray{<:Number, 3}, AbstractVector{<:String}, AbstractVector{<:String}, Vararg{Vector{<:AbstractArray{<:Number, 3}}})",
+          "signature": "plot_decomposition_comparison(\n    idx_outcome::Int,\n    irfs::AbstractArray{<:Number,3},\n    channel_names::AbstractVector{<:String},\n    decomposition_names::AbstractVector{<:String},\n    teffects::Vector{<:AbstractArray{<:Number,3}}...;\n    title::String=\"\",\n    legend::Bool=true,\n    colors=wong_colors()\n) -> TCAPlot",
+          "markdown": "    plot_decomposition_comparison(\n        idx_outcome::Int,\n        irfs::AbstractArray{<:Number,3},\n        channel_names::AbstractVector{<:String},\n        decomposition_names::AbstractVector{<:String},\n        teffects::Vector{<:AbstractArray{<:Number,3}}...;\n        title::String=\"\",\n        legend::Bool=true,\n        colors=wong_colors()\n    ) -> TCAPlot\n\nCreates a decomposition comparison plot of the total effects (`irfs`) and the\ntransmission effects (`teffects`), of various transmission matrices, for a given \noutcome variable (idx_outcome).\n\nThe function returns a `TCAPlot` object, which displays the figure\nimmediately in interactive environments (unless suppressed with a\nsemicolon). You can also extract the separate `Figure` and `Axis`:\n\n```julia\nfig, = plot_decomposition_comparison(...)\nfig, ax = plot_decomposition_comparison(...)\n```\n\n# Arguments\n\n- `idx_outcome::Int`: Index of the outcome variable.\n- `irfs::AbstractArray{<:Number,3}`: Total effects, with shape `[N, 1, H]`\n  where `N` is the number of endogenous variables, and `H` is the number of\n  horizons (including zero).\n- `channel_names::AbstractVector{<:String}`: Names of the transmission\n- `decomposition_names::AbstractVector{<:String}`: Names of the decompositions\n- `teffects::Vector{<:AbstractArray{<:Number,3}}...`: Transmission effects for\n  each transmission channel and each transmission matrix; Each transmission effect \n  must have the same shape as `irfs`.\n\n# Keyword Arguments\n\n- `title::String`: Optional figure title.\n- `legend::Bool`: Whether to plot a legend.\n- `colors`: Colors for the decomposition bars (default: Wong colors).\n\n# Returns\n\n- A `TCAPlot` that includes the figure and axis for further styling.\n",
+          "source": {
+            "path": "ext/CairoMakieExt.jl",
+            "line": 215
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.plot_decomposition_comparison!",
+      "name": "plot_decomposition_comparison!",
+      "qualname": "TransmissionChannelAnalysis.plot_decomposition_comparison!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {
+        "provided_by": "CairoMakieExt"
+      },
+      "summary": "Plot a decomposition comparison plot into an already existing axis.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": null,
+          "markdown": "Plot a decomposition comparison plot into an already existing axis.\n",
+          "source": {
+            "path": "src/plots.jl",
+            "line": 22
+          },
+          "refs": []
+        },
+        {
+          "key": "(Axis, Int, AbstractArray{<:Number, 3}, Vararg{Vector{<:AbstractArray{<:Number, 3}}})",
+          "signature": "plot_decomposition_comparison!(\n    ax::Axis,\n    idx_outcome::Int,\n    irfs::AbstractArray{<:Number,3},\n    teffects::Vector{<:AbstractArray{<:Number,3}}...;\n    colors=wong_colors()\n) -> Axis",
+          "markdown": "    plot_decomposition_comparison!(\n        ax::Axis,\n        idx_outcome::Int,\n        irfs::AbstractArray{<:Number,3},\n        teffects::Vector{<:AbstractArray{<:Number,3}}...;\n        colors=wong_colors()\n    ) -> Axis\n\nPlots a decomposition comparison plot of the total effects (`irfs`) and the\ntransmission effects (`teffects`), of various transmission matrices, for a given \noutcome variable (idx_outcome) into the axis `ax`.\n\n# Arguments\n\n- `idx_outcome::Int`: Index of the outcome variable.\n- `irfs::AbstractArray{<:Number,3}`: Total effects, with shape `[N, 1, H]`\n  where `N` is the number of endogenous variables, and `H` is the number of\n  horizons (including zero).\n- `teffects::Vector{<:AbstractArray{<:Number,3}}...`: Transmission effects for\n  each transmission channel and each transmission matrix; Each transmission effect \n  must have the same shape as `irfs`.\n\n# Keyword Arguments\n\n- `colors`: Colors for the decomposition bars (default: Wong colors).\n\n",
+          "source": {
+            "path": "ext/CairoMakieExt.jl",
+            "line": 284
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.ql",
+      "name": "ql",
+      "qualname": "TransmissionChannelAnalysis.ql",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Compute the QL decomposition of a matrix `A`, such that `A = Q * L`, where:",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix)",
+          "signature": "ql(A::AbstractMatrix) -> Q, L",
+          "markdown": "    ql(A::AbstractMatrix) -> Q, L\n\nCompute the QL decomposition of a matrix `A`, such that `A = Q * L`, where:\n\n- `Q` is an orthogonal matrix (`Q'Q = I`),\n- `L` is a lower-triangular matrix with positive diagonal entries.\n\n# Arguments\n- `A::AbstractMatrix`: The input matrix to decompose.\n\n# Returns\n- `Q`: An orthogonal matrix of the same size as `A`, representing the \"Q\" in \n  the QL decomposition.\n- `L`: A lower-triangular matrix with positive diagonal elements.\n",
+          "source": {
+            "path": "src/utils.jl",
+            "line": 154
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.remove_contradictions",
+      "name": "remove_contradictions",
+      "qualname": "TransmissionChannelAnalysis.remove_contradictions",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Remove contradicting terms.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Q)",
+          "signature": "remove_contradictions(q::Q)",
+          "markdown": "    remove_contradictions(q::Q)\n\nRemove contradicting terms. \n\nA terms is deemed contradicting if it includes some \"xi & !xi\". This would\nresult in the entire Boolean statement to be false, and thus in the effect of\nthis terms to be zero. \n\n## Arguments\n\n- `q::Q`: A transmission condition. See also [`Q`](@ref) and\n  [`make_condition`](@ref). \n\n## Returns\n\n- If `TransmissionChannelAnalysis.REMOVE_CONTRADICTIONS[] == false`, then `q` will\n  simply be returned again. \n- If `TransmissionChannelAnalysis.REMOVE_CONTRADICTIONS[] == true`, then \n    1. If all terms are contradicting, then `Q(\"\", 0)` will be retuned, which has\n       a transmission effect of zero. \n    2. If some terms are non-contradicting, then a transmission condition\n       consisting of only the non-contradicting terms will be returned. \n\n## Examples\n\n```julia\nTransmissionChannelAnalysis.REMOVE_CONTRADICTIONS[] = true\nq = TransmissionChannelAnalysis.Q(\"x1\", 1)\nremove_contradictions(q)  # will return q again since no contradictions exist\n\nq = TransmissionChannelAnalysis.Q(\"x1 & !x1\", 1)\nremove_contradictions(q)  # Will return Q(\"\", 0)\n\nq = TransmissionChannelAnalysis.Q([\"x1 & !x1\", \"x1 & x2\"], [1, 1])\nremove_contradictions(q)  # Will return Q(\"x1 & x2\", 1)\n```\n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 172
+          },
+          "refs": [
+            {
+              "text": "[`Q`](@ref)",
+              "span": [300, 311],
+              "label": "Q",
+              "query": "Q",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.Q",
+              "target_key": null,
+              "candidates": []
+            },
+            {
+              "text": "[`make_condition`](@ref)",
+              "span": [318, 342],
+              "label": "make_condition",
+              "query": "make_condition",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.make_condition",
+              "target_key": null,
+              "candidates": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.require_fitted",
+      "name": "require_fitted",
+      "qualname": "TransmissionChannelAnalysis.require_fitted",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Returns `true` if the `model` is estimated.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(M) where M<:Model",
+          "signature": "require_fitted(model::Model)",
+          "markdown": "    require_fitted(model::Model)\n\nReturns `true` if the `model` is estimated. Throws an error otherwise.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 19
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.residuals",
+      "name": "residuals",
+      "qualname": "TransmissionChannelAnalysis.residuals",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Returns the residuals of the estimated model.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "residuals(::Model)",
+          "markdown": "    residuals(::Model)\n\nReturns the residuals of the estimated model.\n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 43
+          },
+          "refs": []
+        },
+        {
+          "key": "(LP)",
+          "signature": "residuals(model::LP)",
+          "markdown": "    residuals(model::LP)\n\nReturns the residuals of the local projection in a three dimensional array, where \nthe third dimension corresponds to the various horizons, and the second \ndimension corresponds to the various variables. \n",
+          "source": {
+            "path": "src/models/lp.jl",
+            "line": 204
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.set_remove_contradictions",
+      "name": "set_remove_contradictions",
+      "qualname": "TransmissionChannelAnalysis.set_remove_contradictions",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Sets REMOVE_CONTRADICTIONS to `b`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Bool)",
+          "signature": "set_remove_contradictions(b::Bool)",
+          "markdown": "    set_remove_contradictions(b::Bool)\n\nSets REMOVE_CONTRADICTIONS to `b`. \n\nIf `REMOVE_CONTRADICTIONS==true`, then contradicting terms are removed before\nthe transmission effect is computed. A term is deemed contradicting if it \nincludes some \"xi & !xi\". This would result in the entire Boolean statement to \nbe false, and thus in the effect of this terms to be zero. \n",
+          "source": {
+            "path": "src/utils.jl",
+            "line": 140
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.shocks",
+      "name": "shocks",
+      "qualname": "TransmissionChannelAnalysis.shocks",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Returns the identified shocks.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(SVAR)",
+          "signature": "shocks(model::SVAR) --> AbstractMatrix{<:Number}",
+          "markdown": "    shocks(model::SVAR) --> AbstractMatrix{<:Number}\n\nReturns the identified shocks.\n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 94
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.show_y",
+      "name": "show_y",
+      "qualname": "TransmissionChannelAnalysis.show_y",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Pretty print the condition `q::Q` using the variables of the dynamic system, i.e. `y`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Q, AbstractVector{<:Int})",
+          "signature": "show_y(q::Q, order::AbstractVector{<:Int})\n@show_y(q, order)",
+          "markdown": "\n    show_y(q::Q, order::AbstractVector{<:Int})\n    @show_y(q, order)\n\nPretty print the condition `q::Q` using the variables of the dynamic system, i.e. `y`.\n\n## Arguments\n- `q::Q`: A transmission condition. See also `Q`. \n- `order::AbstractVector{<:Int}`: The order of variables defined by the \n  transmission matrix. \n\n## Examples\n\n```julia\ns_y = \"y_{1,0} | !y_{1,1}\"\norder = [3,1,2]\n\nq = make_condition(s_y, order)\n@show_y q $order\n```\n\n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 325
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.sic",
+      "name": "sic",
+      "qualname": "TransmissionChannelAnalysis.sic",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Computes information criteria for model selection in VARs.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "aic(model::Union{VAR,SVAR}) -> Real\naic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nbic(model::Union{VAR,SVAR}) -> Real\nbic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nsic(model::Union{VAR,SVAR}) -> Real\nsic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nhqc(model::Union{VAR,SVAR}) -> Real\nhqc(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real",
+          "markdown": "    aic(model::Union{VAR,SVAR}) -> Real\n    aic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    bic(model::Union{VAR,SVAR}) -> Real\n    bic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    sic(model::Union{VAR,SVAR}) -> Real\n    sic(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\n    hqc(model::Union{VAR,SVAR}) -> Real\n    hqc(Sigma_u::Matrix{<:Number}, num_coeffs::Int, T::Int) -> Real\n\nComputes information criteria for model selection in VARs.\n\nGiven a fitted `VAR` model or directly the covariance matrix `Sigma_u`, the\nnumber of estimated coefficients, and sample size `T`, each function returns\nthe respective criterion value:\n\n- **AIC** (Akaike Information Criterion):\n\n```math\n\\text{AIC} = \\log\\det(\\Sigma_u) + \\frac{2k}{T}\n```\n\n- **SIC/BIC** (Schwarz/Bayesian Information Criterion):\n\n```math\n\\text{SIC} = \\log\\det(\\Sigma_u) + \\frac{\\log(T) k}{T}\n```\n\n- **HQC** (Hannan-Quinn Criterion):\n\n```math\n\\text{HQC} = \\log\\det(\\Sigma_u) + \\frac{2 \\log(\\log T) k}{T}\n```\n\nHere, ``k`` is the number of estimated parameters and ``T`` is the effective\nsample size.\n\n# Arguments\n- `model::VAR`: A fitted VAR model\n- `Sigma_u::Matrix{<:Number}`: Residual covariance matrix\n- `num_coeffs::Int`: Number of estimated coefficients\n- `T::Int`: Number of observations used in estimation\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 334
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.simulate",
+      "name": "simulate",
+      "qualname": "TransmissionChannelAnalysis.simulate",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Simulates a `VAR(p)` model using the specified coefficient matrix `B` and optionally a covariance matrix `Sigma_u` and deterministic trends.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "simulate(::Type{VAR}, T::Int, B::Matrix{<:Number},\n         Sigma_u::Matrix{<:Number}=I(size(B,1));\n         trend_exponents::Vector{<:Number}=[0],\n         initial::Union{Nothing,Vector{<:Number}}=nothing) -> VAR\n\nsimulate!(::Type{VAR}, errors::Matrix{<:Number}, B::Matrix{<:Number};\n          trend_exponents::Vector{<:Number}=[0],\n          initial::Union{Nothing,Vector{<:Number}}=nothing) -> VAR",
+          "markdown": "    simulate(::Type{VAR}, T::Int, B::Matrix{<:Number},\n             Sigma_u::Matrix{<:Number}=I(size(B,1));\n             trend_exponents::Vector{<:Number}=[0],\n             initial::Union{Nothing,Vector{<:Number}}=nothing) -> VAR\n\n    simulate!(::Type{VAR}, errors::Matrix{<:Number}, B::Matrix{<:Number};\n              trend_exponents::Vector{<:Number}=[0],\n              initial::Union{Nothing,Vector{<:Number}}=nothing) -> VAR\n\nSimulates a `VAR(p)` model using the specified coefficient matrix `B` and\noptionally a covariance matrix `Sigma_u` and deterministic trends.\n\nThe simulation uses the reduced-form VAR representation:\n\n```math\n    y_t = C e_t + B_1 y_{t-1} + ... + B_p y_{t-p} + u_t\n```\n\n# Method 1: `simulate!`\nSimulates a `VAR` process by overwriting the provided error matrix `errors`\nwith simulated values. Returns a `VAR` object constructed from the simulated\ndata.\n\n# Method 2: `simulate`\nGenerates error terms internally from a Gaussian distribution with covariance\n`Sigma_u` (default is the identity matrix). Returns a `VAR` object containing the\nsimulated series.\n\n# Arguments\n- `B::Matrix{<:Number}`: Coefficient matrix `[C B_1 ... B_p]`, size `k × (k * p + m)`, \n  where `m` is the number of deterministic components.\n- `trend_exponents::Vector{<:Number}`: Exponents used to simulate trends\n  (e.g. `[0,1]` implies constant and linear trend)\n- `initial::Union{Nothing, Vector{<:Number}}`: Optional initial values for\n  lags (length `k * p`). Default is zero.\n- `T::Int`: Number of time periods to simulate\n- `Sigma_u::Matrix{<:Number}`: Covariance matrix of the error term\n  (default is identity)\n- `errors::Matrix{<:Number}`: Pre-allocated matrix of shape `k × T`, initially\n  filled with innovations, overwritten with simulated data\n\n# Returns\n- `VAR`: A new `VAR` object containing the simulated dataset. The data can \n  be obtained using `get_input_data`. Alternatively, the model can be directly \n  estimated using `fit!`. \n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 586
+          },
+          "refs": []
+        },
+        {
+          "key": "(Type{SVAR}, AbstractMatrix{<:Number}, AbstractMatrix{<:Number}, AbstractMatrix{<:Number})",
+          "signature": "simulate(::Type{SVAR}, shocks::Matrix{<:Number}, A0::Matrix{<:Number},\n         A_plus::Matrix{<:Number};\n         trend_exponents::Vector{<:Number}=[0],\n         initial::Union{Nothing,Vector{<:Number}}=nothing) -> SVAR\n\nsimulate(::Type{SVAR}, T::Int, A0::Matrix{<:Number}, A_plus::Matrix{<:Number};\n         trend_exponents::Vector{<:Number}=[0],\n         initial::Union{Nothing,Vector{<:Number}}=nothing) -> SVAR",
+          "markdown": "    simulate(::Type{SVAR}, shocks::Matrix{<:Number}, A0::Matrix{<:Number},\n             A_plus::Matrix{<:Number};\n             trend_exponents::Vector{<:Number}=[0],\n             initial::Union{Nothing,Vector{<:Number}}=nothing) -> SVAR\n\n    simulate(::Type{SVAR}, T::Int, A0::Matrix{<:Number}, A_plus::Matrix{<:Number};\n             trend_exponents::Vector{<:Number}=[0],\n             initial::Union{Nothing,Vector{<:Number}}=nothing) -> SVAR\n\nSimulates a structural VAR (SVAR) model using the structural form\ncharacterised by matrices `A0` and `A_plus`.\n\nThe SVAR model is given by:\n\n```math\n    A_0 y_t = C e_t + A_1 y_{t-1} + ... + A_p y_{t-p} + \\varepsilon_t\n```\n\n# Method 1: `simulate(::Type{SVAR}, shocks, A0, A_plus)`\nSimulates an SVAR process given structural shocks. \n\n# Method 2: `simulate(::Type{SVAR}, T, A0, A_plus)`\nGenerates random structural shocks from a multivariate Guassian with identify \ncovariance and simulates the SVAR process using these shocks.\n\n# Arguments\n- `A0::Matrix{<:Number}`: Contemporaneous impact matrix (invertible)\n- `A_plus::Matrix{<:Number}`: Coefficient matrix `[C A_1 ... A_p]` \n   (size `k × (k*p + m)`) where `m` is the number of exogenous components. \n- `shocks::Matrix{<:Number}`: Structural shocks of shape `k × T`\n- `T::Int`: Number of time periods to simulate\n- `trend_exponents::Vector{<:Number}`: Exponents for deterministic trends\n  (e.g., `[0,1]` for constant and linear trend)\n- `initial::Union{Nothing, Vector{<:Number}}`: Optional initial conditions\n  for lagged variables (length `k * p`). If `nothing` lags will be initialised \n  at zero.\n\n# Returns\n- `SVAR`: A simulated `SVAR` model containing the generated dataset.\n  The data can be accessed using `get_input_data`, or the model can be\n  estimated using `fit!`.\n",
+          "source": {
+            "path": "src/models/svar.jl",
+            "line": 277
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.simulate!",
+      "name": "simulate!",
+      "qualname": "TransmissionChannelAnalysis.simulate!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Simulates a `VAR(p)` model using the specified coefficient matrix `B` and optionally a covariance matrix `Sigma_u` and deterministic trends.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "simulate(::Type{VAR}, T::Int, B::Matrix{<:Number},\n         Sigma_u::Matrix{<:Number}=I(size(B,1));\n         trend_exponents::Vector{<:Number}=[0],\n         initial::Union{Nothing,Vector{<:Number}}=nothing) -> VAR\n\nsimulate!(::Type{VAR}, errors::Matrix{<:Number}, B::Matrix{<:Number};\n          trend_exponents::Vector{<:Number}=[0],\n          initial::Union{Nothing,Vector{<:Number}}=nothing) -> VAR",
+          "markdown": "    simulate(::Type{VAR}, T::Int, B::Matrix{<:Number},\n             Sigma_u::Matrix{<:Number}=I(size(B,1));\n             trend_exponents::Vector{<:Number}=[0],\n             initial::Union{Nothing,Vector{<:Number}}=nothing) -> VAR\n\n    simulate!(::Type{VAR}, errors::Matrix{<:Number}, B::Matrix{<:Number};\n              trend_exponents::Vector{<:Number}=[0],\n              initial::Union{Nothing,Vector{<:Number}}=nothing) -> VAR\n\nSimulates a `VAR(p)` model using the specified coefficient matrix `B` and\noptionally a covariance matrix `Sigma_u` and deterministic trends.\n\nThe simulation uses the reduced-form VAR representation:\n\n```math\n    y_t = C e_t + B_1 y_{t-1} + ... + B_p y_{t-p} + u_t\n```\n\n# Method 1: `simulate!`\nSimulates a `VAR` process by overwriting the provided error matrix `errors`\nwith simulated values. Returns a `VAR` object constructed from the simulated\ndata.\n\n# Method 2: `simulate`\nGenerates error terms internally from a Gaussian distribution with covariance\n`Sigma_u` (default is the identity matrix). Returns a `VAR` object containing the\nsimulated series.\n\n# Arguments\n- `B::Matrix{<:Number}`: Coefficient matrix `[C B_1 ... B_p]`, size `k × (k * p + m)`, \n  where `m` is the number of deterministic components.\n- `trend_exponents::Vector{<:Number}`: Exponents used to simulate trends\n  (e.g. `[0,1]` implies constant and linear trend)\n- `initial::Union{Nothing, Vector{<:Number}}`: Optional initial values for\n  lags (length `k * p`). Default is zero.\n- `T::Int`: Number of time periods to simulate\n- `Sigma_u::Matrix{<:Number}`: Covariance matrix of the error term\n  (default is identity)\n- `errors::Matrix{<:Number}`: Pre-allocated matrix of shape `k × T`, initially\n  filled with innovations, overwritten with simulated data\n\n# Returns\n- `VAR`: A new `VAR` object containing the simulated dataset. The data can \n  be obtained using `get_input_data`. Alternatively, the model can be directly \n  estimated using `fit!`. \n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 586
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.slide_in!",
+      "name": "slide_in!",
+      "qualname": "TransmissionChannelAnalysis.slide_in!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Slides A into B.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix, AbstractMatrix)",
+          "signature": null,
+          "markdown": "Slides A into B. \n\n# Notes\n- used to construct the B and Omega matrices. \n\n",
+          "source": {
+            "path": "src/utils.jl",
+            "line": 117
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.spectral_radius",
+      "name": "spectral_radius",
+      "qualname": "TransmissionChannelAnalysis.spectral_radius",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Computes the spectral radius of a matrix `X`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractMatrix)",
+          "signature": "spectral_radius(X::AbstractMatrix) -> Number",
+          "markdown": "    spectral_radius(X::AbstractMatrix) -> Number\n\nComputes the spectral radius of a matrix `X`.\n\n# Description\nThe spectral radius of a matrix is defined as the largest absolute eigenvalue \nof the matrix. \n\nMathematically, for a given square matrix `X`, the spectral radius is computed as:\n\n```math\n\\rho(X) = \\max |\\lambda_i|\n```\nwhere `\\lambda_i` are the eigenvalues of `X`.\n\n# Arguments\n- `X::AbstractMatrix`: A square matrix. \n\n# Returns\n- The spectral radius of `X`.\n\n# Example\n```julia\nX = [0.5 0.2; 0.1 0.9]\nr = spectral_radius(X)\n```\n",
+          "source": {
+            "path": "src/models/utils.jl",
+            "line": 46
+          },
+          "refs": []
+        },
+        {
+          "key": "(VAR)",
+          "signature": "spectral_radius(model::Union{VAR,SVAR}) -> Real",
+          "markdown": "    spectral_radius(model::Union{VAR,SVAR}) -> Real\n\nComputes the spectral radius of the companion matrix of a fitted `VAR` model.\n\nThe spectral radius of a matrix ``A`` is defined as the largest absolute value\namong its eigenvalues:\n\n```math\n\\rho(A) = \\max_i |\\lambda_i|\n```\n\nwhere ``\\lambda_i`` are the eigenvalues of ``A``.\n\nIn the context of VAR models, the spectral radius of the companion matrix is\na key measure of stability. A `VAR` model is stable if the\nspectral radius is strictly less than 1.\n\n# Arguments\n- `model::VAR`: A fitted VAR model\n\n",
+          "source": {
+            "path": "src/models/var.jl",
+            "line": 223
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.string_and",
+      "name": "string_and",
+      "qualname": "TransmissionChannelAnalysis.string_and",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Combine two strings using \"&\".",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(String, String)",
+          "signature": "string_and(s1::String, s2::String)",
+          "markdown": "    string_and(s1::String, s2::String)\n\nCombine two strings using \"&\".\n\nMakes sure that only unique variables occur. Also sorts the string such that \nnegated variables only come after all non-negated variables, and higher-variables\ncome before lower variables. \n\n## Examples\n\n```julia\ns1 = \"x1 & x2\"\ns2 = \"x1 & !x2\"\nstring_and(s1, s2)\n# output: \"x2 & x1 & !x2\"\n```\n",
+          "source": {
+            "path": "src/simplifying.jl",
+            "line": 111
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.through",
+      "name": "through",
+      "qualname": "TransmissionChannelAnalysis.through",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "All paths must go through variables in `idx` in periods `horizons`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Int, AbstractVector{<:Int}, AbstractVector{<:Int})",
+          "signature": "through(idx, horizons, order) --> Q",
+          "markdown": "    through(idx, horizons, order) --> Q\n\nAll paths must go through variables in `idx` in periods `horizons`. Note, this \nuses the dynamic system notation `y` such that `idx` refers to the index of \nthe variable in the original dynamic system, i.e. in the SVARMA.\n\n## Arguments\n\n**For the single variable version**:\n\n- `idx::Int`: Index of variable through which the paths should go. This is the  \n  original index in the dynamic system, e.g. the SVAR, before applying the \n  transmission matrix. \n- `horizons::AbstractVector{<:Int}`: Horizons for which the paths must go through \n  the variable. \n- `order::AbstractVector{<:Int}`: Variable ordering determined by the transmission \n  matrix\n\n**For the multiple variable version**:\n\n- `idx::AbstractVector{<:Int}`: Indices of variables through which the paths \n  should go. These are the original indices in the dynamic system, e.g. the SVAR, \n  before applying the transmission matrix. \n- `horizons::Union{AbstractVector{<:Int},Vector{AbstractVector{<:Int}}}`: Horizons \n  for which the paths must go through the variable. Must either be a vector \n  for each variable in `idx` or a single vector. If it is a single vector, then \n  the horizons will be applied to each variable in `idx`.\n- `order::AbstractVector{<:Int}`: Variable ordering determined by the transmission \n  matrix\n\n## Returns\n- Returns a transmission condition `Q`. \n\n## Notes\n- The transmission effect can be calculated using `transmission`. \n\n## Examples\n\nSuppose we are interested in the contemporaneous channel in Section 5.1 of \nWegner et al (2024), i.e. we are interested in the effect going through the federal funds\nrate contemporaneously. In our estimated model, the federal funds rate is the\nfirst variable. We would thus define the contemporaneous channel as \n\n```julia\ncontemporaneous_channel = through(1, [0], 1:4)  # we have four variables with ffr being first\n```\n\nMore generally, we could define the following, which would be the effect through\nthe federal funds rate in the first two periods. \n\n```julia\nq = through(1, [0, 1], 1:4)\n```\n\nThe following is also allowed which is the effect through the federal funds \nrate contemporaneously and one period later, and through the output gap\ncontemporaneously and one period later, where the federal funds rate is ordered \nfirst and the output gap second. \n\n```julia\nq = through([1, 2], [[0, 1], [0, 1]], 1:4)\n```\n\nIf we want to re-order the federal funds rate after the output gap, we simply\nchange the ordering to `[2, 1, 3, 4]` where `2` corresponds to the output gap\nin the original ordering. \n\n```julia\nq = through([1, 2], [[0, 1], [0, 1]], [2, 1, 3, 4])\n```\n",
+          "source": {
+            "path": "src/transmission-helper-functions.jl",
+            "line": 1
+          },
+          "refs": []
+        },
+        {
+          "key": "(Model, Union{Symbol, AbstractVector{Symbol}}, Union{AbstractVector{<:Int}, Vector{<:AbstractVector{<:Int}}}, AbstractVector{Symbol})",
+          "signature": "through(\n    model::Model, \n    variables::Union{AbstractVector{Symbol}, Symbol}, \n    horizons::Union{AbstractVector{<:Int},Vector{<:AbstractVector{<:Int}}}, \n    order::AbstractVector{Symbol}\n) --> Q",
+          "markdown": "    through(\n        model::Model, \n        variables::Union{AbstractVector{Symbol}, Symbol}, \n        horizons::Union{AbstractVector{<:Int},Vector{<:AbstractVector{<:Int}}}, \n        order::AbstractVector{Symbol}\n    ) --> Q\n\nDefine a transmission channel through `variables` for `horizons`. Contrary to \nthe other `through` methods, `variables` and `order` are defined using the \nvariable names of the model -- other `through` methods use indices. \n",
+          "source": {
+            "path": "src/models/model.jl",
+            "line": 110
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.to_transmission_irfs",
+      "name": "to_transmission_irfs",
+      "qualname": "TransmissionChannelAnalysis.to_transmission_irfs",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Transform a standard three dimensional IRF array into a IRF matrix.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractArray{T, 3}) where T",
+          "signature": "to_transmission_irfs(irfs::AbstractArray{T, 3})",
+          "markdown": "    to_transmission_irfs(irfs::AbstractArray{T, 3})\n\nTransform a standard three dimensional IRF array into a IRF matrix. The \n\n## Arguments\n\n- `irfs::AbstractArray{T, 3}`: IRF Array of dimension n_variabels × n_shocks ×\n  n_horizons with the first horizons corresponding to horizon 0. \n\n## Returns\n\n- `Matrix{T}` of dimension (n_variables * n_horizons) × (n_variables *\n  n_horizons). This is the same as what would be obtained via\n  ``(I-B)^{-1}\\mathbb{Q}`` using the notation of Wegner et al (2024). \n",
+          "source": {
+            "path": "src/transmission-function.jl",
+            "line": 42
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
+      "id": "julia:TransmissionChannelAnalysis.transmission",
+      "name": "transmission",
+      "qualname": "TransmissionChannelAnalysis.transmission",
+      "kind": "function",
+      "parent": null,
+      "visibility": "exported",
+      "attributes": {},
+      "summary": "Given a transmission condition `q`, calculate the transmission effect using the either the `:BOmega` method (the default), or the `:irfs` method.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(Int, AbstractMatrix{T}, AbstractMatrix{T}, Q) where T",
+          "signature": "transmission(from::Int, arr1::AbstractMatrix{T}, arr2::AbstractMatrix{T}, q::Q; method = :BOmega) where {T}",
+          "markdown": "    transmission(from::Int, arr1::AbstractMatrix{T}, arr2::AbstractMatrix{T}, q::Q; method = :BOmega) where {T}\n\n\nGiven a transmission condition `q`, calculate the transmission effect using the\neither the `:BOmega` method (the default), or the `:irfs` method. \n\n## Arguments\n\n- `from::Int`: Shock number. \n- `arr1::AbstractMatrix{T}`. In case of `:BOmega` this must be `B`, in case of\n  `:irfs` this must be `irfs`. See the documentation for the specific methods\n  for `transmission(..., ::Type{Val{:BOmega}})` and `transmission(...,::Type{Val{:irfs}})`. \n- `arr2::AbstractMatrix{T}`: In case of `:BOmega` this must be `Omega`, in case of\n  `:irfs` this must be `irfs_ortho`. See the documentation for the specific methods\n  for `transmission(..., ::Type{Val{:BOmega}})` and `transmission(...,::Type{Val{:irfs}})`.  \n- `q::Q`: A transmission condition. See also [`Q`](@ref).\n\n## Keyword Arguments\n\n- `method::Symbol`: Either `:BOmega` in which case the transmission effect will be\n  calculated using the second method in Wegner et al (2024), or `:irfs` in which case the\n  transmission effect is calculated using the first method in Wegner et al (2024). \n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable in the transmission condition\n  with the highest subscript, then all entries in the returned vector with index\n  less thatn `k` are `NaN` since interpretation of those results is nonsensical. \n\n## Examples\n\n```julia\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nB = randn(k*(h+1), k*(h+1))\nOmega = randn(k*(h+1), k*(h+1))\n\neffect = transmission(1, B, Omega, cond; method = :BOmega)\neffect = transmission(1, B, Omega, cond)  # same as above; default is :BOmega\n\nirfs = randn(k, k, h+1)\nirfs_ortho = randn(k, k, h+1)\n\nirfs = to_transmission_irfs(irfs)\nirfs_ortho = to_transmission_irfs(irfs_ortho)\n\neffect = transmission(1, irfs, irfs_ortho, cond; method = :irfs)\n```\n",
+          "source": {
+            "path": "src/transmission-function.jl",
+            "line": 66
+          },
+          "refs": [
+            {
+              "text": "[`Q`](@ref)",
+              "span": [862, 873],
+              "label": "Q",
+              "query": "Q",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.Q",
+              "target_key": null,
+              "candidates": []
+            }
+          ]
+        },
+        {
+          "key": "(Int, AbstractMatrix, AbstractMatrix, Q, Type{Val{:BOmega}})",
+          "signature": "transmission(\n    from::Int, \n    B::AbstractMatrix{T},\n    Omega::AbstractMatrix{T}, \n    q::Q, \n    ::Type{Val{:BOmega}}\n) where {T}",
+          "markdown": "    transmission(\n        from::Int, \n        B::AbstractMatrix{T},\n        Omega::AbstractMatrix{T}, \n        q::Q, \n        ::Type{Val{:BOmega}}\n    ) where {T}\n\nGiven a transmission condition `q`, calculate the transmission effect using the\n`:BOmega` method. \n\n## Arguments\n\n- `from::Int`: Shock number. \n- `B::AbstractMatrix{T}`: Part of the systems representation in Wegner et al (2024). \n- `Omega::AbstractMatrix{T}`: Part of the systems representation in Wegner et al (2024). \n- `q::Q`: A transmission condition. See also `Q`. \n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable in the transmission condition\n  with the highest subscript, then all entries in the returned vector with index\n  less thatn `k` are `NaN` since interpretation of those results is nonsensical. \n\n## Examples\n\n```julia\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nB = randn(k*(h+1), k*(h+1))\nOmega = randn(k*(h+1), k*(h+1))\n\neffect = transmission(1, B, Omega, cond)\n```\n",
+          "source": {
+            "path": "src/transmission-function-BOmega.jl",
+            "line": 52
+          },
+          "refs": []
+        },
+        {
+          "key": "(Int, AbstractMatrix{T}, AbstractMatrix{T}, Q, Type{Val{:irfs}}) where T",
+          "signature": "transmission(from::Int, \n    irfs::AbstractMatrix{T}, \n    irfs_ortho::AbstractMatrix{T}, \n    q::Q, \n    ::Type{Val{:irfs}}\n) where {T}",
+          "markdown": "    transmission(from::Int, \n        irfs::AbstractMatrix{T}, \n        irfs_ortho::AbstractMatrix{T}, \n        q::Q, \n        ::Type{Val{:irfs}}\n    ) where {T}\n\nGiven a transmission condition `q`, calculate the transmission effect using the\n`:irfs` method. \n\n## Arguments\n\n- `from::Int`: Shock number. \n- `irfs::AbstractMatrix{T}`: Impulse responses. These should be in the form of\n  the structural transmission model. See also [`to_transmission_irfs`](@ref). \n- `irfs_ortho::AbstractMatrix{T}`: Orthogonalised IRFs. These should be in the\n  form of the structural transmission model. See also [`to_transmission_irfs`](@ref). \n- `q::Q`: A transmission condition. See also [`Q`](@ref). \n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable in the transmission condition\n  with the highest subscript, then all entries in the returned vector with index\n  less thatn `k` are `NaN` since interpretation of those results is nonsensical. \n\n## Examples\n\n```julia\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nirfs = randn(k, k, h+1)\nirfs_ortho = randn(k, k, h+1)\n\nirfs = to_transmission_irfs(irfs)\nirfs_ortho = to_transmission_irfs(irfs_ortho)\n\neffect = transmission(1, irfs, irfs_ortho, cond; method = :irfs)\n```\n",
+          "source": {
+            "path": "src/transmission-function-irfs.jl",
+            "line": 60
+          },
+          "refs": [
+            {
+              "text": "[`to_transmission_irfs`](@ref)",
+              "span": [429, 459],
+              "label": "to_transmission_irfs",
+              "query": "to_transmission_irfs",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.to_transmission_irfs",
+              "target_key": null,
+              "candidates": []
+            },
+            {
+              "text": "[`to_transmission_irfs`](@ref)",
+              "span": [595, 625],
+              "label": "to_transmission_irfs",
+              "query": "to_transmission_irfs",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.to_transmission_irfs",
+              "target_key": null,
+              "candidates": []
+            },
+            {
+              "text": "[`Q`](@ref)",
+              "span": [673, 684],
+              "label": "Q",
+              "query": "Q",
+              "implicit": false,
+              "status": "resolved",
+              "target": "julia:TransmissionChannelAnalysis.Q",
+              "target_key": null,
+              "candidates": []
+            }
+          ]
+        },
+        {
+          "key": "(Model, Int, Q, AbstractVector{Symbol}, Int)",
+          "signature": "transmission(model::Model, \n             from::Int, \n             q::Q, \n             order::AbstractVector{<:Int}, \n             max_horizon::Int) --> Array{<:Number, 3}\n\ntransmission(model::Model, \n             method::AbstractIdentificationMethod, \n             from::Int, \n             q::Q,\n             order::AbstractVector{<:Int}, \n             max_horizon::Int) --> Array{<:Number, 3}\n\ntransmission(model::Model, \n             from::Int, \n             q::Q, \n             order::AbstractVector{Symbol}, \n             max_horizon::Int) --> Array{<:Number, 3}\n\ntransmission(model::Model, \n             method::AbstractIdentificationMethod, \n             from::Int, \n             q::Q,\n             order::AbstractVector{Symbol}, \n             max_horizon::Int) --> Array{<:Number, 3}",
+          "markdown": "    transmission(model::Model, \n                 from::Int, \n                 q::Q, \n                 order::AbstractVector{<:Int}, \n                 max_horizon::Int) --> Array{<:Number, 3}\n\n    transmission(model::Model, \n                 method::AbstractIdentificationMethod, \n                 from::Int, \n                 q::Q,\n                 order::AbstractVector{<:Int}, \n                 max_horizon::Int) --> Array{<:Number, 3}\n\n    transmission(model::Model, \n                 from::Int, \n                 q::Q, \n                 order::AbstractVector{Symbol}, \n                 max_horizon::Int) --> Array{<:Number, 3}\n\n    transmission(model::Model, \n                 method::AbstractIdentificationMethod, \n                 from::Int, \n                 q::Q,\n                 order::AbstractVector{Symbol}, \n                 max_horizon::Int) --> Array{<:Number, 3}\n\nCompute the transmission effect of a transmission channel defined by the \ncondition `q`. If `model` is a reduced-form model, `method` will be used to \nidentify the required structural shock. \n\n## Arguments\n- `model::Model`: A model, such as an `SVAR`, `VAR`, or `LP`. \n- `method::AbstractIdentificationMethod`: An identification method to identify \n    the `from`-th structural shock. \n- `from::Int`: Shock number. \n- `q::Q`: A transmission condition. See also `Q` and `make_condition`. \n- `order::AbnstractVector{<:Int}`: order of variables defined by the transmission \n  matrix using variable indices. \n- `order::AbnstractVector{Symbol}`: order of variables defined by the transmission \n  matrix using variable names. \n- `max_horizon::Int`: Maximum horizon for the transmission effect.  \n\n## Returns\n- Returns a three dimensional array with the first dimension correspondin \n  to the endogenous variables (in original order), the second to the shock, \n  and the third to the horizon (from 0 to `max_horizon`).\n",
+          "source": {
+            "path": "src/models/transmission.jl",
+            "line": 49
+          },
+          "refs": []
+        }
+      ]
+    }
+  ]
+}

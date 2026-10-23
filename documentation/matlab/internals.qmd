@@ -1,39 +1,12 @@
 ---
 sidebar: doc
-engine: julia
 ---
-
-```{julia}
-#| echo: false 
-#| include: false 
-
-using DocUtils
-using JSON
-
-
-function load_from_json(filename)
-  dict = open(filename, "r") do file 
-    JSON.parse(file)
-  end
-  return dict
-end
-
-functions = load_from_json("matlab-documentation-functions.json")
-classes = load_from_json("matlab-documentation-classes.json")
-class_methods = load_from_json("matlab-documentation-class-methods.json")
-```
 
 # Internals
 
 The internals of the **Matlab Toolbox for Transmission Channel Analysis** all resolve around the type `Q`{.matlab}, which is the internal representation of a transmission condition using the variables of the [systems form](/faq/topics/systems-form.qmd); thus $x_i$ and **not** $y_{i,t}$.  
 
-
-```{julia}
-#| echo: false
-#| output: asis
-
-include_callout_block_matlab("Q", classes)
-```
+{{< api matlab Q >}}
 
 The basic idea is to start with a singleton statement, such as $x_i$, $\neg x_i$ or sometimes even just $\text{TRUE}$. Each of these singleton -- or atomic -- statements refers to the simplest transmission channel in which $x_i$ must be on the path, $x_i$ cannot be on the path, or in which case the condition is always true. Such singleton statement can be created in the following way. 
 
@@ -72,37 +45,17 @@ Under [Assumption @nte-assumption1-internal-julia] `q1`{.matlab} and `q2`{.matla
 
 The detailed internal implementation is given by 
 
-```{julia}
-#| echo: false 
-#| output: asis
-
-include_callout_block_matlab("Q", "and", class_methods)
-```
+{{< api matlab Q.and >}}
 
 While concatenating the two conditions, we need to watch out that no contradictions are being introduced. Contradictions are any statements along the lines $x_i \land \neg x_i$ which would always result in `false`{.matlab}. This is taken care of by the following functions. 
 
-```{julia}
-#| echo: false 
-#| output: asis
+{{< api matlab checkContradiction >}}
 
-include_callout_block_matlab("checkContradiction", functions)
-```
+{{< api matlab removeContradictions >}}
 
-```{julia}
-#| echo: false 
-#| output: asis
+As stated in the [overview](./index.qmd) of the documentation, removal of contradictions is governed by the global `REMOVECONTRADICTION`{.matlab} and the utility function `setRemoveContradictions`{.matlab}. Not removing contradictions does not lead to mistakes in the computation, but can result in longer computations. Contrary, removing contradictions can lead to longer compile times -- it takes longer to compile the transmission conditions. Thus, a trade-off between compile and computing time exists. 
 
-include_callout_block_matlab("removeContradictions", functions)
-```
-
-As stated in the [overview]("./index.qmd") of the documentation, removal of contradictions is governed by the global `REMOVECONTRADICTION`{.matlab} and the utility function `setRemoveContradictions`{.matlab}. Not removing contradictions does not lead to mistakes in the computation, but can result in longer computations. Contrary, removing contradictions can lead to longer compile times -- it takes longer to compile the transmission conditions. Thus, a trade-off between compile and computing time exists. 
-
-```{julia}
-#| echo: false 
-#| output: asis
-
-include_callout_block_matlab("setRemoveContradictions", functions)
-```
+{{< api matlab setRemoveContradictions >}}
 
 ## Combining two conditions using OR (`|`{.matlab})
 
@@ -112,13 +65,7 @@ Q(b \lor b') = Q(b) + Q(b') - Q(b \land b').
 $$
 Implementation of OR (`|`{.matlab}) therefore simply uses AND and the ability for `Q`{.matlab} to represent multiple terms with different multipliers. The precise implementation of OR can be found in the following function. 
 
-
-```{julia}
-#| echo: false 
-#| output: asis
-
-include_callout_block_matlab("Q", "or", class_methods)
-```
+{{< api matlab Q.or >}}
 
 ## Negating a condition using NOT (`~`{.matlab})
 
@@ -128,12 +75,7 @@ Q(\neg b) = Q(T) - Q(b),
 $$
 where $T$ represents the Boolean condition that is always true. This can easily be represented using `Q`{.matlab} through its ability to represent multiple terms and multipliers. Specifically, we simply replace the original transmission condition with a new one that consists of one additional term, representing true, and switch the sign of all original terms of the condition. The following function implements this behaviour. 
 
-```{julia}
-#| echo: false 
-#| output: asis
-
-include_callout_block_matlab("Q", "not", class_methods)
-```
+{{< api matlab Q.not >}}
 
 ## Parsing transmission conditions using `makeCondition`{.matlab}
 
@@ -143,17 +85,6 @@ For user friendliness, we also provide a version of `makeConditionY`{.matlab} th
 
 In any case, `makeCondition`{.matlab} and `makeConditionY`{.matlab} should be seen as utility functions with the main funcionality being dependent on correct implementation of `Q`{.matlab}, `&`{.matlab}, `|`{.matlab}, and `~`{.matlab} as explained above. 
 
+{{< api matlab makeCondition >}}
 
-```{julia}
-#| echo: false 
-#| output: asis
-
-include_callout_block_matlab("makeCondition", functions)
-```
-
-```{julia}
-#| echo: false 
-#| output: asis
-
-include_callout_block_matlab("makeConditionY", functions)
-```
+{{< api matlab makeConditionY >}}
