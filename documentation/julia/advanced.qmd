@@ -117,6 +117,31 @@ To compute transmission effects using the systems form, `method`{.julia} should 
 
 {{< api julia transmission >}}
 
+### Effects that are set to `NaN`{.julia} {#nan-effects}
+
+The theory behind TCA [@wegnerTCA2024] assumes that the outcome variable is ordered after all variables that the transmission condition puts restrictions on. `transmission`{.julia} still returns an effect for every variable, but for some of them the question asked by the condition makes no sense. To prevent these effects from being interpreted by accident, they are set to `NaN`{.julia}.
+
+The rule is the same for the `:BOmega`{.julia} and the `:irfs`{.julia} method. Let $x_k$ be the variable with the highest index in the [systems form](/faq/topics/systems-form.qmd) that paths must go *through*, i.e. that enters any term of the (simplified) transmission condition through an AND. Then the effects on $x_1, \dots, x_k$ are `NaN`{.julia}.
+
+- **AND (`through`{.julia})**: a path to $x_i$ with $i \le k$ cannot go through $x_k$ before it reaches $x_i$. The computed number would have no meaning, and the two methods can even return different numbers. These effects are therefore `NaN`{.julia}.
+- **NOT (`not_through`{.julia})**: never leads to `NaN`{.julia}. A path to $x_i$ cannot go through a variable ordered after $x_i$, so excluding such a variable does not restrict the paths to $x_i$ and the effect is still correct. If $x_i$ itself is excluded, the effect on $x_i$ is correctly zero.
+
+The table shows the rule for a system with four variables. "computed" means that the effect is the effect along all paths that satisfy the condition.
+
+| Condition | $x_1$ | $x_2$ | $x_3$ | $x_4$ |
+|-----------|-------|-------|-------|-------|
+| `x1` | `NaN` | computed | computed | computed |
+| `!x1` | 0 | computed | computed | computed |
+| `x2` | `NaN` | `NaN` | computed | computed |
+| `!x2` | total effect | 0 | computed | computed |
+| `x2 & !x3` | `NaN` | `NaN` | 0 | computed |
+| `!x2 & x3` | `NaN` | `NaN` | `NaN` | computed |
+| `x1 \| x3` | `NaN` | `NaN` | `NaN` | computed |
+
+The systems form orders variables first by horizon and then by the transmission matrix. "Ordered before" therefore includes all variables at earlier horizons. For example, with `q = through(model, :Y2, 0:3, transmission_order)`{.julia} all paths must go through `Y2` at horizon 3. The effects of all variables at horizons 0 to 2 are thus `NaN`{.julia}, as are the effects at horizon 3 of `Y2` and of all variables ordered before `Y2` in `transmission_order`. With `q = not_through(model, :Y2, 0:3, transmission_order)`{.julia} no effect is `NaN`{.julia}.
+
+Masking is applied to the simplified condition (see [Internals](./internals.qmd)). Logically equivalent conditions can therefore be masked differently. For example, `!(x2 & x3)` simplifies to the total effect minus the effect through `x2 & x3` and masks $x_1$ to $x_3$, while `!x2 | !x3` contains no AND and masks nothing. Effects that are not masked are correct in both cases.
+
 It may occur that a transmission condition contains a contradiction, i.e. a part of the boolean conditions says $x_i \land \neg x_i$. These are usually automatically removed internally. However, this automatic removal can sometimes lengthen the time it takes for the condition to compile. We therefore offer the utility function `set_remove_contradictions`{.julia} that can be used to turn this off. Even if off, the resulting transmission effect will be correct, but the computation may take a bit longer. Thus, there is a trade-off between longer compile times (if contradictions are being removed) and longer computing time (if contradictions are not removed). 
 
 {{< api julia set_remove_contradictions >}}

@@ -466,6 +466,12 @@ The returned `effects` array has dimensions:
 2. Transmission effect of the chosen shock
 3. Horizons (starting at 0)
 
+::: {.callout-note}
+## Some effects are `NaN` on purpose
+
+TCA assumes that the outcome variable is ordered after all variables that the channel puts restrictions on. Effects on variables that come before (or are) a variable that paths must go **through** are therefore set to `NaN`, so that they are not interpreted by accident. "Before" refers to the systems form, so it includes all earlier horizons. For example, with `through(model, :Y2, 0:3, transmission_order)` all effects at horizons 0 to 2 are `NaN`. Variables that only appear in `not_through` never cause `NaN`. See [Effects that are set to `NaN`](./advanced.qmd#nan-effects) for details.
+:::
+
 If your `SVAR` model is already structurally identified (fitted with a structural identification scheme), you may omit the identification argument:
 
 ```julia
