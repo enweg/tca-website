@@ -6,7 +6,13 @@ bibliography: ../../../references.bib
 sidebar: examples
 ---
 
-In this example, we replicate the results from Section 5.3 of @wegnerTCA2024. Before we begin, download both the [code](./sw2007.m) and the [Dynare model](./SW2007.zip). Make sure to unzip the Dynare model, and place both the *sw2007.m* script and the *SW2007* folder into the same directory.
+::: {.callout-note}
+## Differences to the figures in @wegnerTCA2024
+
+The figures on this page differ slightly from those in Section 5.3 of @wegnerTCA2024. All differences are due to fixes in the translation of the DSGE into its VARMA representation, which the toolbox has received since the paper was written. The total effects are unchanged; only the split between the demand and the wage channel differs, mostly at short horizons.
+:::
+
+In this example, we replicate the results from Section 5.3 of @wegnerTCA2024. Before we begin, download both the [code](./sw2007.m) and the [Dynare model](./SW2007.zip). Make sure to unzip the Dynare model, and place both the *sw2007.m* script and the *SW2007* folder into the same directory. The figures on this page were generated with MATLAB R2024b, Dynare 6.3, and the TCA toolbox at commit `69d703a` (after v0.3.1).
 
 To ensure a clean environment, we recommend starting a new Matlab session. Alternatively, run the following lines to clear the workspace and console:
 
