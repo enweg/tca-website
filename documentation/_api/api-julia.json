@@ -4,7 +4,7 @@
   "library": {
     "name": "TransmissionChannelAnalysis",
     "version": "0.2.2",
-    "commit": "43e28b377325c3f91946769ba9530dc76f2de767",
+    "commit": "2377069dbe5ec4fa536f783418047d5e3e78b0d9",
     "source_url": "https://github.com/enweg/TransmissionChannelAnalysis.jl/blob/{commit}/{path}#L{line}"
   },
   "generator": "ApiDocs.jl 0.1.0",
@@ -994,7 +994,7 @@
         {
           "key": "(Int, AbstractMatrix{T}, AbstractMatrix{T}, AbstractVector{Int}, Number) where T",
           "signature": "calculate_Q_and_only(from::Int, \n    irfs::AbstractMatrix{T}, \n    irfs_ortho::AbstractMatrix{T}, \n    vars::AbstractVector{Int}, \n    multiplier::Number\n) where {T}",
-          "markdown": "    calculate_Q_and_only(from::Int, \n        irfs::AbstractMatrix{T}, \n        irfs_ortho::AbstractMatrix{T}, \n        vars::AbstractVector{Int}, \n        multiplier::Number\n    ) where {T}\n\nCalculate the transmission effect of a transmission condition/query that\ninvolves only ANDs. \n\n## Arguments\n\n- `from::Int`: ID of shock. \n- `irfs::AbstractMatrix{T}`: IRFs in transmission form. See\n  [`to_transmission_irfs`](@ref).\n- `irfs_ortho::AbstractMatrix{T}`: Orthogonalised IRFs in transmission form. See\n  [`to_transmission_irfs`](@ref).\n- `multiplier::Number`: Multiplier.\n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable in the transmission condition\n  with the highest subscript, then all entries in the returned vector with index\n  less thatn `k` are `NaN` since interpretation of those results is nonsensical.\n\n## Notes\n\n- Only for internal use. \n\n",
+          "markdown": "    calculate_Q_and_only(from::Int, \n        irfs::AbstractMatrix{T}, \n        irfs_ortho::AbstractMatrix{T}, \n        vars::AbstractVector{Int}, \n        multiplier::Number\n    ) where {T}\n\nCalculate the transmission effect of a transmission condition/query that\ninvolves only ANDs. \n\n## Arguments\n\n- `from::Int`: ID of shock. \n- `irfs::AbstractMatrix{T}`: IRFs in transmission form. See\n  [`to_transmission_irfs`](@ref).\n- `irfs_ortho::AbstractMatrix{T}`: Orthogonalised IRFs in transmission form. See\n  [`to_transmission_irfs`](@ref).\n- `multiplier::Number`: Multiplier.\n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. No entries are set to `NaN`; masking is done for the full\n  condition in `transmission`. See also `mask_uninterpretable!`.\n\n## Notes\n\n- Only for internal use. \n\n",
           "source": {
             "path": "src/transmission-function-irfs.jl",
             "line": 3
@@ -1991,6 +1991,30 @@
       ]
     },
     {
+      "id": "julia:TransmissionChannelAnalysis.mask_uninterpretable!",
+      "name": "mask_uninterpretable!",
+      "qualname": "TransmissionChannelAnalysis.mask_uninterpretable!",
+      "kind": "function",
+      "parent": null,
+      "visibility": "internal",
+      "attributes": {},
+      "summary": "Set all transmission effects that must not be interpreted to `NaN`.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "(AbstractVector, Vector{Vector{Int}})",
+          "signature": "mask_uninterpretable!(effects::AbstractVector, and_nums::Vector{Vector{Int}})",
+          "markdown": "    mask_uninterpretable!(effects::AbstractVector, and_nums::Vector{Vector{Int}})\n\nSet all transmission effects that must not be interpreted to `NaN`. These are\nthe effects on all variables ``x_i`` with ``i \\leq k``, where ``x_k`` is the\nvariable with the highest index that enters any term of the transmission\ncondition through an AND (a variable that paths must go through).\n\nThe theory in Wegner et al (2024) assumes that the outcome variable is ordered after all\nvariables that the transmission condition puts restrictions on. A user might\nnot be aware of this requirement and may thus interpret the effect on a\nvariable that is ordered before (or is equal to) one of the conditioning\nvariables.\n\n- For NOT this is not a problem. A path to ``x_i`` cannot go through any\n  variable ordered after ``x_i``, so a NOT on such a variable does not restrict\n  the paths to ``x_i``, and the effect on ``x_i`` itself is correctly zero if\n  ``x_i`` is excluded. NOT variables therefore never trigger masking.\n- For AND this is a problem. A path to ``x_i`` with ``i \\leq k`` cannot go\n  through ``x_k`` before reaching the outcome, so the question is\n  nonsensical. The computed numbers have no meaningful interpretation and can\n  even differ between the `:BOmega` and the `:irfs` method. They are therefore\n  set to `NaN`.\n\nThe masking is applied to the effect of the full condition and not to the\neffect of individual terms, since the `:irfs` method rewrites NOT literals as\nAND literals using inclusion-exclusion; masking those internal terms would\nwrongly mask effects of NOT conditions.\n\n## Arguments\n\n- `effects::AbstractVector`: Transmission effects in the ordering of the\n  transmission matrix. Modified in place.\n- `and_nums::Vector{Vector{Int}}`: Variable numbers included via AND in each\n  term. See `get_varnums_and_multiplier`.\n\n## Returns\n\n- `effects` with the uninterpretable entries set to `NaN`.\n\n## Notes\n\n- Only for internal use.\n",
+          "source": {
+            "path": "src/transmission-function.jl",
+            "line": 42
+          },
+          "refs": []
+        }
+      ]
+    },
+    {
       "id": "julia:TransmissionChannelAnalysis.nobs",
       "name": "nobs",
       "qualname": "TransmissionChannelAnalysis.nobs",
@@ -2633,7 +2657,7 @@
           "markdown": "    to_transmission_irfs(irfs::AbstractArray{T, 3})\n\nTransform a standard three dimensional IRF array into a IRF matrix. The \n\n## Arguments\n\n- `irfs::AbstractArray{T, 3}`: IRF Array of dimension n_variabels × n_shocks ×\n  n_horizons with the first horizons corresponding to horizon 0. \n\n## Returns\n\n- `Matrix{T}` of dimension (n_variables * n_horizons) × (n_variables *\n  n_horizons). This is the same as what would be obtained via\n  ``(I-B)^{-1}\\mathbb{Q}`` using the notation of Wegner et al (2024). \n",
           "source": {
             "path": "src/transmission-function.jl",
-            "line": 42
+            "line": 93
           },
           "refs": []
         }
@@ -2654,10 +2678,10 @@
         {
           "key": "(Int, AbstractMatrix{T}, AbstractMatrix{T}, Q) where T",
           "signature": "transmission(from::Int, arr1::AbstractMatrix{T}, arr2::AbstractMatrix{T}, q::Q; method = :BOmega) where {T}",
-          "markdown": "    transmission(from::Int, arr1::AbstractMatrix{T}, arr2::AbstractMatrix{T}, q::Q; method = :BOmega) where {T}\n\n\nGiven a transmission condition `q`, calculate the transmission effect using the\neither the `:BOmega` method (the default), or the `:irfs` method. \n\n## Arguments\n\n- `from::Int`: Shock number. \n- `arr1::AbstractMatrix{T}`. In case of `:BOmega` this must be `B`, in case of\n  `:irfs` this must be `irfs`. See the documentation for the specific methods\n  for `transmission(..., ::Type{Val{:BOmega}})` and `transmission(...,::Type{Val{:irfs}})`. \n- `arr2::AbstractMatrix{T}`: In case of `:BOmega` this must be `Omega`, in case of\n  `:irfs` this must be `irfs_ortho`. See the documentation for the specific methods\n  for `transmission(..., ::Type{Val{:BOmega}})` and `transmission(...,::Type{Val{:irfs}})`.  \n- `q::Q`: A transmission condition. See also [`Q`](@ref).\n\n## Keyword Arguments\n\n- `method::Symbol`: Either `:BOmega` in which case the transmission effect will be\n  calculated using the second method in Wegner et al (2024), or `:irfs` in which case the\n  transmission effect is calculated using the first method in Wegner et al (2024). \n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable in the transmission condition\n  with the highest subscript, then all entries in the returned vector with index\n  less thatn `k` are `NaN` since interpretation of those results is nonsensical. \n\n## Examples\n\n```julia\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nB = randn(k*(h+1), k*(h+1))\nOmega = randn(k*(h+1), k*(h+1))\n\neffect = transmission(1, B, Omega, cond; method = :BOmega)\neffect = transmission(1, B, Omega, cond)  # same as above; default is :BOmega\n\nirfs = randn(k, k, h+1)\nirfs_ortho = randn(k, k, h+1)\n\nirfs = to_transmission_irfs(irfs)\nirfs_ortho = to_transmission_irfs(irfs_ortho)\n\neffect = transmission(1, irfs, irfs_ortho, cond; method = :irfs)\n```\n",
+          "markdown": "    transmission(from::Int, arr1::AbstractMatrix{T}, arr2::AbstractMatrix{T}, q::Q; method = :BOmega) where {T}\n\n\nGiven a transmission condition `q`, calculate the transmission effect using the\neither the `:BOmega` method (the default), or the `:irfs` method. \n\n## Arguments\n\n- `from::Int`: Shock number. \n- `arr1::AbstractMatrix{T}`. In case of `:BOmega` this must be `B`, in case of\n  `:irfs` this must be `irfs`. See the documentation for the specific methods\n  for `transmission(..., ::Type{Val{:BOmega}})` and `transmission(...,::Type{Val{:irfs}})`. \n- `arr2::AbstractMatrix{T}`: In case of `:BOmega` this must be `Omega`, in case of\n  `:irfs` this must be `irfs_ortho`. See the documentation for the specific methods\n  for `transmission(..., ::Type{Val{:BOmega}})` and `transmission(...,::Type{Val{:irfs}})`.  \n- `q::Q`: A transmission condition. See also [`Q`](@ref).\n\n## Keyword Arguments\n\n- `method::Symbol`: Either `:BOmega` in which case the transmission effect will be\n  calculated using the second method in Wegner et al (2024), or `:irfs` in which case the\n  transmission effect is calculated using the first method in Wegner et al (2024). \n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable with the highest subscript\n  that enters the (simplified) transmission condition through an AND, then all\n  entries with index `i ≤ k` are `NaN`, since the outcome variable must be\n  ordered after all variables that paths must go through. Variables that only\n  enter through a NOT never lead to `NaN`. See also\n  `mask_uninterpretable!`.\n\n## Examples\n\n```julia\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nB = randn(k*(h+1), k*(h+1))\nOmega = randn(k*(h+1), k*(h+1))\n\neffect = transmission(1, B, Omega, cond; method = :BOmega)\neffect = transmission(1, B, Omega, cond)  # same as above; default is :BOmega\n\nirfs = randn(k, k, h+1)\nirfs_ortho = randn(k, k, h+1)\n\nirfs = to_transmission_irfs(irfs)\nirfs_ortho = to_transmission_irfs(irfs_ortho)\n\neffect = transmission(1, irfs, irfs_ortho, cond; method = :irfs)\n```\n",
           "source": {
             "path": "src/transmission-function.jl",
-            "line": 66
+            "line": 117
           },
           "refs": [
             {
@@ -2676,7 +2700,7 @@
         {
           "key": "(Int, AbstractMatrix, AbstractMatrix, Q, Type{Val{:BOmega}})",
           "signature": "transmission(\n    from::Int, \n    B::AbstractMatrix{T},\n    Omega::AbstractMatrix{T}, \n    q::Q, \n    ::Type{Val{:BOmega}}\n) where {T}",
-          "markdown": "    transmission(\n        from::Int, \n        B::AbstractMatrix{T},\n        Omega::AbstractMatrix{T}, \n        q::Q, \n        ::Type{Val{:BOmega}}\n    ) where {T}\n\nGiven a transmission condition `q`, calculate the transmission effect using the\n`:BOmega` method. \n\n## Arguments\n\n- `from::Int`: Shock number. \n- `B::AbstractMatrix{T}`: Part of the systems representation in Wegner et al (2024). \n- `Omega::AbstractMatrix{T}`: Part of the systems representation in Wegner et al (2024). \n- `q::Q`: A transmission condition. See also `Q`. \n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable in the transmission condition\n  with the highest subscript, then all entries in the returned vector with index\n  less thatn `k` are `NaN` since interpretation of those results is nonsensical. \n\n## Examples\n\n```julia\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nB = randn(k*(h+1), k*(h+1))\nOmega = randn(k*(h+1), k*(h+1))\n\neffect = transmission(1, B, Omega, cond)\n```\n",
+          "markdown": "    transmission(\n        from::Int, \n        B::AbstractMatrix{T},\n        Omega::AbstractMatrix{T}, \n        q::Q, \n        ::Type{Val{:BOmega}}\n    ) where {T}\n\nGiven a transmission condition `q`, calculate the transmission effect using the\n`:BOmega` method. \n\n## Arguments\n\n- `from::Int`: Shock number. \n- `B::AbstractMatrix{T}`: Part of the systems representation in Wegner et al (2024). \n- `Omega::AbstractMatrix{T}`: Part of the systems representation in Wegner et al (2024). \n- `q::Q`: A transmission condition. See also `Q`. \n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable with the highest subscript\n  that enters the (simplified) transmission condition through an AND, then all\n  entries with index `i ≤ k` are `NaN`, since the outcome variable must be\n  ordered after all variables that paths must go through. Variables that only\n  enter through a NOT never lead to `NaN`. See also `mask_uninterpretable!`.\n\n## Examples\n\n```julia\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nB = randn(k*(h+1), k*(h+1))\nOmega = randn(k*(h+1), k*(h+1))\n\neffect = transmission(1, B, Omega, cond)\n```\n",
           "source": {
             "path": "src/transmission-function-BOmega.jl",
             "line": 52
@@ -2686,10 +2710,10 @@
         {
           "key": "(Int, AbstractMatrix{T}, AbstractMatrix{T}, Q, Type{Val{:irfs}}) where T",
           "signature": "transmission(from::Int, \n    irfs::AbstractMatrix{T}, \n    irfs_ortho::AbstractMatrix{T}, \n    q::Q, \n    ::Type{Val{:irfs}}\n) where {T}",
-          "markdown": "    transmission(from::Int, \n        irfs::AbstractMatrix{T}, \n        irfs_ortho::AbstractMatrix{T}, \n        q::Q, \n        ::Type{Val{:irfs}}\n    ) where {T}\n\nGiven a transmission condition `q`, calculate the transmission effect using the\n`:irfs` method. \n\n## Arguments\n\n- `from::Int`: Shock number. \n- `irfs::AbstractMatrix{T}`: Impulse responses. These should be in the form of\n  the structural transmission model. See also [`to_transmission_irfs`](@ref). \n- `irfs_ortho::AbstractMatrix{T}`: Orthogonalised IRFs. These should be in the\n  form of the structural transmission model. See also [`to_transmission_irfs`](@ref). \n- `q::Q`: A transmission condition. See also [`Q`](@ref). \n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable in the transmission condition\n  with the highest subscript, then all entries in the returned vector with index\n  less thatn `k` are `NaN` since interpretation of those results is nonsensical. \n\n## Examples\n\n```julia\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nirfs = randn(k, k, h+1)\nirfs_ortho = randn(k, k, h+1)\n\nirfs = to_transmission_irfs(irfs)\nirfs_ortho = to_transmission_irfs(irfs_ortho)\n\neffect = transmission(1, irfs, irfs_ortho, cond; method = :irfs)\n```\n",
+          "markdown": "    transmission(from::Int, \n        irfs::AbstractMatrix{T}, \n        irfs_ortho::AbstractMatrix{T}, \n        q::Q, \n        ::Type{Val{:irfs}}\n    ) where {T}\n\nGiven a transmission condition `q`, calculate the transmission effect using the\n`:irfs` method. \n\n## Arguments\n\n- `from::Int`: Shock number. \n- `irfs::AbstractMatrix{T}`: Impulse responses. These should be in the form of\n  the structural transmission model. See also [`to_transmission_irfs`](@ref). \n- `irfs_ortho::AbstractMatrix{T}`: Orthogonalised IRFs. These should be in the\n  form of the structural transmission model. See also [`to_transmission_irfs`](@ref). \n- `q::Q`: A transmission condition. See also [`Q`](@ref). \n\n## Returns \n\n- Returns a `Vector{T}` with entry `i` corresponding to the transmission effect\n  on variable ``x_i``. If ``x_k`` is the variable with the highest subscript\n  that enters the (simplified) transmission condition through an AND, then all\n  entries with index `i ≤ k` are `NaN`, since the outcome variable must be\n  ordered after all variables that paths must go through. Variables that only\n  enter through a NOT never lead to `NaN`. See also\n  `mask_uninterpretable!`.\n\n## Examples\n\n```julia\nk = 6\nh = 3\ns = \"(x1 | x2) & !x3\"\ncond = make_condition(s)\n\nirfs = randn(k, k, h+1)\nirfs_ortho = randn(k, k, h+1)\n\nirfs = to_transmission_irfs(irfs)\nirfs_ortho = to_transmission_irfs(irfs_ortho)\n\neffect = transmission(1, irfs, irfs_ortho, cond; method = :irfs)\n```\n",
           "source": {
             "path": "src/transmission-function-irfs.jl",
-            "line": 60
+            "line": 59
           },
           "refs": [
             {

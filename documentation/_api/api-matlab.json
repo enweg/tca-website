@@ -3,8 +3,8 @@
   "language": "matlab",
   "library": {
     "name": "tca-matlab-toolbox",
-    "version": "v0.3.0-1-gafcd08c",
-    "commit": "afcd08c70e11a2f831c52cd15dca78c22b4bcba5",
+    "version": "v0.3.1-1-g69d703a",
+    "commit": "69d703a9ec3d817cc75b51451650674cc39651ef",
     "source_url": null
   },
   "generator": "ApiDocs.jl 0.1.0",
@@ -8868,6 +8868,64 @@
       ]
     },
     {
+      "id": "matlab:maskUninterpretable",
+      "name": "maskUninterpretable",
+      "qualname": "maskUninterpretable",
+      "kind": "function",
+      "parent": null,
+      "visibility": "public",
+      "attributes": {},
+      "summary": "Set transmission effects that must not be interpreted to NaN.",
+      "bases": [],
+      "related": [],
+      "docs": [
+        {
+          "key": "",
+          "signature": "function effects = maskUninterpretable(effects, varAnd)",
+          "markdown": "`maskUninterpretable` Set transmission effects that must not be interpreted to NaN.\n\n`effects = maskUninterpretable(effects, varAnd)` sets the effects on all\nvariables `x_i` with `i <= k` to `NaN`, where `x_k` is the variable with\nthe highest index that enters any term of the transmission condition\nthrough an AND (a variable that paths must go through).\n\nThe theory assumes that the outcome variable is ordered after all\nvariables that the transmission condition puts restrictions on. A user\nmight not be aware of this requirement and may thus interpret the effect\non a variable that is ordered before (or is equal to) one of the\nconditioning variables.\n- For NOT this is not a problem. A path to `x_i` cannot go through any\n  variable ordered after `x_i`, so a NOT on such a variable does not\n  restrict the paths to `x_i`, and the effect on `x_i` itself is\n  correctly zero if `x_i` is excluded. NOT variables therefore never\n  trigger masking.\n- For AND this is a problem. A path to `x_i` with `i <= k` cannot go\n  through `x_k` before reaching the outcome, so the question is\n  nonsensical. The computed numbers have no meaningful interpretation\n  and can even differ between the `BOmega` and the `irf` method. They\n  are therefore set to `NaN`.\n\nThe masking is applied to the effect of the full condition and not to\nthe effect of individual terms, since the `irf` method rewrites NOT\nliterals as AND literals using inclusion-exclusion; masking those\ninternal terms would wrongly mask effects of NOT conditions.\n\n## Arguments\n- `effects` (vector): Transmission effects in the ordering of the\n  transmission matrix.\n- `varAnd` (cell array of vectors): Each cell contains a vector of variable\n  indices that are included via AND in the term. Can be obtained using\n  `getVarNumsAndMultiplier`.\n\n## Returns\n- `effects` (vector): The effects with the uninterpretable entries set to `NaN`.\n\n## WARNING\nInternal function. Should not be called by users directly.\n\nSee also `transmission`, `getVarNumsAndMultiplier`",
+          "source": {
+            "path": "maskUninterpretable.m",
+            "line": 1
+          },
+          "refs": [
+            {
+              "text": "`getVarNumsAndMultiplier`",
+              "span": [1770, 1795],
+              "label": "getVarNumsAndMultiplier",
+              "query": "getVarNumsAndMultiplier",
+              "implicit": true,
+              "status": "resolved",
+              "target": "matlab:getVarNumsAndMultiplier",
+              "target_key": null,
+              "candidates": []
+            },
+            {
+              "text": "`transmission`",
+              "span": [1971, 1985],
+              "label": "transmission",
+              "query": "transmission",
+              "implicit": false,
+              "status": "resolved",
+              "target": "matlab:transmission",
+              "target_key": null,
+              "candidates": []
+            },
+            {
+              "text": "`getVarNumsAndMultiplier`",
+              "span": [1987, 2012],
+              "label": "getVarNumsAndMultiplier",
+              "query": "getVarNumsAndMultiplier",
+              "implicit": false,
+              "status": "resolved",
+              "target": "matlab:getVarNumsAndMultiplier",
+              "target_key": null,
+              "candidates": []
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "matlab:notThrough",
       "name": "notThrough",
       "qualname": "notThrough",
@@ -9407,7 +9465,7 @@
         {
           "key": "",
           "signature": "function effects = transmission(from, arr1, arr2, q, method, order)",
-          "markdown": "`transmission` Compute the transmission effect given a transmission condition.\n\n`effects = transmission(from, arr1, arr2, q, method)` calculates the\ntransmission effect for a given transmission condition `q` using either\nthe `BOmega` method or the `irf` method. If `BOmega` is used, then\ntransmission effects will be calculated using the systems form\n$x = Bx + \\Omega\\varepsilon$\n\n## Arguments\n- `from` (integer): Index of the shock.\n- `arr1` (matrix):\n    - If `method = \"BOmega\"`, this must be `B` from the systems form.\n    - If `method = \"irf\"`, this must be structural `irfs` (technically\n      only those of the shock that is being investigates (`from`)).\n      Has to be a IRF matrix. See `toTransmissionIrfs` for more information.\n- `arr2` (matrix):\n    - If `method = \"BOmega\"`, this must be `Omega` from the systems form.\n    - If `method = \"irf\"`, this must be `irfsOrtho` (Cholesky IRFs) following\n      the ordering of the transmission matrix.\n- `q` (Q): A transmission condition. See also `Q`.\n- `method` (string): Specifies the calculation method:\n    - `\"BOmega\"` uses the systems form.\n    - `\"irf\"` uses only IRFs and can thus be used with local projections.\n- `order` (vector, optional): variable ordering as defined by the transmission matrix.\n\n## Returns:\n- `effects` (vector): A vector where entry `i` corresponds to the transmission\n  effect on variable `x_i`. If `x_k` is the variable in the transmission\n  condition with the highest index, all entries in the returned vector with\n  index less than `k` are `NaN`, since interpretation of those results is nonsensical.\n\n## Example:\n```\nk = 6;\nh = 3;\ns = \"(x1 | x2) & !x3\";\ncond = makeCondition(s);\n\nB = randn(k*(h+1), k*(h+1));\nOmega = randn(k*(h+1), k*(h+1));\n\neffect = transmission(1, B, Omega, cond, \"BOmega\");\n\nirfs = randn(k, k, h+1);\nirfsOrtho = randn(k, k, h+1);\n\nirfs = toTransmissionIrfs(irfs);\nirfsOrtho = toTransmissionIrfs(irfsOrtho);\n\neffect = transmission(1, irfs, irfsOrtho, cond, \"irf\");\n```\n\n## Notes:\n- If `method = \"BOmega\"`, the function applies `transmissionBOmega`.\n- If `method = \"irf\"`, the function applies `transmissionIrfs`.\n- If `order` is provided, the returned effects will be a 3D array\n  of dimension (nVariables, 1, horizons) where the variables are in the\n  original ordering (before applying the transmission matrix).\n- If `order` is not provided, the returned effects will be a (nVariable*horizons, 1)\n  dimensional vector following the ordering after applying the transmission\n  matrix. This is similar to the matrix obtained via $(I - B)^{-1}\\Omega$\n  using the matrices from the systems form.\n\nSee also `transmissionBOmega`, `transmissionIrfs`, `makeCondition`, `through`, `notThrough`",
+          "markdown": "`transmission` Compute the transmission effect given a transmission condition.\n\n`effects = transmission(from, arr1, arr2, q, method)` calculates the\ntransmission effect for a given transmission condition `q` using either\nthe `BOmega` method or the `irf` method. If `BOmega` is used, then\ntransmission effects will be calculated using the systems form\n$x = Bx + \\Omega\\varepsilon$\n\n## Arguments\n- `from` (integer): Index of the shock.\n- `arr1` (matrix):\n    - If `method = \"BOmega\"`, this must be `B` from the systems form.\n    - If `method = \"irf\"`, this must be structural `irfs` (technically\n      only those of the shock that is being investigates (`from`)).\n      Has to be a IRF matrix. See `toTransmissionIrfs` for more information.\n- `arr2` (matrix):\n    - If `method = \"BOmega\"`, this must be `Omega` from the systems form.\n    - If `method = \"irf\"`, this must be `irfsOrtho` (Cholesky IRFs) following\n      the ordering of the transmission matrix.\n- `q` (Q): A transmission condition. See also `Q`.\n- `method` (string): Specifies the calculation method:\n    - `\"BOmega\"` uses the systems form.\n    - `\"irf\"` uses only IRFs and can thus be used with local projections.\n- `order` (vector, optional): variable ordering as defined by the transmission matrix.\n\n## Returns:\n- `effects` (vector): A vector where entry `i` corresponds to the transmission\n  effect on variable `x_i`. If `x_k` is the variable with the highest index\n  that enters the (simplified) transmission condition through an AND, then\n  all entries with index `i <= k` are `NaN`, since the outcome variable must\n  be ordered after all variables that paths must go through. Variables that\n  only enter through a NOT never lead to `NaN`. See also `maskUninterpretable`.\n\n## Example:\n```\nk = 6;\nh = 3;\ns = \"(x1 | x2) & !x3\";\ncond = makeCondition(s);\n\nB = randn(k*(h+1), k*(h+1));\nOmega = randn(k*(h+1), k*(h+1));\n\neffect = transmission(1, B, Omega, cond, \"BOmega\");\n\nirfs = randn(k, k, h+1);\nirfsOrtho = randn(k, k, h+1);\n\nirfs = toTransmissionIrfs(irfs);\nirfsOrtho = toTransmissionIrfs(irfsOrtho);\n\neffect = transmission(1, irfs, irfsOrtho, cond, \"irf\");\n```\n\n## Notes:\n- If `method = \"BOmega\"`, the function applies `transmissionBOmega`.\n- If `method = \"irf\"`, the function applies `transmissionIrfs`.\n- If `order` is provided, the returned effects will be a 3D array\n  of dimension (nVariables, 1, horizons) where the variables are in the\n  original ordering (before applying the transmission matrix).\n- If `order` is not provided, the returned effects will be a (nVariable*horizons, 1)\n  dimensional vector following the ordering after applying the transmission\n  matrix. This is similar to the matrix obtained via $(I - B)^{-1}\\Omega$\n  using the matrices from the systems form.\n\nSee also `transmissionBOmega`, `transmissionIrfs`, `makeCondition`, `through`, `notThrough`",
           "source": {
             "path": "transmission.m",
             "line": 1
@@ -9436,8 +9494,19 @@
               "candidates": []
             },
             {
+              "text": "`maskUninterpretable`",
+              "span": [1717, 1738],
+              "label": "maskUninterpretable",
+              "query": "maskUninterpretable",
+              "implicit": false,
+              "status": "resolved",
+              "target": "matlab:maskUninterpretable",
+              "target_key": null,
+              "candidates": []
+            },
+            {
               "text": "`transmissionBOmega`",
-              "span": [2039, 2059],
+              "span": [2187, 2207],
               "label": "transmissionBOmega",
               "query": "transmissionBOmega",
               "implicit": true,
@@ -9448,7 +9517,7 @@
             },
             {
               "text": "`transmissionIrfs`",
-              "span": [2105, 2123],
+              "span": [2253, 2271],
               "label": "transmissionIrfs",
               "query": "transmissionIrfs",
               "implicit": true,
@@ -9459,7 +9528,7 @@
             },
             {
               "text": "`transmissionBOmega`",
-              "span": [2615, 2635],
+              "span": [2763, 2783],
               "label": "transmissionBOmega",
               "query": "transmissionBOmega",
               "implicit": false,
@@ -9470,7 +9539,7 @@
             },
             {
               "text": "`transmissionIrfs`",
-              "span": [2637, 2655],
+              "span": [2785, 2803],
               "label": "transmissionIrfs",
               "query": "transmissionIrfs",
               "implicit": false,
@@ -9481,7 +9550,7 @@
             },
             {
               "text": "`makeCondition`",
-              "span": [2657, 2672],
+              "span": [2805, 2820],
               "label": "makeCondition",
               "query": "makeCondition",
               "implicit": false,
@@ -9492,7 +9561,7 @@
             },
             {
               "text": "`through`",
-              "span": [2674, 2683],
+              "span": [2822, 2831],
               "label": "through",
               "query": "through",
               "implicit": false,
@@ -9503,7 +9572,7 @@
             },
             {
               "text": "`notThrough`",
-              "span": [2685, 2697],
+              "span": [2833, 2845],
               "label": "notThrough",
               "query": "notThrough",
               "implicit": false,
